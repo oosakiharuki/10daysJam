@@ -7,6 +7,8 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete player_;
 	delete playermodel_;
+	delete boss_;
+	delete bossModel_;
 }
 
 void GameScene::Initialize() {
@@ -22,11 +24,18 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	// プレイヤーの初期化
 	player_->Initialize(playermodel_, &viewProjection_);
+	// ボスのモデル
+	bossModel_ = Model::CreateFromOBJ("boss", true);
+	// ボスの生成と初期化
+	boss_ = new Boss();
+	boss_->Initialize(bossModel_, &viewProjection_);
 }
 
 void GameScene::Update() {
 	// プレイヤーの更新
 	player_->Update();
+	// ボスの更新
+	boss_->Updata();
 }
 
 void GameScene::Draw() {
@@ -55,6 +64,8 @@ void GameScene::Draw() {
 	/// </summary>
 	// プレイヤーの描画
 	player_->Draw();
+	// ボスの描画
+	boss_->Draw();
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
