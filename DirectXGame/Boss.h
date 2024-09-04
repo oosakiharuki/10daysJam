@@ -3,6 +3,7 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include "ViewProjection.h"
+#include "Vector3.h"
 
 class Boss {
 public:
@@ -13,6 +14,12 @@ public:
 
 	void Draw();
 
+	Vector3 GetWorldPosition();
+
+	AABB GetAABB();
+
+	void IsHit();
+
 private:
 	WorldTransform worldTransform_;
 
@@ -21,4 +28,8 @@ private:
 	ViewProjection* viewProjection_ = nullptr;
 
 	float bossHp = 100.0f;
+	bool isDamage_ = false;
+	bool isHeal_ = false;
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
 };
