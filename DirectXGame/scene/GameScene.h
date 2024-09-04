@@ -8,6 +8,8 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 
+#include "Enemy.h"
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -47,4 +49,14 @@ private: // メンバ変数
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
+	
+	
+	WorldTransform worldTransform_;
+	ViewProjection viewProjection_;
+
+	Enemy* enemy_ = nullptr;
+
+	Model* enemyModel_ = nullptr;
+	uint32_t textureHandle_ = 0u;
+
 };
