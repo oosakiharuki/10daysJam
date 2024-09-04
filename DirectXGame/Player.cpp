@@ -10,3 +10,7 @@ void Player::Initialize(Model* model, ViewProjection* viewProjection) {
 void Player::Update() { worldTransform_.UpdateMatrix(); }
 
 void Player::Draw() { model_->Draw(worldTransform_, *viewProjection_); }
+
+void Player::Move() {
+
+}

@@ -2,15 +2,13 @@
 #include "Model.h"
 #include "Vector3.h"
 #include "WorldTransform.h"
-class Player {
+class Box {
 public:
-	void Initialize(Model* model, ViewProjection* viewProjection);
+	void Initialize();
 
 	void Update();
 
 	void Draw();
-    //移動
-	void Move();
 
 private:
 	// ワールド変換データ
