@@ -4,16 +4,29 @@
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+GameScene::~GameScene() { 
+	delete boss_; 
+	delete modelBoss_;
+}
 
 void GameScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+	worldTransform_.Initialize();
+	viewProjection_.Initialize();
+
+	modelBoss_ = Model::CreateFromOBJ("boss", true);
+
+	// ボスの生成と初期化
+	boss_ = new Boss;
+	boss_->Initialize(modelBoss_, &viewProjection_);
 }
 
-void GameScene::Update() {}
+void GameScene::Update() { 
+	boss_->Updata();
+}
 
 void GameScene::Draw() {
 
@@ -40,6 +53,7 @@ void GameScene::Draw() {
 
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
+	boss_->Draw();
 	/// </summary>
 
 	// 3Dオブジェクト描画後処理

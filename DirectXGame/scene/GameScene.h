@@ -7,6 +7,7 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "Boss.h"
 
 /// <summary>
 /// ゲームシーン
@@ -43,6 +44,12 @@ private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
+	WorldTransform worldTransform_;
+	ViewProjection viewProjection_;
+
+	// ボス
+	Boss* boss_ = nullptr;
+	Model* modelBoss_ = nullptr;
 
 	/// <summary>
 	/// ゲームシーン用
