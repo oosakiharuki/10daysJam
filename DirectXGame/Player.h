@@ -5,7 +5,7 @@
 class MapChipField;
 class Player {
 public:
-	void Initialize(Model* model, ViewProjection* viewProjection);
+	void Initialize(Model* model, ViewProjection* viewProjection,const Vector3&position);
 
 	void Update();
 
@@ -24,4 +24,8 @@ private:
 	ViewProjection* viewProjection_ = nullptr;
 	//マップチップ
 	MapChipField* mapChipField_ = nullptr;
+	//速度
+	Vector3 velocity_ = {};
+	//加速
+	static inline const float kAcceleration = 0.1f;
 };
