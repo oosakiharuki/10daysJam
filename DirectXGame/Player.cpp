@@ -35,6 +35,8 @@ void Player::Move() {
 			// 左右切り替え
 			if (lrDirection_ != LRDirection::kRight) {
 				lrDirection_ = LRDirection::kRight;
+				turnFirstRotationY_ = worldTransform_.rotation_.y;
+				turnTimer_ = kTimeTurn;
 			}
 		} else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
 			// 速度と逆方向にブレーキ
@@ -45,6 +47,8 @@ void Player::Move() {
 			// 左右切り替え
 			if (lrDirection_ != LRDirection::kLeft) {
 				lrDirection_ = LRDirection::kLeft;
+				turnFirstRotationY_ = worldTransform_.rotation_.y;
+				turnTimer_ = kTimeTurn;
 			}
 		}
 		// 加減速
@@ -61,11 +65,15 @@ void Player::Move() {
 	worldTransform_.UpdateMatrix();
 }
 //旋回
-void Player::Rotate() { float destinationRotationYTable[] = {
-	std::numbers::pi_v<float> / 2.0f,
-	std::numbers::pi_v<float> * 3.0f / 2.0f};
-//状態に応じた角度を取得
-	float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
-	//自キャラの角度を設定する
-	worldTransform_.rotation_.y = destinationRotationY;
+void Player::Rotate() { 
+	if (turnTimer_ > 0.0f) {
+		turnTimer_ -= 1.0f / 60.0f;
+		float destinationRotationYTable[] = {std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
+		// 状態に応じた角度を取得する
+		float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+		float easing = 1 - turnTimer_ / kTimeTurn;
+		float nowRotationY = std::lerp(turnFirstRotationY_, destinationRotationY, easing);
+		// 自キャラの角度を設定する
+		worldTransform_.rotation_.y = nowRotationY;
+	}
 }

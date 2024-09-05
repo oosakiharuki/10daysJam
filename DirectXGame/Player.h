@@ -40,4 +40,10 @@ private:
 	//速度減衰
 	static inline const float kAttenuation = 0.05f;
 	static inline const float kLimitRunSpeed = 0.3f;
+	// 旋回時間<秒>
+	static inline const float kTimeTurn = 0.3f;
+	// 旋回開始時の角度
+	float turnFirstRotationY_ = 0.0f;
+	// 旋回タイマー
+	float turnTimer_ = 0.0f;
 };
