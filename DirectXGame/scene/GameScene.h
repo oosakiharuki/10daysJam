@@ -63,6 +63,10 @@ private: // メンバ変数
 	const uint32_t kNumEnemies = 3; //敵の数
 	std::list<Enemy*> enemies_;
 	Model* enemyModel_ = nullptr;
+	float speed[3];
+	float range[3];
+
+
 	//ブロック
 	Model* modelBlocks_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;

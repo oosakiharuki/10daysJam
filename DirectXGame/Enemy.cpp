@@ -1,7 +1,7 @@
 #include "Enemy.h"
 #include <cassert>
 
-void Enemy::Initialize(Model* model, ViewProjection* viewProjection, Vector3 position) { 
+void Enemy::Initialize(Model* model, ViewProjection* viewProjection, Vector3 position, float speed, float range) { 
 	
 	assert(model);
 
@@ -12,15 +12,18 @@ void Enemy::Initialize(Model* model, ViewProjection* viewProjection, Vector3 pos
 	worldTransform_.translation_ = position;
 
 	move = position;
+
+	kLoad = speed;
+	kRange = range;
 }
 
 void Enemy::Update() {
 
 	worldTransform_.UpdateMatrix();
 
-	speed += 1.0f / 60.0f; //速度
+	kSpeed += kLoad; // 速度
 
-	worldTransform_.translation_.x = move.x + std::sin(speed) * range;
+	worldTransform_.translation_.x = move.x + std::sin(kSpeed) * kRange;
 
 }
 

@@ -9,7 +9,7 @@ public:
 	/// <param name="model">モデル</param>
 	/// <param name="viewProjection">ビュープロジェクション</param>
 	/// <param name="position">位置</param>
-	void Initialize(Model* model,ViewProjection* viewProjection,Vector3 position);
+	void Initialize(Model* model,ViewProjection* viewProjection,Vector3 position,float speed,float range);
 	void Update();
 	void Draw();
 
@@ -20,7 +20,8 @@ private:
 	ViewProjection* viewProjection_ = nullptr;
 
 	Vector3 move = {0, 0, 0};
-	float speed = 0.0f;
-	float range = 10.0f; //半径
+	float kSpeed;
+	float kLoad;
+	float kRange; //半径
 
 };

@@ -44,8 +44,12 @@ void GameScene::Initialize() {
 	for (uint32_t i = 0; i < kNumEnemies; i++) {
 		//生成
 		Enemy* enemy_ = new Enemy();
+		//速さ、動く半径
+		speed[i] = 1.0f / 60.0f;
+		speed[1] = -1.0f / 30.0f;
+		range[i] = 10.0f;
 		// 初期化
-		enemy_->Initialize(enemyModel_, &viewProjection_, {0, 14.0f - (i * 5.0f), 0});
+		enemy_->Initialize(enemyModel_, &viewProjection_, {0, 14.0f - (i * 5.0f), 0}, speed[i], range[i]);
 		
 		enemies_.push_back(enemy_);
 	}
