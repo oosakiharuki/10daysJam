@@ -9,6 +9,8 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "DebugCamera.h"
+#include "MapChipField.h"
+#include <vector>
 
 /// <summary>
 /// ゲームシーン
@@ -40,6 +42,8 @@ public: // メンバ関数
 	/// 描画
 	/// </summary>
 	void Draw();
+	//ブロック生成
+	void GenerateBlocks();
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -54,6 +58,11 @@ private: // メンバ変数
 	// プレイヤー
 	Player* player_ = nullptr;
 	Model* playermodel_ = nullptr;
+	//ブロック
+	Model* modelBlocks_ = nullptr;
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
+	//マップチップフィールド
+	MapChipField* mapChipField_;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
