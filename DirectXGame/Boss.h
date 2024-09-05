@@ -6,7 +6,7 @@
 #include "Vector3.h"
 
 class Box;
-//class Enemy;
+class Enemy;
 
 class Boss {
 public:
@@ -23,7 +23,7 @@ public:
 
 	void OnBoxCollision(const Box* box);
 
-	//void OnEnemyCollision(const Enemy* enemy);
+	void OnEnemyCollision(const Enemy* enemy);
 
 	void IsHit();
 
@@ -47,6 +47,6 @@ private:
 	bool hitEnemy_ = false;
 	bool hitHeal_ = false;
 	bool isDead_ = false;
-	static inline const float kWidth = 4.8f;
-	static inline const float kHeight = 4.8f;
+	static inline const float kWidth = 9.8f;
+	static inline const float kHeight = 9.8f;
 };

@@ -48,10 +48,10 @@ void Boss::OnBoxCollision(const Box* box) {
 	hitBox_ = true;
 }
 
-/* void Boss::OnEnemyCollision(const Enemy* Enemy) {
-	(void)box;
+ void Boss::OnEnemyCollision(const Enemy* enemy) {
+	(void)enemy;
 	hitEnemy_ = true;
-}*/
+}
 
 void Boss::IsHit() {
 	if (hitBox_) {
