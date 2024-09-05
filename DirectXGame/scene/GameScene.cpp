@@ -32,11 +32,18 @@ void GameScene::Initialize() {
 	worldTransform_.Initialize();
 	// デバックカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
+	// マップチップフィールドの生成
+	mapChipField_ = new MapChipField;
+	mapChipField_->LoadMapChipCsv("Resources/map.csv");
 	// プレイヤーモデル
 	playermodel_ = Model::CreateFromOBJ("player", true);
 	// プレイヤーの生成
 	player_ = new Player();
+	//座標指定
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1,0);
 	// プレイヤーの初期化
+
+	player_->Initialize(playermodel_, &viewProjection_,playerPosition);
 	player_->Initialize(playermodel_, &viewProjection_);
 	//エネミー
 	//モデル
@@ -52,9 +59,6 @@ void GameScene::Initialize() {
 	boss_->Initialize(bossModel_, &viewProjection_);
 	// ブロックモデル
 	modelBlocks_ = Model::CreateFromOBJ("block", true);
-	// マップチップフィールドの生成
-	mapChipField_ = new MapChipField;
-	mapChipField_->LoadMapChipCsv("Resources/map.csv");
 	// ブロックの生成
 	GenerateBlocks();
 }
