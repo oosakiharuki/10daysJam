@@ -1,15 +1,13 @@
 #include "Enemy.h"
 #include <cassert>
 
-void Enemy::Initialize(Model* model,  ViewProjection* viewProjection) { 
+void Enemy::Initialize(Model* model, ViewProjection* viewProjection, Vector3 position) { 
 	
 	assert(model);
 
 	model_ = model;
 	worldTransform_.Initialize();
 	viewProjection_ = viewProjection;
-
-	Vector3 position = {10, 10, 0};	// mapchipで入れるposition;csvで変えれると思う
 
 	worldTransform_.translation_ = position;
 
