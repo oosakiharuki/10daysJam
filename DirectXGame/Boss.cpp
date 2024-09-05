@@ -8,6 +8,13 @@ void Boss::Initialize(Model* model, ViewProjection* viewProjection) {
 }
 
 void Boss::Updata() { 
+
+	IsHit();
+
+	if (bossHp <= 0) {
+		isDead_ = true;
+	}
+
 	worldTransform_.UpdateMatrix(); 
 }
 
@@ -36,16 +43,26 @@ AABB Boss::GetAABB() {
 	return aabb;
 }
 
+void Boss::OnBoxCollision(const Box* box) { 
+	(void)box; 
+	hitBox_ = true;
+}
+
 void Boss::IsHit() {
-	if (isDamage_) {
+	if (hitBox_) {
+		if (bossHp >= 0) {
+			bossHp -= 2;
+		}
+		hitBox_ = false;
+	} else if (hitEnemy_) {
 		if (bossHp >= 0) {
 			bossHp -= 5;
 		}
-		isDamage_ = false;
-	} else if (isHeal_) {
-		if (bossHp <= 100) {
+		hitEnemy_ = false;
+	} else if (hitHeal_) {
+		if (bossHp < 100) {
 			bossHp += 5;
 		}
-		isHeal_ = false;
+		hitHeal_ = false;
 	}
 }
