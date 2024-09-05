@@ -22,6 +22,9 @@ public:
 	void Rotate();
 	//セッタ
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
+	const WorldTransform& GetWorldTransform() { return worldTransform_; };
+	//速度加算
+	const Vector3& GetVelocity() const { return velocity_; }
 
 private:
 	// ワールド変換データ

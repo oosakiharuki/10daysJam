@@ -19,6 +19,9 @@ Vector3& operator*=(Vector3& v, float s);
 Vector3 operator*(const Vector3& v1, const Vector3& v2);
 Vector3& operator*=(Vector3& v1, const Vector3& v2);
 
+// 加算
+Vector3 Add(const Vector3& v1, const Vector3& v2);
+
 Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
 // 平行移動行列
 // 平行移動行列
