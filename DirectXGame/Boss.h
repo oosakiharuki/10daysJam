@@ -6,6 +6,7 @@
 #include "Vector3.h"
 
 class Box;
+//class Enemy;
 
 class Boss {
 public:
@@ -21,6 +22,8 @@ public:
 	AABB GetAABB();
 
 	void OnBoxCollision(const Box* box);
+
+	//void OnEnemyCollision(const Enemy* enemy);
 
 	void IsHit();
 
