@@ -9,6 +9,7 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "DebugCamera.h"
 
 /// <summary>
 /// ゲームシーン
@@ -47,6 +48,10 @@ private: // メンバ変数
 	Audio* audio_ = nullptr;
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
+	// デバックカメラ有効
+	bool isDebugCameraActive_ = false;
+	// デバックカメラ
+	DebugCamera* debugCamera_ = nullptr;
 	// プレイヤー
 	Player* player_ = nullptr;
 	Model* playermodel_ = nullptr;

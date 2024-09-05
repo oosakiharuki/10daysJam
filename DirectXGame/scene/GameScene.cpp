@@ -7,6 +7,7 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete player_;
 	delete playermodel_;
+	delete debugCamera_;
 	delete boss_;
 	delete bossModel_;
 }
@@ -18,6 +19,8 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 	viewProjection_.Initialize();
 	worldTransform_.Initialize();
+	// デバックカメラの生成
+	debugCamera_ = new DebugCamera(1280, 720);
 	// プレイヤーモデル
 	playermodel_ = Model::CreateFromOBJ("player", true);
 	// プレイヤーの生成
@@ -34,6 +37,29 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	// プレイヤーの更新
 	player_->Update();
+	// デバックカメラの更新
+	debugCamera_->Update();
+#ifdef _DEBUG
+	if (input_->TriggerKey(DIK_SPACE)) {
+		if (isDebugCameraActive_ == false) {
+			isDebugCameraActive_ = true;
+		} else {
+			isDebugCameraActive_ = false;
+		}
+	}
+#endif
+	// カメラの処理
+
+	if (isDebugCameraActive_) {
+		debugCamera_->Update();
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		// ビュープロジェクション行列の転送
+		viewProjection_.TransferMatrix();
+	} else {
+		// ビュープロジェクション行列の更新と転送
+		viewProjection_.UpdateMatrix();
+	}
 	// ボスの更新
 	boss_->Updata();
 }
