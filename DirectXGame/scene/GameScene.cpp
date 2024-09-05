@@ -231,4 +231,26 @@ void GameScene::CheckAllCollision() {
 		}
 	}
 	#pragma endregion
+
+	#pragma region ボスと敵の当たり判定
+	{ 
+		// 判定1と2の座標
+		AABB aabb1, aabb2;
+
+		// ボスの座標
+		aabb1 = boss_->GetAABB();
+
+		// ボスと敵すべての当たり判定
+		for (Enemy* enemy_ : enemies_) {
+			// 敵の座標
+			aabb2 = enemy_->GetAABB();
+
+			// AABB同士の交差判定
+			if (IsCollision(aabb1, aabb2)) {
+				// ボスの衝突時コールバックを呼び出す
+				boss_->OnEnemyCollision(enemy_);
+			}
+		}
+	}
+	#pragma endregion
 }

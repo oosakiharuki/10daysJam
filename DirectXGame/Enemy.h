@@ -13,6 +13,10 @@ public:
 	void Update();
 	void Draw();
 
+	Vector3 GetWorldPosition();
+
+	AABB GetAABB();
+
 private:
 
 	Model* model_ = nullptr;
@@ -23,4 +27,6 @@ private:
 	float speed = 0.0f;
 	float range = 10.0f; //半径
 
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
 };
