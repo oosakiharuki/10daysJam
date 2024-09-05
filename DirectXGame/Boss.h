@@ -26,6 +26,12 @@ public:
 
 	bool IsDead() const { return isDead_; }
 
+	bool IsHitBox() const { return hitBox_; }
+
+	bool IsHitEnemy() const { return hitEnemy_; }
+
+	bool IsHitHeal() const { return hitHeal_; }
+
 private:
 	WorldTransform worldTransform_;
 
@@ -38,6 +44,6 @@ private:
 	bool hitEnemy_ = false;
 	bool hitHeal_ = false;
 	bool isDead_ = false;
-	static inline const float kWidth = 4.0f;
-	static inline const float kHeight = 4.0f;
+	static inline const float kWidth = 4.8f;
+	static inline const float kHeight = 4.8f;
 };
