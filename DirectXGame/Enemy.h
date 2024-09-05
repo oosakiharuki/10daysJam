@@ -1,5 +1,6 @@
 #include "Model.h"
 #include "WorldTransform.h"
+#include <sstream>
 
 class Enemy{
 public:
@@ -9,7 +10,11 @@ public:
 	/// <param name="model">モデル</param>
 	/// <param name="viewProjection">ビュープロジェクション</param>
 	/// <param name="position">位置</param>
-	void Initialize(Model* model,ViewProjection* viewProjection,Vector3 position,float speed,float range);
+	void Initialize(Model* model,ViewProjection* viewProjection,Vector3 position);
+
+	void LoadEnemyMoveData();
+	void UpdateEnemyPopCommands(uint32_t number);
+
 	void Update();
 	void Draw();
 
@@ -23,5 +28,8 @@ private:
 	float kSpeed;
 	float kLoad;
 	float kRange; //半径
+
+
+	std::stringstream enemyMoveCommands;
 
 };
