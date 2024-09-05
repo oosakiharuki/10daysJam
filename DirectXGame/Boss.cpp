@@ -4,7 +4,7 @@ void Boss::Initialize(Model* model, ViewProjection* viewProjection) {
 	model_ = model;
 	viewProjection_ = viewProjection;
 	worldTransform_.Initialize();
-	worldTransform_.translation_.y -= 10.0f;
+	worldTransform_.translation_.y -= 25.0f;
 }
 
 void Boss::Updata() { 
