@@ -14,7 +14,6 @@ void Boss::Updata() {
 	if (bossHp <= 0) {
 		isDead_ = true;
 	}
-
 	worldTransform_.UpdateMatrix(); 
 }
 
