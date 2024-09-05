@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "Model.h"
 #include "Player.h"
+#include "Box.h"
 #include "Enemy.h"
 #include "Boss.h"
 #include "Sprite.h"
@@ -47,6 +48,11 @@ public: // メンバ関数
 	//ブロック生成
 	void GenerateBlocks();
 
+	// すべての当たり判定
+	void CheckAllCollision();
+
+	bool IsCollision(const AABB& aabb1, const AABB& aabb2);
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -60,6 +66,9 @@ private: // メンバ変数
 	// プレイヤー
 	Player* player_ = nullptr;
 	Model* playermodel_ = nullptr;
+	// 箱
+	Box* box_ = nullptr;
+	Model* boxModel_ = nullptr;
 	//エネミー
 	Enemy* enemy_ = nullptr;
 	Model* enemyModel_ = nullptr;

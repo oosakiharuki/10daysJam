@@ -21,6 +21,8 @@ GameScene::~GameScene() {
 	delete mapChipField_;
 	delete boss_;
 	delete bossModel_;
+	delete box_;
+	delete boxModel_;
 }
 
 void GameScene::Initialize() {
@@ -56,6 +58,9 @@ void GameScene::Initialize() {
 	// ボスの生成と初期化
 	boss_ = new Boss();
 	boss_->Initialize(bossModel_, &viewProjection_);
+	// 箱の生成と初期化
+	box_ = new Box();
+	box_->Initialize();
 	// ブロックモデル
 	modelBlocks_ = Model::CreateFromOBJ("block", true);
 	// ブロックの生成
@@ -185,4 +190,36 @@ void GameScene::GenerateBlocks() {
 			}
 		}
 	}
+}
+
+bool GameScene::IsCollision(const AABB& aabb1, const AABB& aabb2) {
+	if ((aabb1.min.x <= aabb2.max.x && aabb1.max.x >= aabb2.min.x) && (aabb1.min.y <= aabb2.max.y && aabb1.max.y >= aabb2.min.y) && (aabb1.min.z <= aabb2.max.z && aabb1.max.z >= aabb2.min.z)) {
+		return true;
+	}
+	return false;
+}
+
+// すべての当たり判定
+void GameScene::CheckAllCollision() {
+
+	#pragma region ボスと箱の当たり判定
+	{
+		// 判定1と2の座標
+		AABB aabb1, aabb2;
+
+		// ボスの座標
+		aabb1 = boss_->GetAABB();
+		// 箱の座標
+		aabb2 = box_->GetAABB();
+
+		// ボスと箱の当たり判定
+
+		//AABB同士の交差判定
+		if (IsCollision(aabb1, aabb2)) {
+			// ボスの衝突時コールバックを呼び出す
+			boss_->OnBoxCollision(box_);
+			// 箱の衝突時コールバックを呼び出す
+		}
+	}
+	#pragma endregion
 }
