@@ -27,5 +27,8 @@ private:
 	//速度
 	Vector3 velocity_ = {};
 	//加速
-	static inline const float kAcceleration = 0.1f;
+	static inline const float kAcceleration = 0.05f;
+	//速度減衰
+	static inline const float kAttenuation = 0.05f;
+	static inline const float kLimitRunSpeed = 0.3f;
 };
