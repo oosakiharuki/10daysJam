@@ -15,6 +15,9 @@ GameScene::~GameScene() {
 	}
 	worldTransformBlocks_.clear();
 	delete debugCamera_;
+
+	delete enemyModel_;
+	delete enemy_;
 	delete mapChipField_;
 }
 
@@ -33,6 +36,13 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	// プレイヤーの初期化
 	player_->Initialize(playermodel_, &viewProjection_);
+	//エネミー
+	//モデル
+	enemyModel_ = Model::Create();
+	//生成
+	enemy_ = new Enemy();
+	//初期化
+	enemy_->Initialize(enemyModel_,&viewProjection_);
 	// ブロックモデル
 	modelBlocks_ = Model::CreateFromOBJ("block", true);
 	// マップチップフィールドの生成
@@ -77,6 +87,10 @@ void GameScene::Update() {
 		// ビュープロジェクション行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
+
+
+	//エネミーの処理
+	enemy_->Update();
 }
 
 void GameScene::Draw() {
@@ -113,6 +127,9 @@ void GameScene::Draw() {
 	}
 	// プレイヤーの描画
 	player_->Draw();
+	//エネミーの描画
+	enemy_->Draw();
+
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
