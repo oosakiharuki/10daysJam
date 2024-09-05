@@ -6,6 +6,7 @@
 #include "Model.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Boss.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
@@ -62,6 +63,9 @@ private: // メンバ変数
 	//エネミー
 	Enemy* enemy_ = nullptr;
 	Model* enemyModel_ = nullptr;
+	// ボス
+	Boss* boss_ = nullptr;
+	Model* bossModel_ = nullptr;
 	//ブロック
 	Model* modelBlocks_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;

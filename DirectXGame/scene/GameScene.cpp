@@ -19,6 +19,8 @@ GameScene::~GameScene() {
 	delete enemyModel_;
 	delete enemy_;
 	delete mapChipField_;
+	delete boss_;
+	delete bossModel_;
 }
 
 void GameScene::Initialize() {
@@ -43,6 +45,11 @@ void GameScene::Initialize() {
 	enemy_ = new Enemy();
 	//初期化
 	enemy_->Initialize(enemyModel_,&viewProjection_);
+	// ボスのモデル
+	bossModel_ = Model::CreateFromOBJ("boss", true);
+	// ボスの生成と初期化
+	boss_ = new Boss();
+	boss_->Initialize(bossModel_, &viewProjection_);
 	// ブロックモデル
 	modelBlocks_ = Model::CreateFromOBJ("block", true);
 	// マップチップフィールドの生成
@@ -91,6 +98,8 @@ void GameScene::Update() {
 
 	//エネミーの処理
 	enemy_->Update();
+	// ボスの更新
+	boss_->Updata();
 }
 
 void GameScene::Draw() {
@@ -130,6 +139,8 @@ void GameScene::Draw() {
 	//エネミーの描画
 	enemy_->Draw();
 
+	// ボスの描画
+	boss_->Draw();
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
