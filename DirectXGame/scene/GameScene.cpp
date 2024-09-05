@@ -44,7 +44,6 @@ void GameScene::Initialize() {
 	// プレイヤーの初期化
 
 	player_->Initialize(playermodel_, &viewProjection_,playerPosition);
-	player_->Initialize(playermodel_, &viewProjection_);
 	//エネミー
 	//モデル
 	enemyModel_ = Model::Create();
