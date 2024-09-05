@@ -2,6 +2,12 @@
 #include "Model.h"
 #include "Vector3.h"
 #include "WorldTransform.h"
+
+// 左右
+enum class LRDirection {
+	kRight,
+	kLeft,
+};
 class MapChipField;
 class Player {
 public:
@@ -12,6 +18,8 @@ public:
 	void Draw();
     //移動
 	void Move();
+	//旋回
+	void Rotate();
 	//セッタ
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 
@@ -26,6 +34,7 @@ private:
 	MapChipField* mapChipField_ = nullptr;
 	//速度
 	Vector3 velocity_ = {};
+	LRDirection lrDirection_ = LRDirection::kRight;
 	//加速
 	static inline const float kAcceleration = 0.05f;
 	//速度減衰

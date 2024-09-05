@@ -42,9 +42,7 @@ void GameScene::Initialize() {
 	//座標指定
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1,0);
 	// プレイヤーの初期化
-
 	player_->Initialize(playermodel_, &viewProjection_,playerPosition);
-	player_->Initialize(playermodel_, &viewProjection_);
 	//エネミー
 	//モデル
 	enemyModel_ = Model::Create();
