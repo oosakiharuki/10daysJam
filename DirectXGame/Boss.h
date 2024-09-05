@@ -38,6 +38,6 @@ private:
 	bool hitEnemy_ = false;
 	bool hitHeal_ = false;
 	bool isDead_ = false;
-	static inline const float kWidth = 0.8f;
-	static inline const float kHeight = 0.8f;
+	static inline const float kWidth = 4.0f;
+	static inline const float kHeight = 4.0f;
 };
