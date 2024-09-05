@@ -21,6 +21,8 @@ GameScene::~GameScene() {
 		delete enemy_;
 	}
 	delete mapChipField_;
+	delete boss_;
+	delete bossModel_;
 }
 
 void GameScene::Initialize() {
@@ -32,12 +34,18 @@ void GameScene::Initialize() {
 	worldTransform_.Initialize();
 	// デバックカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
+	// マップチップフィールドの生成
+	mapChipField_ = new MapChipField;
+	mapChipField_->LoadMapChipCsv("Resources/map.csv");
 	// プレイヤーモデル
 	playermodel_ = Model::CreateFromOBJ("player", true);
 	// プレイヤーの生成
 	player_ = new Player();
+	//座標指定
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1,0);
 	// プレイヤーの初期化
-	player_->Initialize(playermodel_, &viewProjection_);
+
+	player_->Initialize(playermodel_, &viewProjection_,playerPosition);
 	//エネミー
 	//モデル
 	enemyModel_ = Model::Create();
@@ -49,11 +57,13 @@ void GameScene::Initialize() {
 		
 		enemies_.push_back(enemy_);
 	}
+	// ボスのモデル
+	bossModel_ = Model::CreateFromOBJ("boss", true);
+	// ボスの生成と初期化
+	boss_ = new Boss();
+	boss_->Initialize(bossModel_, &viewProjection_);
 	// ブロックモデル
 	modelBlocks_ = Model::CreateFromOBJ("block", true);
-	// マップチップフィールドの生成
-	mapChipField_ = new MapChipField;
-	mapChipField_->LoadMapChipCsv("Resources/map.csv");
 	// ブロックの生成
 	GenerateBlocks();
 }
@@ -98,6 +108,8 @@ void GameScene::Update() {
 	for (Enemy* enemy_ : enemies_) {
 		enemy_->Update();
 	}
+	// ボスの更新
+	boss_->Updata();
 }
 
 void GameScene::Draw() {
@@ -138,6 +150,9 @@ void GameScene::Draw() {
 	for (Enemy* enemy_ : enemies_) {
 		enemy_->Draw();
 	}
+
+	// ボスの描画
+	boss_->Draw();
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion

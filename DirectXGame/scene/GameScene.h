@@ -6,6 +6,7 @@
 #include "Model.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Boss.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
@@ -63,6 +64,9 @@ private: // メンバ変数
 	const uint32_t kNumEnemies = 3; //敵の数
 	std::list<Enemy*> enemies_;
 	Model* enemyModel_ = nullptr;
+	// ボス
+	Boss* boss_ = nullptr;
+	Model* bossModel_ = nullptr;
 	//ブロック
 	Model* modelBlocks_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
