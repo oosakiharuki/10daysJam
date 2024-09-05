@@ -3,7 +3,13 @@
 
 class Enemy{
 public:
-	void Initialize(Model* model,ViewProjection* viewProjection);
+	/// <summary>
+	/// 初期位置
+	/// </summary>
+	/// <param name="model">モデル</param>
+	/// <param name="viewProjection">ビュープロジェクション</param>
+	/// <param name="position">位置</param>
+	void Initialize(Model* model,ViewProjection* viewProjection,Vector3 position);
 	void Update();
 	void Draw();
 
