@@ -15,6 +15,9 @@ GameScene::~GameScene() {
 	}
 	worldTransformBlocks_.clear();
 	delete debugCamera_;
+
+	delete enemyModel_;
+	delete enemy_;
 	delete mapChipField_;
 	delete boss_;
 	delete bossModel_;
@@ -35,6 +38,13 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	// プレイヤーの初期化
 	player_->Initialize(playermodel_, &viewProjection_);
+	//エネミー
+	//モデル
+	enemyModel_ = Model::Create();
+	//生成
+	enemy_ = new Enemy();
+	//初期化
+	enemy_->Initialize(enemyModel_,&viewProjection_);
 	// ボスのモデル
 	bossModel_ = Model::CreateFromOBJ("boss", true);
 	// ボスの生成と初期化
@@ -84,6 +94,10 @@ void GameScene::Update() {
 		// ビュープロジェクション行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
+
+
+	//エネミーの処理
+	enemy_->Update();
 	// ボスの更新
 	boss_->Updata();
 }
@@ -122,6 +136,9 @@ void GameScene::Draw() {
 	}
 	// プレイヤーの描画
 	player_->Draw();
+	//エネミーの描画
+	enemy_->Draw();
+
 	// ボスの描画
 	boss_->Draw();
 	// 3Dオブジェクト描画後処理

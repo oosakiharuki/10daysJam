@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "Model.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Boss.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
@@ -59,6 +60,9 @@ private: // メンバ変数
 	// プレイヤー
 	Player* player_ = nullptr;
 	Model* playermodel_ = nullptr;
+	//エネミー
+	Enemy* enemy_ = nullptr;
+	Model* enemyModel_ = nullptr;
 	// ボス
 	Boss* boss_ = nullptr;
 	Model* bossModel_ = nullptr;
