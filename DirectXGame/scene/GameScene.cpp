@@ -113,9 +113,6 @@ void GameScene::Update() {
 	}
 	// プレイヤーの更新
 	player_->Update(boxes_);
-	// エネミーの処理
-	enemy_->Update();
-
 	// ボスの更新
 	boss_->Updata();
 	//カメラコントローラーの更新
