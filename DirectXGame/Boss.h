@@ -4,6 +4,8 @@
 #include "WorldTransform.h"
 #include "ViewProjection.h"
 #include "Vector3.h"
+#include "Input.h"
+#include "Audio.h"
 
 class Box;
 class Enemy;
@@ -37,11 +39,12 @@ public:
 
 private:
 	WorldTransform worldTransform_;
-
 	Model* model_ = nullptr;
-
 	ViewProjection* viewProjection_ = nullptr;
+	Input* input_ = nullptr;
+	Audio* audio_ = nullptr;
 
+	uint32_t soundDataHandle_ = 0;
 	float bossHp = 100.0f;
 	bool hitBox_ = false;
 	bool hitEnemy_ = false;

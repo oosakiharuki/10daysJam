@@ -4,7 +4,10 @@ void Boss::Initialize(Model* model, ViewProjection* viewProjection) {
 	model_ = model;
 	viewProjection_ = viewProjection;
 	worldTransform_.Initialize();
-	//worldTransform_.translation_.y -= 25.0f;
+	input_ = Input::GetInstance();
+	audio_ = Audio::GetInstance();
+
+	soundDataHandle_ = audio_->LoadWave("HitSE.wav");
 	worldTransform_.translation_ = {
 	    10.0f,
 	    -17.0f,
@@ -23,7 +26,10 @@ void Boss::Updata() {
 }
 
 void Boss::Draw() { 
-	model_->Draw(worldTransform_, *viewProjection_); 
+	if (!isDead_) {
+    	model_->Draw(worldTransform_, *viewProjection_); 
+	}
+
 }
 
 Vector3 Boss::GetWorldPosition() {
@@ -59,13 +65,15 @@ void Boss::OnBoxCollision(const Box* box) {
 
 void Boss::IsHit() {
 	if (hitBox_) {
-		if (bossHp >= 0) {
+		if (bossHp > 0) {
 			bossHp -= 2;
+			audio_->PlayWave(soundDataHandle_);
 		}
 		hitBox_ = false;
 	} else if (hitEnemy_) {
-		if (bossHp >= 0) {
+		if (bossHp > 0) {
 			bossHp -= 5;
+    		audio_->PlayWave(soundDataHandle_);
 		}
 		hitEnemy_ = false;
 	} else if (hitHeal_) {
