@@ -65,6 +65,9 @@ private: // メンバ変数
 	const uint32_t kNumEnemies = 3; //敵の数
 	std::list<Enemy*> enemies_;
 	Model* enemyModel_ = nullptr;
+
+	std::stringstream enemyPopCommands;
+
 	// ボス
 	Boss* boss_ = nullptr;
 	Model* bossModel_ = nullptr;

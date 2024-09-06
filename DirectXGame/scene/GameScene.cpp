@@ -53,8 +53,10 @@ void GameScene::Initialize() {
 		//生成
 		Enemy* enemy_ = new Enemy();
 		// 初期化
+		enemy_->LoadEnemyMoveData();	
+		enemy_->UpdateEnemyPopCommands(i);
 		enemy_->Initialize(enemyModel_, &viewProjection_, {0, 14.0f - (i * 5.0f), 0});
-		
+
 		enemies_.push_back(enemy_);
 	}
 	// ボスのモデル
