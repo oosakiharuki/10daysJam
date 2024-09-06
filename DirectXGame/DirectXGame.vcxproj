@@ -119,7 +119,7 @@
     <ClCompile Include="MyMath.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
-    <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="Title.cpp" />
     <ClCompile Include="WorldTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -160,7 +160,8 @@
     <ClInclude Include="MyMath.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="scene\GameScene.h" />
-    <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="Title.h" />
+
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\TerrainPS.hlsl">
