@@ -8,6 +8,7 @@
 #include "Box.h"
 #include "Enemy.h"
 #include "Boss.h"
+#include "Skydome.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
@@ -83,6 +84,9 @@ private: // メンバ変数
 	Model* bossModel_ = nullptr;
 	//ブロック
 	Model* modelBlocks_ = nullptr;
+	// 天球
+	Skydome* skydome_ = nullptr;
+	Model* skydomeModel_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 	//マップチップフィールド
 	MapChipField* mapChipField_;
