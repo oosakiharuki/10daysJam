@@ -1,6 +1,5 @@
 #include "Model.h"
 #include "WorldTransform.h"
-#include "WorldTransform.h"
 
 /// <summary>
 /// 天球
