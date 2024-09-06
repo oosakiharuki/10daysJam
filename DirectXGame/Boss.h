@@ -27,11 +27,13 @@ public:
 
 	void OnEnemyCollision(const Enemy* enemy);
 
+	// 衝突時にスコアの加算
 	void IsHit();
 
-	bool IsDead() const { return isDead_; }
-
+	//スコアのgetter
 	float GetScore() const { return score_; }
+
+	bool IsDead() const { return isDead_; }
 
 private:
 	WorldTransform worldTransform_;
