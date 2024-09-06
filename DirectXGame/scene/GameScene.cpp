@@ -17,7 +17,9 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 
 	delete enemyModel_;
-	delete enemy_;
+	for (Enemy* enemy_ : enemies_) {
+		delete enemy_;
+	}
 	delete mapChipField_;
 	delete boss_;
 	delete bossModel_;
@@ -51,10 +53,16 @@ void GameScene::Initialize() {
 	//エネミー
 	//モデル
 	enemyModel_ = Model::Create();
-	//生成
-	enemy_ = new Enemy();
-	//初期化
-	enemy_->Initialize(enemyModel_,&viewProjection_);
+	for (uint32_t i = 0; i < kNumEnemies; i++) {
+		//生成
+		Enemy* enemy_ = new Enemy();
+		// 初期化
+		enemy_->LoadEnemyMoveData();
+		enemy_->UpdateEnemyPopCommands(i);		
+		enemy_->Initialize(enemyModel_, &viewProjection_, {0, 14.0f - (i * 5.0f), 0});
+	
+		enemies_.push_back(enemy_);
+	}
 	// ボスのモデル
 	bossModel_ = Model::CreateFromOBJ("boss", true);
 	// ボスの生成と初期化
@@ -98,6 +106,7 @@ void GameScene::Update() {
 	player_->Update(boxes_);
 	// エネミーの処理
 	enemy_->Update();
+
 	// ボスの更新
 	boss_->Updata();
 	//カメラコントローラーの更新
@@ -128,6 +137,10 @@ void GameScene::Update() {
 	} else {
 		// ビュープロジェクション行列の更新と転送
 		viewProjection_.UpdateMatrix();
+	}
+	// エネミーの処理
+	for (Enemy* enemy_ : enemies_) {
+		enemy_->Update();
 	}
 }
 
@@ -166,7 +179,9 @@ void GameScene::Draw() {
 	// プレイヤーの描画
 	player_->Draw();
 	//エネミーの描画
-	enemy_->Draw();
+	for (Enemy* enemy_ : enemies_) {
+		enemy_->Draw();
+	}
 
 	// ボスの描画
 	boss_->Draw();
@@ -214,4 +229,58 @@ void GameScene::GenerateBlocks() {
 			}
 		}
 	}
+}
+
+bool GameScene::IsCollision(const AABB& aabb1, const AABB& aabb2) {
+	if ((aabb1.min.x <= aabb2.max.x && aabb1.max.x >= aabb2.min.x) && (aabb1.min.y <= aabb2.max.y && aabb1.max.y >= aabb2.min.y) && (aabb1.min.z <= aabb2.max.z && aabb1.max.z >= aabb2.min.z)) {
+		return true;
+	}
+	return false;
+}
+
+// すべての当たり判定
+void GameScene::CheckAllCollision() {
+
+	#pragma region ボスと箱の当たり判定
+	/*{
+		// 判定1と2の座標
+		AABB aabb1, aabb2;
+
+		// ボスの座標
+		aabb1 = boss_->GetAABB();
+		// 箱の座標
+		aabb2 = box_->GetAABB();
+
+		// ボスと箱の当たり判定
+
+		//AABB同士の交差判定
+		if (IsCollision(aabb1, aabb2)) {
+			// ボスの衝突時コールバックを呼び出す
+			boss_->OnBoxCollision(box_);
+			// 箱の衝突時コールバックを呼び出す
+		}
+	}*/ 
+	#pragma endregion
+
+	#pragma region ボスと敵の当たり判定
+	{ 
+		// 判定1と2の座標
+		AABB aabb1, aabb2;
+
+		// ボスの座標
+		aabb1 = boss_->GetAABB();
+
+		// ボスと敵すべての当たり判定
+		for (Enemy* enemy_ : enemies_) {
+			// 敵の座標
+			aabb2 = enemy_->GetAABB();
+
+			// AABB同士の交差判定
+			if (IsCollision(aabb1, aabb2)) {
+				// ボスの衝突時コールバックを呼び出す
+				boss_->OnEnemyCollision(enemy_);
+			}
+		}
+	}
+	#pragma endregion
 }
