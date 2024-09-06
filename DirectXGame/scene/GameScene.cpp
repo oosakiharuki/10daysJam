@@ -23,6 +23,8 @@ GameScene::~GameScene() {
 	delete mapChipField_;
 	delete boss_;
 	delete bossModel_;
+	delete skydome_;
+	delete skydomeModel_;
 	delete cameraController_;
 }
 
@@ -64,6 +66,11 @@ void GameScene::Initialize() {
 	// ボスの生成と初期化
 	boss_ = new Boss();
 	boss_->Initialize(bossModel_, &viewProjection_);
+	// 天球のモデル
+	skydomeModel_ = Model::CreateFromOBJ("sphere", true);
+	// 天球の生成と初期化
+	skydome_ = new Skydome();
+	skydome_->Initialize(skydomeModel_, &viewProjection_);
 	// ブロックモデル
 	modelBlocks_ = Model::CreateFromOBJ("block", true);
 	// カメラコントローラの生成・初期化
@@ -76,6 +83,8 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+	// 天球の更新
+	skydome_->Update();
 	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -144,6 +153,8 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+	// 天球の描画
+	skydome_->Draw();
 	// ブロックの描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
