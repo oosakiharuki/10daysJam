@@ -4,7 +4,7 @@
 #include "WorldTransform.h"
 class Box {
 public:
-	void Initialize();
+	void Initialize(Model* model, ViewProjection* viewProjection);
 
 	void Update();
 
