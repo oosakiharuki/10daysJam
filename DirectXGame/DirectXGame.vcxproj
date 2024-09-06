@@ -110,6 +110,7 @@
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="Box.cpp" />
+    <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="main.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="Boss.h" />
     <ClInclude Include="Box.h" />
+    <ClInclude Include="CameraController.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="MapChipField.h" />

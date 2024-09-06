@@ -23,6 +23,7 @@ GameScene::~GameScene() {
 	delete mapChipField_;
 	delete boss_;
 	delete bossModel_;
+	delete cameraController_;
 }
 
 void GameScene::Initialize() {
@@ -42,9 +43,8 @@ void GameScene::Initialize() {
 	// プレイヤーの生成
 	player_ = new Player();
 	//座標指定
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1,0);
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(6,0);
 	// プレイヤーの初期化
-
 	player_->Initialize(playermodel_, &viewProjection_,playerPosition);
 	//エネミー
 	//モデル
@@ -64,6 +64,11 @@ void GameScene::Initialize() {
 	boss_->Initialize(bossModel_, &viewProjection_);
 	// ブロックモデル
 	modelBlocks_ = Model::CreateFromOBJ("block", true);
+	// カメラコントローラの生成・初期化
+	cameraController_ = new CameraController();
+	cameraController_->Initialize(&viewProjection_,movableArea);
+	cameraController_->SetTarget(player_);
+	cameraController_->Reset();
 	// ブロックの生成
 	GenerateBlocks();
 }
@@ -80,6 +85,10 @@ void GameScene::Update() {
 	}
 	// プレイヤーの更新
 	player_->Update();
+	// ボスの更新
+	boss_->Updata();
+	//カメラコントローラーの更新
+	cameraController_->Update();
 	// デバックカメラの更新
 	debugCamera_->Update();
 #ifdef _DEBUG
@@ -103,13 +112,10 @@ void GameScene::Update() {
 		// ビュープロジェクション行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
-
 	// エネミーの処理
 	for (Enemy* enemy_ : enemies_) {
 		enemy_->Update();
 	}
-	// ボスの更新
-	boss_->Updata();
 }
 
 void GameScene::Draw() {

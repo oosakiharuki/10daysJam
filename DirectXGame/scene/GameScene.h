@@ -12,6 +12,7 @@
 #include "WorldTransform.h"
 #include "DebugCamera.h"
 #include "MapChipField.h"
+#include "CameraController.h"
 #include <vector>
 
 /// <summary>
@@ -72,6 +73,9 @@ private: // メンバ変数
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 	//マップチップフィールド
 	MapChipField* mapChipField_;
+	//カメラコントローラー
+	CameraController* cameraController_ = nullptr;
+	Rect movableArea = {12, 10, 0, 10};
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
