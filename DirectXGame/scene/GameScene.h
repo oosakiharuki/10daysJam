@@ -13,6 +13,7 @@
 #include "DebugCamera.h"
 #include "MapChipField.h"
 #include "CameraController.h"
+#include "Box.h"
 #include <vector>
 
 /// <summary>
@@ -75,6 +76,11 @@ private: // メンバ変数
 	//カメラコントローラー
 	CameraController* cameraController_ = nullptr;
 	Rect movableArea = {12, 10, 0, 10};
+    //箱
+	Box* box_ = nullptr;
+	Model* boxModel_ = nullptr;
+	// 複数の箱を保持
+	std::vector<Box*> boxes_; 
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

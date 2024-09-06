@@ -22,6 +22,7 @@ GameScene::~GameScene() {
 	delete boss_;
 	delete bossModel_;
 	delete cameraController_;
+	delete box_;
 }
 
 void GameScene::Initialize() {
@@ -63,6 +64,17 @@ void GameScene::Initialize() {
 	cameraController_->Initialize(&viewProjection_,movableArea);
 	cameraController_->SetTarget(player_);
 	cameraController_->Reset();
+	//箱モデル
+	boxModel_ = Model::CreateFromOBJ("cube", true);
+	// 複数の箱を生成してリストに追加
+	for (int i = 0; i < 1; ++i) { 
+		Box* box = new Box();
+		box->Initialize(boxModel_, &viewProjection_);
+		boxes_.push_back(box);
+	}
+	//箱の生成と初期化
+	box_ = new Box();
+	box_->Initialize(boxModel_, &viewProjection_);
 	// ブロックの生成
 	GenerateBlocks();
 }
@@ -78,13 +90,17 @@ void GameScene::Update() {
 		}
 	}
 	// プレイヤーの更新
-	player_->Update();
+	player_->Update(boxes_);
 	// エネミーの処理
 	enemy_->Update();
 	// ボスの更新
 	boss_->Updata();
 	//カメラコントローラーの更新
 	cameraController_->Update();
+	//箱の更新
+	for (Box* box : boxes_) {
+		box->Update();
+	}
 	// デバックカメラの更新
 	debugCamera_->Update();
 #ifdef _DEBUG
@@ -149,6 +165,9 @@ void GameScene::Draw() {
 
 	// ボスの描画
 	boss_->Draw();
+	for (Box* box : boxes_) {
+		box->Draw();
+	}
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
