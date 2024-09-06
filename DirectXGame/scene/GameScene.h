@@ -62,7 +62,8 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 	Model* playermodel_ = nullptr;
 	//エネミー
-	Enemy* enemy_ = nullptr;
+	const uint32_t kNumEnemies = 3; //敵の数
+	std::list<Enemy*> enemies_;
 	Model* enemyModel_ = nullptr;
 	// ボス
 	Boss* boss_ = nullptr;
