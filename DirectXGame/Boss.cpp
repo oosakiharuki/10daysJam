@@ -17,10 +17,6 @@ void Boss::Initialize(Model* model, ViewProjection* viewProjection) {
 
 void Boss::Updata() { 
 
-	if (input_->TriggerKey(DIK_E)) {
-		hitEnemy_ = true;
-	}
-
 	IsHit();
 
 	if (bossHp <= 0) {
