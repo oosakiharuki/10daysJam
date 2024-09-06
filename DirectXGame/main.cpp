@@ -7,6 +7,73 @@
 #include "TextureManager.h"
 #include "WinApp.h"
 
+#include "Title.h"
+enum class Scene {
+	title,
+	game,
+};
+
+Title* title = nullptr;
+GameScene* gameScene = nullptr;
+
+Scene scene_;
+
+
+//シーンチェンジ
+void ChangeScene() {
+	switch (scene_) {
+	case Scene::title:
+		
+		if (title->IsNextScene()) {
+			scene_ = Scene::game;
+			delete title;
+			title = nullptr;
+
+			gameScene = new GameScene();
+			gameScene->Initialize();
+		}
+
+		break;
+	case Scene::game:
+
+		//if () {
+		// scene_ = Scene::title;
+		//	delete gameScene;
+		//	gameScene = nullptr;
+
+		//	title = new Title();
+		//	title->Initialize();
+		//}
+
+		break;
+	}
+}
+
+//更新
+void ChangeUpdate() {
+	switch (scene_) {
+	case Scene::title:
+		title->Update();
+		break;
+	case Scene::game:
+		gameScene->Update();
+		break;
+	}
+}
+
+//描画
+void ChangeDraw() {
+	switch (scene_) {
+	case Scene::title:
+		title->Draw();
+		break;
+	case Scene::game:
+		gameScene->Draw();
+		break;
+	}
+}
+
+
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WinApp* win = nullptr;
@@ -16,7 +83,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Audio* audio = nullptr;
 	AxisIndicator* axisIndicator = nullptr;
 	PrimitiveDrawer* primitiveDrawer = nullptr;
-	GameScene* gameScene = nullptr;
+	//GameScene* gameScene = nullptr;
 
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
@@ -58,8 +125,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 
 	// ゲームシーンの初期化
-	gameScene = new GameScene();
-	gameScene->Initialize();
+	scene_ = Scene::title;
+
+	title = new Title();
+	title->Initialize();
 
 	// メインループ
 	while (true) {
@@ -73,7 +142,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// 入力関連の毎フレーム処理
 		input->Update();
 		// ゲームシーンの毎フレーム処理
-		gameScene->Update();
+		
+		ChangeScene();
+		ChangeUpdate();
+		
 		// 軸表示の更新
 		axisIndicator->Update();
 		// ImGui受付終了
@@ -82,7 +154,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// 描画開始
 		dxCommon->PreDraw();
 		// ゲームシーンの描画
-		gameScene->Draw();
+		
+		ChangeDraw();
+		
 		// 軸表示の描画
 		axisIndicator->Draw();
 		// プリミティブ描画のリセット
