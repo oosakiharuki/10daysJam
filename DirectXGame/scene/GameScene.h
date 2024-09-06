@@ -6,11 +6,13 @@
 #include "Model.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Boss.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "DebugCamera.h"
 #include "MapChipField.h"
+#include "CameraController.h"
 #include <vector>
 
 /// <summary>
@@ -63,12 +65,20 @@ private: // メンバ変数
 	const uint32_t kNumEnemies = 3; //敵の数
 	std::list<Enemy*> enemies_;
 	Model* enemyModel_ = nullptr;
+
 	std::stringstream enemyPopCommands;
+
+	// ボス
+	Boss* boss_ = nullptr;
+	Model* bossModel_ = nullptr;
 	//ブロック
 	Model* modelBlocks_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 	//マップチップフィールド
 	MapChipField* mapChipField_;
+	//カメラコントローラー
+	CameraController* cameraController_ = nullptr;
+	Rect movableArea = {12, 10, 0, 10};
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
