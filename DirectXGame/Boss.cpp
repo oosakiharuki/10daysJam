@@ -17,6 +17,10 @@ void Boss::Initialize(Model* model, ViewProjection* viewProjection) {
 
 void Boss::Updata() { 
 
+	if (input_->TriggerKey(DIK_E)) {
+		hitEnemy_ = true;
+	}
+
 	IsHit();
 
 	if (bossHp <= 0) {
@@ -26,10 +30,7 @@ void Boss::Updata() {
 }
 
 void Boss::Draw() { 
-	if (!isDead_) {
-    	model_->Draw(worldTransform_, *viewProjection_); 
-	}
-
+    model_->Draw(worldTransform_, *viewProjection_); 
 }
 
 Vector3 Boss::GetWorldPosition() {
@@ -65,21 +66,25 @@ void Boss::OnBoxCollision(const Box* box) {
 
 void Boss::IsHit() {
 	if (hitBox_) {
-		if (bossHp > 0) {
+		/*if (bossHp > 0) {
 			bossHp -= 2;
-			audio_->PlayWave(soundDataHandle_);
-		}
+
+		}*/ 
+		audio_->PlayWave(soundDataHandle_);
+		score_ += 2;
 		hitBox_ = false;
 	} else if (hitEnemy_) {
-		if (bossHp > 0) {
+		/*if (bossHp > 0) {
 			bossHp -= 5;
-    		audio_->PlayWave(soundDataHandle_);
-		}
+
+		}*/ 
+    	audio_->PlayWave(soundDataHandle_);
+		score_ += 5;
 		hitEnemy_ = false;
-	} else if (hitHeal_) {
+	} /* else if (hitHeal_) {
 		if (bossHp < 100) {
 			bossHp += 5;
 		}
 		hitHeal_ = false;
-	}
+	}*/
 }
