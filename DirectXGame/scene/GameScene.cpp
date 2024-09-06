@@ -26,6 +26,10 @@ GameScene::~GameScene() {
 	delete skydome_;
 	delete skydomeModel_;
 	delete cameraController_;
+	for (Box* box : boxes_) {
+		delete box;
+	}
+	delete box_;
 }
 
 void GameScene::Initialize() {
@@ -78,6 +82,19 @@ void GameScene::Initialize() {
 	cameraController_->Initialize(&viewProjection_,movableArea);
 	cameraController_->SetTarget(player_);
 	cameraController_->Reset();
+	//箱モデル
+	boxModel_ = Model::CreateFromOBJ("cube", true);
+	std::vector<Vector3> positions = {
+	    {0.0f, 20.0f, 0.0f},
+        {6.0f, 20.0f, 0.0f},
+        {14.0f, 20.0f, 0.0f}
+    };
+	for (const auto& position : positions) {
+		Box* box = new Box();
+		box->Initialize(boxModel_, &viewProjection_);
+		box->SetPosition(position);
+		boxes_.push_back(box);
+	}
 	// ブロックの生成
 	GenerateBlocks();
 }
@@ -95,11 +112,18 @@ void GameScene::Update() {
 		}
 	}
 	// プレイヤーの更新
-	player_->Update();
+	player_->Update(boxes_);
+	// エネミーの処理
+	enemy_->Update();
+
 	// ボスの更新
 	boss_->Updata();
 	//カメラコントローラーの更新
 	cameraController_->Update();
+	//箱の更新
+	for (Box* box : boxes_) {
+		box->Update();
+	}
 	// デバックカメラの更新
 	debugCamera_->Update();
 #ifdef _DEBUG
@@ -172,6 +196,9 @@ void GameScene::Draw() {
 
 	// ボスの描画
 	boss_->Draw();
+	for (Box* box : boxes_) {
+		box->Draw();
+	}
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
