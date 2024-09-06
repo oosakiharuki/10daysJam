@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include <cassert>
 #include <fstream>
+#include "MyMath.h"
 
 void Enemy::Initialize(Model* model, ViewProjection* viewProjection, Vector3 position) { 
 	
@@ -13,6 +14,7 @@ void Enemy::Initialize(Model* model, ViewProjection* viewProjection, Vector3 pos
 	worldTransform_.translation_ = position;
 
 	move = position;
+
 }
 
 void Enemy::LoadEnemyMoveData() {
@@ -47,15 +49,25 @@ void Enemy::UpdateEnemyPopCommands(uint32_t number) {
 			float speed = (float)std::atof(word.c_str());
 
 			getline(line_stream, word, ',');
-			float range = (float)std::atof(word.c_str());
+			float rangeX = (float)std::atof(word.c_str());
+
+			getline(line_stream, word, ',');
+			float rangeY = (float)std::atof(word.c_str());
 
 			getline(line_stream, word, ',');
 			if (word.find("revarse") == 0) {
 				speed = -speed;
 			}
 
+			getline(line_stream, word, ',');
+			if (word.find("circle") == 0) {
+				rotateFlag = true;
+			}
+
+
 			kLoad = 1.0f / speed;
-			kRange = range;
+			kRange.x = rangeX;
+			kRange.y = rangeY;
 		}
 	}
 }
@@ -66,8 +78,14 @@ void Enemy::Update() {
 
 	kSpeed += kLoad; // 速度
 
-	worldTransform_.translation_.x = move.x + std::sin(kSpeed) * kRange;
+	worldTransform_.translation_.x = move.x + std::sin(kSpeed) * kRange.x;
+	
 
+	if (rotateFlag) {
+		worldTransform_.translation_.y = move.y + std::cos(kSpeed) * kRange.y;
+	} else {
+		worldTransform_.translation_.y = move.y + std::sin(kSpeed) * kRange.y;
+	}
 }
 
 void Enemy::Draw() {

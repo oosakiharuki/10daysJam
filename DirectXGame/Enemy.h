@@ -27,8 +27,8 @@ private:
 	Vector3 move = {0, 0, 0};
 	float kSpeed;
 	float kLoad;
-	float kRange; //半径
-
+	Vector3 kRange; //半径
+	bool rotateFlag; //敵が T:回転するか / F:斜め移動か
 
 	std::stringstream enemyMoveCommands;
 
