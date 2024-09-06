@@ -18,6 +18,10 @@ public:
 	void Update();
 	void Draw();
 
+	Vector3 GetWorldPosition();
+
+	AABB GetAABB();
+
 private:
 
 	Model* model_ = nullptr;
@@ -32,4 +36,6 @@ private:
 
 	std::stringstream enemyMoveCommands;
 
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
 };

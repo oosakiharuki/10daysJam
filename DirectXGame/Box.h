@@ -10,6 +10,10 @@ public:
 
 	void Draw();
 
+	Vector3 GetWorldPosition();
+
+	AABB GetAABB();
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -17,4 +21,7 @@ private:
 	Model* model_ = nullptr;
 	// ビュープロジェクション
 	ViewProjection* viewProjection_ = nullptr;
+
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
 };
