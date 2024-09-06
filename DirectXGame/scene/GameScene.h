@@ -73,7 +73,7 @@ private: // メンバ変数
 	Box* box_ = nullptr;
 	Model* boxModel_ = nullptr;
 	//エネミー
-	const uint32_t kNumEnemies = 5; //敵の数
+	const uint32_t kNumEnemies = 4; //敵の数
 	std::list<Enemy*> enemies_;
 	Model* enemyModel_ = nullptr;
 

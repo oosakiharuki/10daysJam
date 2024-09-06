@@ -2,6 +2,7 @@
 #include <cassert>
 #include <fstream>
 #include "MyMath.h"
+#include "Box.h"
 
 void Enemy::Initialize(Model* model, ViewProjection* viewProjection, Vector3 position) { 
 	
@@ -113,4 +114,14 @@ AABB Enemy::GetAABB() {
 	aabb.max = {worldPos.x + kWidth / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kWidth / 2.0f};
 
 	return aabb;
+}
+
+void Enemy::OnCollision() {
+
+	//worldTransform_.translation_.y = box_->GetWorldPosition().y + 20.0f;
+	isDead_ = true;
+}
+
+void Enemy::OnCollisionBoss() { 
+	isDead_ = true; 
 }

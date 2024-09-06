@@ -66,7 +66,7 @@ void Boss::IsHit() {
 			bossHp -= 2;
 
 		}*/ 
-		audio_->PlayWave(soundDataHandle_);
+		//audio_->PlayWave(soundDataHandle_);//エラーが起きる
 		score_ += 2;
 		hitBox_ = false;
 	} else if (hitEnemy_) {
@@ -74,7 +74,7 @@ void Boss::IsHit() {
 			bossHp -= 5;
 
 		}*/ 
-    	audio_->PlayWave(soundDataHandle_);
+    	audio_->PlayWave(soundDataHandle_);//ココも
 		score_ += 5;
 		hitEnemy_ = false;
 	} /* else if (hitHeal_) {

@@ -2,6 +2,8 @@
 #include "WorldTransform.h"
 #include <sstream>
 
+class Box;
+
 class Enemy{
 public:
 	/// <summary>
@@ -21,6 +23,9 @@ public:
 	Vector3 GetWorldPosition();
 
 	AABB GetAABB();
+	void OnCollision();
+	void OnCollisionBoss();
+	bool IsDead() { return isDead_; }
 
 private:
 
@@ -38,4 +43,8 @@ private:
 
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
+
+	bool isDead_ = false;
+
+	Box* box_ = nullptr;
 };
