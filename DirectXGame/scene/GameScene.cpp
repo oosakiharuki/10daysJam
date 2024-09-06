@@ -62,9 +62,6 @@ void GameScene::Initialize() {
 	// ボスの生成と初期化
 	boss_ = new Boss();
 	boss_->Initialize(bossModel_, &viewProjection_);
-	// 箱の生成と初期化
-	box_ = new Box();
-	box_->Initialize();
 	// ブロックモデル
 	modelBlocks_ = Model::CreateFromOBJ("block", true);
 	// カメラコントローラの生成・初期化
@@ -216,7 +213,7 @@ bool GameScene::IsCollision(const AABB& aabb1, const AABB& aabb2) {
 void GameScene::CheckAllCollision() {
 
 	#pragma region ボスと箱の当たり判定
-	{
+	/*{
 		// 判定1と2の座標
 		AABB aabb1, aabb2;
 
@@ -233,7 +230,7 @@ void GameScene::CheckAllCollision() {
 			boss_->OnBoxCollision(box_);
 			// 箱の衝突時コールバックを呼び出す
 		}
-	}
+	}*/ 
 	#pragma endregion
 
 	#pragma region ボスと敵の当たり判定
