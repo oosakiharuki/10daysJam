@@ -7,7 +7,13 @@ void Box::Initialize(Model* model, ViewProjection* viewProjection) {
 	viewProjection_ = viewProjection;
 }
 
-void Box::Update() { worldTransform_.UpdateMatrix(); }
+void Box::Update() {
+	if (isFalling_) {
+		fallSpeed_ += kGravity;
+		worldTransform_.translation_.y -= fallSpeed_;
+	}
+	worldTransform_.UpdateMatrix();
+}
 
 void Box::Draw() { model_->Draw(worldTransform_, *viewProjection_); }
 

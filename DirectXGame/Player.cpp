@@ -19,8 +19,9 @@ void Player::Update(const std::vector<Box*>& boxes) {
 	Move();
 	// 旋回
 	Rotate();
+	bool isQKeyPressed = Input::GetInstance()->PushKey(DIK_Q);
 	// 箱を持ち上げる・落とす
-	if (Input::GetInstance()->PushKey(DIK_Q)) {
+	if (isQKeyPressed && !wasQKeyPressed_) {
 		if (!isCarryingBox_) {
 			// 近くにある箱を探す
 			Box* nearestBox = FindNearestBox(boxes);
@@ -32,6 +33,11 @@ void Player::Update(const std::vector<Box*>& boxes) {
 			// 箱を投げ落とす
 			PickOrDropBox(carriedBox_);
 		}
+	}
+	wasQKeyPressed_ = isQKeyPressed;
+	if (isCarryingBox_ && carriedBox_ != nullptr) {
+		// 箱の位置をプレイヤーの位置に合わせる
+		carriedBox_->SetPosition({worldTransform_.translation_.x, worldTransform_.translation_.y + 1.0f, worldTransform_.translation_.z});
 	}
 }
 
@@ -96,13 +102,14 @@ void Player::Rotate() {
 void Player::PickOrDropBox(Box* box) {
 	if (isCarryingBox_) {
 		// 箱を投げ落とす
-		carriedBox_->SetPosition({worldTransform_.translation_.x, worldTransform_.translation_.y - 1.0f, worldTransform_.translation_.z});
+		carriedBox_->SetPosition({worldTransform_.translation_.x, worldTransform_.translation_.y - kBoxPickupHeight, worldTransform_.translation_.z});
+		carriedBox_->SetFalling(true);
 		isCarryingBox_ = false;
 		carriedBox_ = nullptr;
 	} else if (box != nullptr&&IsNearBox(box)) {
 		// 箱を持ち上げる
 		carriedBox_ = box;
-		carriedBox_->SetPosition({worldTransform_.translation_.x, worldTransform_.translation_.y + 1.0f, worldTransform_.translation_.z});
+		carriedBox_->SetPosition({worldTransform_.translation_.x, worldTransform_.translation_.y + kBoxPickupHeight, worldTransform_.translation_.z});
 		isCarryingBox_ = true;
 	}
 }

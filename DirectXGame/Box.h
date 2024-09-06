@@ -10,6 +10,8 @@ public:
 
 	void Draw();
 
+	//落下
+	void SetFalling(bool falling) { isFalling_ = falling; }
 	void SetPosition(const Vector3& position) { 
 		worldTransform_.translation_ = position;
 		worldTransform_.UpdateMatrix();
@@ -24,4 +26,10 @@ private:
 	Model* model_ = nullptr;
 	// ビュープロジェクション
 	ViewProjection* viewProjection_ = nullptr;
+	// 重力
+	bool isFalling_ = false;
+	float fallSpeed_ = 0.0f;
+	//重力加速度
+	static constexpr float kGravity = 0.1f; 
 };
+

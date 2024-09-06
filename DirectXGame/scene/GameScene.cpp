@@ -22,6 +22,9 @@ GameScene::~GameScene() {
 	delete boss_;
 	delete bossModel_;
 	delete cameraController_;
+	for (Box* box : boxes_) {
+		delete box;
+	}
 	delete box_;
 }
 
@@ -66,15 +69,17 @@ void GameScene::Initialize() {
 	cameraController_->Reset();
 	//箱モデル
 	boxModel_ = Model::CreateFromOBJ("cube", true);
-	// 複数の箱を生成してリストに追加
-	for (int i = 0; i < 1; ++i) { 
+	std::vector<Vector3> positions = {
+	    {0.0f, 20.0f, 0.0f},
+        {6.0f, 20.0f, 0.0f},
+        {14.0f, 20.0f, 0.0f}
+    };
+	for (const auto& position : positions) {
 		Box* box = new Box();
 		box->Initialize(boxModel_, &viewProjection_);
+		box->SetPosition(position);
 		boxes_.push_back(box);
 	}
-	//箱の生成と初期化
-	box_ = new Box();
-	box_->Initialize(boxModel_, &viewProjection_);
 	// ブロックの生成
 	GenerateBlocks();
 }

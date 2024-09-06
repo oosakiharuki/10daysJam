@@ -49,9 +49,11 @@ private:
 	static inline const float kAcceleration = 0.05f;
 	//速度減衰
 	static inline const float kAttenuation = 0.05f;
-	static inline const float kLimitRunSpeed = 0.3f;
+	static inline const float kLimitRunSpeed = 0.15f;
 	// 旋回時間<秒>
 	static inline const float kTimeTurn = 0.3f;
+	//箱の高さ
+	static constexpr float kBoxPickupHeight = 2.0f;
 	// 旋回開始時の角度
 	float turnFirstRotationY_ = 0.0f;
 	// 旋回タイマー
@@ -60,4 +62,6 @@ private:
 	bool isCarryingBox_ = false;
 	//持ち上げてる箱のポインタ
 	Box* carriedBox_ = nullptr;
+	//キーの状態保存
+	bool wasQKeyPressed_ = false;
 };
