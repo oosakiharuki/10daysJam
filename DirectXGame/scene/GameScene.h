@@ -55,6 +55,8 @@ public: // メンバ関数
 	void CheckAllCollision();
 
 	bool IsCollision(const AABB& aabb1, const AABB& aabb2);
+	//ランダムな位置を生成
+	Vector3 GenerateRandomPosition();
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -95,6 +97,18 @@ private: // メンバ変数
 	Rect movableArea = {12, 10, 0, 10};
 	// 複数の箱を保持
 	std::vector<Box*> boxes_; 
+	 // 最後の箱生成からの経過時間
+	float timeSinceLastBox_ = 0.0f; 
+	// 箱生成間隔
+	const float kBoxSpawnInterval = 5.0f; 
+
+	const float kBoxSpawnMinX = 0.0f; 
+	const float kBoxSpawnMaxX = 31.0f;
+	const float kBoxSpawnMinY = 19.5f;
+	const float kBoxSpawnMaxY = 19.5f;  
+	const float kBoxSpawnMinZ = 0.0f; 
+	const float kBoxSpawnMaxZ = 0.0f;  
+	
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

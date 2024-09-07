@@ -1,8 +1,13 @@
 #include "GameScene.h"
 #include "TextureManager.h"
 #include <cassert>
+#include <cstdlib>
+#include <ctime>
 
-GameScene::GameScene() {}
+GameScene::GameScene() {
+	// ランダムシードを初期化
+	srand(static_cast<unsigned int>(time(nullptr)));
+}
 
 GameScene::~GameScene() {
 	delete player_;
@@ -29,7 +34,7 @@ GameScene::~GameScene() {
 	for (Box* box : boxes_) {
 		delete box;
 	}
-	delete box_;
+	boxes_.clear();
 }
 
 void GameScene::Initialize() {
@@ -84,17 +89,14 @@ void GameScene::Initialize() {
 	cameraController_->Reset();
 	//箱モデル
 	boxModel_ = Model::CreateFromOBJ("cube", true);
-	std::vector<Vector3> positions = {
-	    {0.0f, 20.0f, 0.0f},
-        {6.0f, 20.0f, 0.0f},
-        {14.0f, 20.0f, 0.0f}
-    };
-	for (const auto& position : positions) {
+	for (int i = 0; i < 3; ++i) {
 		Box* box = new Box();
 		box->Initialize(boxModel_, &viewProjection_);
-		box->SetPosition(position);
+		Vector3 randomPosition = GenerateRandomPosition();
+		box->SetPosition(randomPosition);
 		boxes_.push_back(box);
 	}
+
 	// ブロックの生成
 	GenerateBlocks();
 }
@@ -117,6 +119,20 @@ void GameScene::Update() {
 	boss_->Updata();
 	//カメラコントローラーの更新
 	cameraController_->Update();
+	//箱の生成間隔
+	timeSinceLastBox_ += 1.0f / 60.0f;
+
+	if (timeSinceLastBox_ >= kBoxSpawnInterval) {
+		Box* newBox = new Box();
+		newBox->Initialize(boxModel_, &viewProjection_);
+
+		Vector3 randomPosition = GenerateRandomPosition();
+		newBox->SetPosition(randomPosition);
+
+		boxes_.push_back(newBox);
+		timeSinceLastBox_ = 0.0f;
+	}
+
 	//箱の更新
 	for (Box* box : boxes_) {
 		box->Update();
@@ -291,4 +307,11 @@ void GameScene::CheckAllCollision() {
 		}
 	}
 	#pragma endregion
+}
+//ランダムな位置を生成
+Vector3 GameScene::GenerateRandomPosition() {
+	float x = kBoxSpawnMinX + static_cast<float>(rand()) / RAND_MAX * (kBoxSpawnMaxX - kBoxSpawnMinX);
+	float y = kBoxSpawnMinY + static_cast<float>(rand()) / RAND_MAX * (kBoxSpawnMaxY - kBoxSpawnMinY);
+	float z = kBoxSpawnMinZ + static_cast<float>(rand()) / RAND_MAX * (kBoxSpawnMaxZ - kBoxSpawnMinZ);
+	return Vector3{x, y, z};
 }

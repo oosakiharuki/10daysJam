@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Input.h"
 #include "MyMath.h"
+#include "imgui.h"
 #include <algorithm>
 #include <numbers>
 #include <limits>
@@ -39,6 +40,9 @@ void Player::Update(const std::vector<Box*>& boxes) {
 		// 箱の位置をプレイヤーの位置に合わせる
 		carriedBox_->SetPosition({worldTransform_.translation_.x, worldTransform_.translation_.y + 1.0f, worldTransform_.translation_.z});
 	}
+	ImGui::Begin("player");
+	ImGui::DragFloat3("Postion", &worldTransform_.translation_.x, 0.1f);
+	ImGui::End();
 }
 
 void Player::Draw() { model_->Draw(worldTransform_, *viewProjection_); }
