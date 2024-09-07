@@ -27,6 +27,8 @@ public:
 	void OnCollisionBoss();
 	bool IsDead() { return isDead_; }
 
+	void SetBox(Box* box) { box_ = box; }
+
 private:
 
 	Model* model_ = nullptr;
@@ -41,9 +43,10 @@ private:
 
 	std::stringstream enemyMoveCommands;
 
-	static inline const float kWidth = 0.8f;
-	static inline const float kHeight = 0.8f;
+	static inline const float kWidth = 2.8f;
+	static inline const float kHeight = 2.8f;
 
+	bool isCrush_ = false;
 	bool isDead_ = false;
 
 	Box* box_ = nullptr;

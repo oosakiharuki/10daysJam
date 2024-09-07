@@ -146,7 +146,7 @@ void GameScene::Update() {
 	}
 	// エネミーの処理
 	for (Enemy* enemy_ : enemies_) {
-		enemy_->Update();
+		enemy_->Update();		
 	}
 	CheckAllCollision();
 
@@ -315,6 +315,7 @@ void GameScene::CheckAllCollision() {
 	{
 		for (Box* box : boxes_) {
 			for (Enemy* enemy_ : enemies_) {
+				enemy_->SetBox(box);
 				
 				aabb1 = box->GetAABB();
 				aabb2 = enemy_->GetAABB();

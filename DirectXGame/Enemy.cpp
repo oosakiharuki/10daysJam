@@ -15,7 +15,7 @@ void Enemy::Initialize(Model* model, ViewProjection* viewProjection, Vector3 pos
 	worldTransform_.translation_ = position;
 
 	move = position;
-
+	
 }
 
 void Enemy::LoadEnemyMoveData() {
@@ -77,16 +77,21 @@ void Enemy::Update() {
 
 	worldTransform_.UpdateMatrix();
 
-	kSpeed += kLoad; // 速度
+	if (!isCrush_) {
 
-	worldTransform_.translation_.x = move.x + std::sin(kSpeed) * kRange.x;
-	
+		kSpeed += kLoad; // 速度
 
-	if (rotateFlag) {
-		worldTransform_.translation_.y = move.y + std::cos(kSpeed) * kRange.y;
+		worldTransform_.translation_.x = move.x + std::sin(kSpeed) * kRange.x;
+
+		if (rotateFlag) {
+			worldTransform_.translation_.y = move.y + std::cos(kSpeed) * kRange.y;
+		} else {
+			worldTransform_.translation_.y = move.y + std::sin(kSpeed) * kRange.y;
+		}
 	} else {
-		worldTransform_.translation_.y = move.y + std::sin(kSpeed) * kRange.y;
+		worldTransform_.translation_.y = box_->GetWorldPosition().y - 1.0f;
 	}
+
 }
 
 void Enemy::Draw() {
@@ -117,9 +122,7 @@ AABB Enemy::GetAABB() {
 }
 
 void Enemy::OnCollision() {
-
-	//worldTransform_.translation_.y = box_->GetWorldPosition().y + 20.0f;
-	isDead_ = true;
+	isCrush_ = true;
 }
 
 void Enemy::OnCollisionBoss() { 

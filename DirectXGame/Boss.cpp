@@ -74,7 +74,7 @@ void Boss::IsHit() {
 			bossHp -= 5;
 
 		}*/ 
-    	audio_->PlayWave(soundDataHandle_);//ココも
+    	//audio_->PlayWave(soundDataHandle_);//ココも
 		score_ += 5;
 		hitEnemy_ = false;
 	} /* else if (hitHeal_) {
