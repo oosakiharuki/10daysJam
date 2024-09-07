@@ -22,6 +22,8 @@ public:
 	Vector3 GetWorldPosition();
 
 	AABB GetAABB();
+	void OnCollisionBoss();
+	bool IsDead() { return isDead_; }
 
 private:
 	// ワールド変換データ
@@ -37,5 +39,7 @@ private:
 	static constexpr float kGravity = 0.1f; 
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
+
+	bool isDead_ = false;
 };
 

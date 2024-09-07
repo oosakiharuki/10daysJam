@@ -34,6 +34,7 @@ GameScene::~GameScene() {
 	for (Box* box : boxes_) {
 		delete box;
 	}
+	delete boxModel_;
 	boxes_.clear();
 }
 
@@ -162,8 +163,23 @@ void GameScene::Update() {
 	}
 	// エネミーの処理
 	for (Enemy* enemy_ : enemies_) {
-		enemy_->Update();
+		enemy_->Update();		
 	}
+	CheckAllCollision();
+
+
+
+
+	enemies_.remove_if([](Enemy* enemy) {
+		if (enemy->IsDead()) {
+
+			delete enemy;
+			return true;
+		}
+		return false;
+	});
+
+
 }
 
 void GameScene::Draw() {
@@ -264,32 +280,33 @@ bool GameScene::IsCollision(const AABB& aabb1, const AABB& aabb2) {
 
 // すべての当たり判定
 void GameScene::CheckAllCollision() {
+		
+	// 判定1と2の座標	
+	AABB aabb1, aabb2;
 
 	#pragma region ボスと箱の当たり判定
-	/*{
-		// 判定1と2の座標
-		AABB aabb1, aabb2;
+	{
+		for (Box* box : boxes_) {
+			// ボスの座標
+			aabb1 = boss_->GetAABB();
+			// 箱の座標
+			aabb2 = box->GetAABB();
 
-		// ボスの座標
-		aabb1 = boss_->GetAABB();
-		// 箱の座標
-		aabb2 = box_->GetAABB();
+			// ボスと箱の当たり判定
 
-		// ボスと箱の当たり判定
-
-		//AABB同士の交差判定
-		if (IsCollision(aabb1, aabb2)) {
-			// ボスの衝突時コールバックを呼び出す
-			boss_->OnBoxCollision(box_);
-			// 箱の衝突時コールバックを呼び出す
+			//AABB同士の交差判定
+			if (IsCollision(aabb1, aabb2)) {
+				// ボスの衝突時コールバックを呼び出す
+				boss_->OnBoxCollision(box);
+				// 箱の衝突時コールバックを呼び出す
+				box->OnCollisionBoss();
+			}
 		}
-	}*/ 
+	} 
 	#pragma endregion
 
 	#pragma region ボスと敵の当たり判定
 	{ 
-		// 判定1と2の座標
-		AABB aabb1, aabb2;
 
 		// ボスの座標
 		aabb1 = boss_->GetAABB();
@@ -303,6 +320,27 @@ void GameScene::CheckAllCollision() {
 			if (IsCollision(aabb1, aabb2)) {
 				// ボスの衝突時コールバックを呼び出す
 				boss_->OnEnemyCollision(enemy_);
+
+				enemy_->OnCollisionBoss();
+			}
+		}
+	}
+	#pragma endregion
+
+
+	#pragma region 敵とはこの当たり判定
+	{
+		for (Box* box : boxes_) {
+			for (Enemy* enemy_ : enemies_) {
+				enemy_->SetBox(box);
+				
+				aabb1 = box->GetAABB();
+				aabb2 = enemy_->GetAABB();
+
+				if (IsCollision(aabb1, aabb2)) {
+					enemy_->OnCollision();
+				}
+
 			}
 		}
 	}

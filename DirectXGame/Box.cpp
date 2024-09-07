@@ -38,3 +38,5 @@ AABB Box::GetAABB() {
 	return aabb;
 }
 
+
+void Box::OnCollisionBoss() { isDead_ = true; }
