@@ -90,7 +90,7 @@ void GameScene::Initialize() {
 	cameraController_->Reset();
 	//箱モデル
 	boxModel_ = Model::CreateFromOBJ("cube", true);
-	for (int i = 0; i < 3; ++i) {
+	for (uint32_t i = 0; i < 3; ++i) {
 		Box* box = new Box();
 		box->Initialize(boxModel_, &viewProjection_);
 		Vector3 randomPosition = GenerateRandomPosition();
@@ -331,13 +331,13 @@ void GameScene::CheckAllCollision() {
 	#pragma region 敵とはこの当たり判定
 	{
 		for (Box* box : boxes_) {
-			for (Enemy* enemy_ : enemies_) {
-				enemy_->SetBox(box);
+			for (Enemy* enemy_ : enemies_) {			
 				
 				aabb1 = box->GetAABB();
 				aabb2 = enemy_->GetAABB();
 
 				if (IsCollision(aabb1, aabb2)) {
+					enemy_->SetBox(box);
 					enemy_->OnCollision();
 				}
 
