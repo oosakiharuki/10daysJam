@@ -60,7 +60,7 @@ void GameScene::Initialize() {
 	player_->Initialize(playermodel_, &viewProjection_,playerPosition);
 	//エネミー
 	//モデル
-	enemyModel_ = Model::Create();
+	enemyModel_ = Model::CreateFromOBJ("enemy", true);
 	for (uint32_t i = 0; i < kNumEnemies; i++) {
 		//生成
 		Enemy* enemy_ = new Enemy();
