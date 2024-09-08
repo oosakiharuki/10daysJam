@@ -87,6 +87,8 @@ void Player::Move() {
 	}
 	// 移動
 	worldTransform_.translation_.x += velocity_.x;
+	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -23.0f, 43.0f);
+
 	// 行列計算
 	worldTransform_.UpdateMatrix();
 }
