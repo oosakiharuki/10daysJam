@@ -339,7 +339,6 @@ void GameScene::CheckAllCollision() {
 					enemy_->SetBox(box);
 					enemy_->OnCollision();
 				}
-
 			}
 		}
 	}

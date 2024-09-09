@@ -8,14 +8,17 @@
 #include "WinApp.h"
 
 #include "Title.h"
+#include "StageSelect.h"
 enum class Scene {
 	title,
+	stageselect,
 	game,
 };
 
 Title* title = nullptr;
-GameScene* gameScene = nullptr;
 
+GameScene* gameScene = nullptr;
+StageSelect* stageselect = nullptr;
 Scene scene_;
 
 
@@ -25,14 +28,24 @@ void ChangeScene() {
 	case Scene::title:
 		
 		if (title->IsNextScene()) {
-			scene_ = Scene::game;
+			scene_ = Scene::stageselect;
 			delete title;
 			title = nullptr;
+
+			stageselect = new StageSelect();
+			stageselect->Initialize();
+		}
+
+		break;
+	case Scene::stageselect:
+		if (stageselect->IsNextScene()) {
+			scene_ = Scene::game;
+			delete stageselect;
+			stageselect = nullptr;
 
 			gameScene = new GameScene();
 			gameScene->Initialize();
 		}
-
 		break;
 	case Scene::game:
 
@@ -55,6 +68,9 @@ void ChangeUpdate() {
 	case Scene::title:
 		title->Update();
 		break;
+	case Scene::stageselect:
+		stageselect->Update();
+		break;
 	case Scene::game:
 		gameScene->Update();
 		break;
@@ -66,6 +82,9 @@ void ChangeDraw() {
 	switch (scene_) {
 	case Scene::title:
 		title->Draw();
+		break;
+	case Scene::stageselect:
+		stageselect->Draw();
 		break;
 	case Scene::game:
 		gameScene->Draw();
