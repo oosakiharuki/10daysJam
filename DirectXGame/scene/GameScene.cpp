@@ -56,14 +56,15 @@ void GameScene::Initialize() {
 	playermodel_ = Model::CreateFromOBJ("player", true);
 	// プレイヤーの生成
 	player_ = new Player();
-	//座標指定
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(6,0);
+	// 座標指定
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(6, 0);
 	// プレイヤーの初期化
-	player_->Initialize(playermodel_, &viewProjection_,playerPosition);
-	//エネミー
-	//モデル
+	player_->Initialize(playermodel_, &viewProjection_, playerPosition);
+	// エネミー
+	// モデル
 	enemyModel_ = Model::CreateFromOBJ("enemy", true);
 	for (uint32_t i = 0; i < kNumEnemies; i++) {
+    
 		enemyPosX = rand() % 20;
 		enemyPosY = rand() % 15 + 3;
 		//生成
@@ -92,11 +93,11 @@ void GameScene::Initialize() {
 	// ブロックモデル
 	modelBlocks_ = Model::CreateFromOBJ("block", true);
 	// カメラコントローラの生成・初期化
-	cameraController_ = new CameraController();
-	cameraController_->Initialize(&viewProjection_,movableArea);
+	cameraController_ = new CameraController();//
+	cameraController_->Initialize(&viewProjection_, movableArea);
 	cameraController_->SetTarget(player_);
 	cameraController_->Reset();
-	//箱モデル
+	// 箱モデル
 	boxModel_ = Model::CreateFromOBJ("cube", true);
 	for (uint32_t i = 0; i < 3; ++i) {
 		Box* box = new Box();
@@ -126,26 +127,50 @@ void GameScene::Update() {
 	player_->Update(boxes_);
 	// ボスの更新
 	boss_->Updata();
-	//カメラコントローラーの更新
+	// カメラコントローラーの更新
 	cameraController_->Update();
-	//箱の生成間隔
+	// 箱の生成間隔
 	timeSinceLastBox_ += 1.0f / 60.0f;
 
 	if (timeSinceLastBox_ >= kBoxSpawnInterval) {
-		Box* newBox = new Box();
-		newBox->Initialize(boxModel_, &viewProjection_);
+		Vector3 randomPosition;
+		bool positionFound = false;
 
-		Vector3 randomPosition = GenerateRandomPosition();
-		newBox->SetPosition(randomPosition);
+		// 一定回数試行してランダムな位置を生成
+		for (int i = 0; i < 10; ++i) {
+			randomPosition = GenerateRandomPosition();
+			if (IsFarEnough(randomPosition)) {
+				positionFound = true;
+				break;
+			}
+		}
 
-		boxes_.push_back(newBox);
-		timeSinceLastBox_ = 0.0f;
+		// 適切な位置が見つかった場合のみ箱を生成
+		if (positionFound) {
+			Box* newBox = new Box();
+			newBox->Initialize(boxModel_, &viewProjection_);
+			newBox->SetPosition(randomPosition);
+			boxes_.push_back(newBox);
+			timeSinceLastBox_ = 0.0f;
+		}
 	}
 
-	//箱の更新
+	// 箱の更新
 	for (Box* box : boxes_) {
 		box->Update();
 	}
+	//箱の削除処理
+	boxes_.erase(
+	    std::remove_if(
+	        boxes_.begin(), boxes_.end(),
+	        [](Box* box) {
+		        if (box->IsDead()) {
+			        delete box;  // メモリを解放
+			        return true; // 削除対象
+		        }
+		        return false; // 削除しない
+	        }),
+	    boxes_.end());
 	// デバックカメラの更新
 	debugCamera_->Update();
 #ifdef _DEBUG
@@ -171,7 +196,7 @@ void GameScene::Update() {
 	}
 	// エネミーの処理
 	for (Enemy* enemy_ : enemies_) {
-		enemy_->Update();		
+		enemy_->Update();
 	}
 	CheckAllCollision();
 
@@ -202,7 +227,6 @@ void GameScene::Update() {
 			enemies_.push_back(enemy_);
 		}
 	}
-
 }
 
 void GameScene::Draw() {
@@ -241,7 +265,7 @@ void GameScene::Draw() {
 	}
 	// プレイヤーの描画
 	player_->Draw();
-	//エネミーの描画
+	// エネミーの描画
 	for (Enemy* enemy_ : enemies_) {
 		enemy_->Draw();
 	}
@@ -302,14 +326,32 @@ bool GameScene::IsCollision(const AABB& aabb1, const AABB& aabb2) {
 	}
 	return false;
 }
+// 距離をチェック
+bool GameScene::IsFarEnough(const Vector3& newPos) {
+	const float kMinDistance = 2.0f; // 箱同士の最小距離
+
+	for (Box* box : boxes_) {
+		Vector3 boxPos = box->GetPosition();
+		float dx = newPos.x - boxPos.x;
+		float dy = newPos.y - boxPos.y;
+		float dz = newPos.z - boxPos.z;
+
+		// float型で計算するためのキャスト
+		float distance = sqrt(dx * dx + dy * dy + dz * dz);
+
+		if (distance < kMinDistance) {
+			return false;
+		}
+	}
+	return true;
+}
 
 // すべての当たり判定
 void GameScene::CheckAllCollision() {
-		
-	// 判定1と2の座標	
-	AABB aabb1, aabb2;
 
-	#pragma region ボスと箱の当たり判定
+	// 判定1と2の座標
+	AABB aabb1, aabb2;
+#pragma region ボスと箱の当たり判定
 	{
 		for (Box* box : boxes_) {
 			// ボスの座標
@@ -319,7 +361,7 @@ void GameScene::CheckAllCollision() {
 
 			// ボスと箱の当たり判定
 
-			//AABB同士の交差判定
+			// AABB同士の交差判定
 			if (IsCollision(aabb1, aabb2)) {
 				// ボスの衝突時コールバックを呼び出す
 				boss_->OnBoxCollision(box);
@@ -327,12 +369,11 @@ void GameScene::CheckAllCollision() {
 				box->OnCollisionBoss();
 			}
 		}
-	} 
-	#pragma endregion
+	}
+#pragma endregion
 
-	#pragma region ボスと敵の当たり判定
-	{ 
-
+#pragma region ボスと敵の当たり判定
+	{
 		// ボスの座標
 		aabb1 = boss_->GetAABB();
 
@@ -350,14 +391,13 @@ void GameScene::CheckAllCollision() {
 			}
 		}
 	}
-	#pragma endregion
+#pragma endregion
 
-
-	#pragma region 敵とはこの当たり判定
+#pragma region 敵とはこの当たり判定
 	{
 		for (Box* box : boxes_) {
-			for (Enemy* enemy_ : enemies_) {			
-				
+			for (Enemy* enemy_ : enemies_) {
+
 				aabb1 = box->GetAABB();
 				aabb2 = enemy_->GetAABB();
 
@@ -366,13 +406,12 @@ void GameScene::CheckAllCollision() {
 					enemy_->SetBoss(boss_);
 					enemy_->OnCollision();
 				}
-
 			}
 		}
 	}
-	#pragma endregion
+#pragma endregion
 }
-//ランダムな位置を生成
+// ランダムな位置を生成
 Vector3 GameScene::GenerateRandomPosition() {
 	float x = kBoxSpawnMinX + static_cast<float>(rand()) / RAND_MAX * (kBoxSpawnMaxX - kBoxSpawnMinX);
 	float y = kBoxSpawnMinY + static_cast<float>(rand()) / RAND_MAX * (kBoxSpawnMaxY - kBoxSpawnMinY);
