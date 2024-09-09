@@ -52,4 +52,9 @@ private:
 	Score* score = nullptr;
 
 	uint32_t enemyCounter_ = 1;
+
+	float moveSpeed_ = 0.05f; // 移動速度
+	float moveRange_ = 5.0f; // 移動範囲
+	int moveDirection_ = 1;   // 1: 右移動, -1: 左移動
+	float initialPositionX_;  // 初期位置のX座標
 };
