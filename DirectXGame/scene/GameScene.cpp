@@ -36,6 +36,8 @@ GameScene::~GameScene() {
 	}
 	delete boxModel_;
 	boxes_.clear();
+
+	delete score;
 }
 
 void GameScene::Initialize() {
@@ -62,20 +64,27 @@ void GameScene::Initialize() {
 	// モデル
 	enemyModel_ = Model::CreateFromOBJ("enemy", true);
 	for (uint32_t i = 0; i < kNumEnemies; i++) {
-		// 生成
+    
+		enemyPosX = rand() % 20;
+		enemyPosY = rand() % 15 + 3;
+		//生成
 		Enemy* enemy_ = new Enemy();
 		// 初期化
 		enemy_->LoadEnemyMoveData();
-		enemy_->UpdateEnemyPopCommands(i);
-		enemy_->Initialize(enemyModel_, &viewProjection_, {15, 14.0f - (i * 5.0f), 0});
-
+		enemy_->UpdateEnemyPopCommands(i);		
+		enemy_->Initialize(enemyModel_, &viewProjection_, {mapChipField_->GetMapChipPositionByIndex(enemyPosX,enemyPosY)});
+	
 		enemies_.push_back(enemy_);
 	}
+	//スコア
+	score = new Score();
+	score->Initialize();
 	// ボスのモデル
 	bossModel_ = Model::CreateFromOBJ("boss", true);
 	// ボスの生成と初期化
 	boss_ = new Boss();
 	boss_->Initialize(bossModel_, &viewProjection_);
+	boss_->GetScore(score);
 	// 天球のモデル
 	skydomeModel_ = Model::CreateFromOBJ("sphere", true);
 	// 天球の生成と初期化
@@ -191,6 +200,9 @@ void GameScene::Update() {
 	}
 	CheckAllCollision();
 
+	score->Updata();
+
+
 	enemies_.remove_if([](Enemy* enemy) {
 		if (enemy->IsDead()) {
 
@@ -199,6 +211,22 @@ void GameScene::Update() {
 		}
 		return false;
 	});
+	
+
+	if (enemies_.empty()) {
+		for (uint32_t i = 0; i < kNumEnemies; i++) {
+			// 生成
+			enemyPosX = rand() % 20;
+			enemyPosY = rand() % 15 + 3;
+			Enemy* enemy_ = new Enemy();
+			// 初期化
+			enemy_->LoadEnemyMoveData();
+			enemy_->UpdateEnemyPopCommands(i);
+			enemy_->Initialize(enemyModel_, &viewProjection_, {mapChipField_->GetMapChipPositionByIndex(enemyPosX, enemyPosY)});
+
+			enemies_.push_back(enemy_);
+		}
+	}
 }
 
 void GameScene::Draw() {
@@ -254,6 +282,8 @@ void GameScene::Draw() {
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(commandList);
+
+	score->Draw();
 
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
@@ -373,6 +403,7 @@ void GameScene::CheckAllCollision() {
 
 				if (IsCollision(aabb1, aabb2)) {
 					enemy_->SetBox(box);
+					enemy_->SetBoss(boss_);
 					enemy_->OnCollision();
 				}
 			}
