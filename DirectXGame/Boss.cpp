@@ -11,7 +11,7 @@ void Boss::Initialize(Model* model, ViewProjection* viewProjection) {
 	soundDataHandle_ = audio_->LoadWave("HitSE.wav");
 	worldTransform_.translation_ = {
 	    10.0f,
-	    -20.0f,
+	    -8.5f,
 	   0.0,
 	};
 }
