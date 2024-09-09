@@ -110,7 +110,6 @@ private: // メンバ変数
 	const float kBoxSpawnMaxY = 19.5f;  
 	const float kBoxSpawnMinZ = 0.0f; 
 	const float kBoxSpawnMaxZ = 0.0f;  
-	
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

@@ -84,7 +84,7 @@ void GameScene::Initialize() {
 	// ブロックモデル
 	modelBlocks_ = Model::CreateFromOBJ("block", true);
 	// カメラコントローラの生成・初期化
-	cameraController_ = new CameraController();
+	cameraController_ = new CameraController();//
 	cameraController_->Initialize(&viewProjection_, movableArea);
 	cameraController_->SetTarget(player_);
 	cameraController_->Reset();
@@ -150,6 +150,18 @@ void GameScene::Update() {
 	for (Box* box : boxes_) {
 		box->Update();
 	}
+	//箱の削除処理
+	boxes_.erase(
+	    std::remove_if(
+	        boxes_.begin(), boxes_.end(),
+	        [](Box* box) {
+		        if (box->IsDead()) {
+			        delete box;  // メモリを解放
+			        return true; // 削除対象
+		        }
+		        return false; // 削除しない
+	        }),
+	    boxes_.end());
 	// デバックカメラの更新
 	debugCamera_->Update();
 #ifdef _DEBUG
