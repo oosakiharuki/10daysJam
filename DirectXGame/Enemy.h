@@ -3,6 +3,7 @@
 #include <sstream>
 
 class Box;
+class Boss;
 
 class Enemy{
 public:
@@ -28,6 +29,7 @@ public:
 	bool IsDead() { return isDead_; }
 
 	void SetBox(Box* box) { box_ = box; }
+	void SetBoss(Boss* boss) { boss_ = boss; }
 
 private:
 
@@ -50,4 +52,5 @@ private:
 	bool isDead_ = false;
 
 	Box* box_ = nullptr;
+	Boss* boss_ = nullptr;
 };

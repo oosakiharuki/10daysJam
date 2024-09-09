@@ -13,9 +13,9 @@ public:
 
 private:
 	int textureHandle[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	int placeNum[3] = {0, 0, 0};
+	int placeNum[5] = {0, 0, 0, 0, 0};
 	int score;
 
 	Vector3 pos;
-	Sprite* sprite[3] = {};
+	Sprite* sprite[5] = {};
 };

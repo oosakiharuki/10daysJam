@@ -28,6 +28,7 @@ public:
 	//スコアのgetter
 	//float GetScore() const { return score_; }
 	void GetScore(Score* score_) { score = score_; }
+	void EnemyCounter();
 
 	bool IsDead() const { return isDead_; }
 
@@ -49,4 +50,6 @@ private:
 	int scorePoint_ = 0;
 
 	Score* score = nullptr;
+
+	uint32_t enemyCounter_ = 1;
 };

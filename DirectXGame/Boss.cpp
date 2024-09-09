@@ -68,7 +68,7 @@ void Boss::IsHit() {
 
 		}*/ 
 		//audio_->PlayWave(soundDataHandle_);//エラーが起きる
-		scorePoint_ += 2;
+		//scorePoint_ += 2; //何回も当たってる
 		score->ScoreCounter(scorePoint_);
 		hitBox_ = false;
 	} else if (hitEnemy_) {
@@ -77,8 +77,9 @@ void Boss::IsHit() {
 
 		}*/ 
     	//audio_->PlayWave(soundDataHandle_);//ココも
-		scorePoint_ += 5;
+		scorePoint_ += 1 * enemyCounter_;
 		score->ScoreCounter(scorePoint_);
+		enemyCounter_ = 1;
 		hitEnemy_ = false;
 	} /* else if (hitHeal_) {
 		if (bossHp < 100) {
@@ -89,3 +90,5 @@ void Boss::IsHit() {
 
 	
 }
+
+void Boss::EnemyCounter() { enemyCounter_ *= 2; }
