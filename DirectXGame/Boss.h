@@ -46,7 +46,7 @@ private:
 	bool hitHeal_ = false;
 	bool isDead_ = false;
 	static inline const float kWidth = 34.8f;
-	static inline const float kHeight = 24.8f;
+	static inline const float kHeight = 8.8f;
 	int scorePoint_ = 0;
 
 	Score* score = nullptr;
