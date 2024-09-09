@@ -55,6 +55,8 @@ public: // メンバ関数
 	void CheckAllCollision();
 
 	bool IsCollision(const AABB& aabb1, const AABB& aabb2);
+	//距離をチェック
+	bool IsFarEnough(const Vector3& newPos);
 	//ランダムな位置を生成
 	Vector3 GenerateRandomPosition();
 
@@ -97,7 +99,7 @@ private: // メンバ変数
 	MapChipField* mapChipField_;
 	//カメラコントローラー
 	CameraController* cameraController_ = nullptr;
-	Rect movableArea = {12, 10, 0, 10};
+	Rect movableArea = {12, 15, 0, 10};
 	// 複数の箱を保持
 	std::vector<Box*> boxes_; 
 	 // 最後の箱生成からの経過時間
@@ -111,8 +113,6 @@ private: // メンバ変数
 	const float kBoxSpawnMaxY = 19.5f;  
 	const float kBoxSpawnMinZ = 0.0f; 
 	const float kBoxSpawnMaxZ = 0.0f;  
-	
-
 	Score* score = nullptr;
 	/// <summary>
 	/// ゲームシーン用

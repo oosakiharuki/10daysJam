@@ -119,6 +119,8 @@
     <ClCompile Include="MyMath.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
+    <ClCompile Include="StageSelect.cpp" />
+
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Skydome.cpp" />
@@ -162,7 +164,11 @@
     <ClInclude Include="MyMath.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="scene\GameScene.h" />
+
+    <ClInclude Include="StageSelect.h" />
+
     <ClInclude Include="Score.h" />
+
     <ClInclude Include="Title.h" />
     <ClInclude Include="Skydome.h" />
   </ItemGroup>

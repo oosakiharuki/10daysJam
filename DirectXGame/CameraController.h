@@ -11,7 +11,6 @@ class Player;
 class CameraController {
 public:
 	void Initialize(ViewProjection* viewProjection,Rect movableArea);
-
 	void Update();
 	// リセット
 	void Reset();
