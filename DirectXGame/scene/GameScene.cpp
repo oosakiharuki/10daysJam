@@ -36,6 +36,8 @@ GameScene::~GameScene() {
 	}
 	delete boxModel_;
 	boxes_.clear();
+
+	delete score;
 }
 
 void GameScene::Initialize() {
@@ -71,11 +73,15 @@ void GameScene::Initialize() {
 	
 		enemies_.push_back(enemy_);
 	}
+	//スコア
+	score = new Score();
+	score->Initialize();
 	// ボスのモデル
 	bossModel_ = Model::CreateFromOBJ("boss", true);
 	// ボスの生成と初期化
 	boss_ = new Boss();
 	boss_->Initialize(bossModel_, &viewProjection_);
+	boss_->GetScore(score);
 	// 天球のモデル
 	skydomeModel_ = Model::CreateFromOBJ("sphere", true);
 	// 天球の生成と初期化
@@ -167,7 +173,7 @@ void GameScene::Update() {
 	}
 	CheckAllCollision();
 
-
+	score->Updata();
 
 
 	enemies_.remove_if([](Enemy* enemy) {
@@ -235,6 +241,8 @@ void GameScene::Draw() {
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(commandList);
+
+	score->Draw();
 
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
