@@ -94,7 +94,7 @@ private: // メンバ変数
 	MapChipField* mapChipField_;
 	//カメラコントローラー
 	CameraController* cameraController_ = nullptr;
-	Rect movableArea = {12, 10, 0, 10};
+	Rect movableArea = {12, 15, 0, 10};
 	// 複数の箱を保持
 	std::vector<Box*> boxes_; 
 	 // 最後の箱生成からの経過時間

@@ -67,7 +67,7 @@ void GameScene::Initialize() {
 		// 初期化
 		enemy_->LoadEnemyMoveData();
 		enemy_->UpdateEnemyPopCommands(i);		
-		enemy_->Initialize(enemyModel_, &viewProjection_, {0, 14.0f - (i * 5.0f), 0});
+		enemy_->Initialize(enemyModel_, &viewProjection_, {15, 14.0f - (i * 5.0f), 0});
 	
 		enemies_.push_back(enemy_);
 	}
@@ -326,7 +326,6 @@ void GameScene::CheckAllCollision() {
 		}
 	}
 	#pragma endregion
-
 
 	#pragma region 敵とはこの当たり判定
 	{
