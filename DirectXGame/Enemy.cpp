@@ -3,6 +3,7 @@
 #include <fstream>
 #include "MyMath.h"
 #include "Box.h"
+#include "Boss.h"
 
 void Enemy::Initialize(Model* model, ViewProjection* viewProjection, Vector3 position) { 
 	
@@ -89,7 +90,7 @@ void Enemy::Update() {
 			worldTransform_.translation_.y = move.y + std::sin(kSpeed) * kRange.y;
 		}
 	} else {
-		worldTransform_.translation_.y = box_->GetWorldPosition().y - 1.0f;
+		worldTransform_.translation_.y = box_->GetWorldPosition().y - 3.0f;
 	}
 
 }
@@ -122,6 +123,7 @@ AABB Enemy::GetAABB() {
 }
 
 void Enemy::OnCollision() {
+	boss_->EnemyCounter();
 	isCrush_ = true;
 }
 

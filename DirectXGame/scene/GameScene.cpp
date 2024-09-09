@@ -64,12 +64,14 @@ void GameScene::Initialize() {
 	//モデル
 	enemyModel_ = Model::CreateFromOBJ("enemy", true);
 	for (uint32_t i = 0; i < kNumEnemies; i++) {
+		enemyPosX = rand() % 20;
+		enemyPosY = rand() % 15 + 3;
 		//生成
 		Enemy* enemy_ = new Enemy();
 		// 初期化
 		enemy_->LoadEnemyMoveData();
 		enemy_->UpdateEnemyPopCommands(i);		
-		enemy_->Initialize(enemyModel_, &viewProjection_, {0, 14.0f - (i * 5.0f), 0});
+		enemy_->Initialize(enemyModel_, &viewProjection_, {mapChipField_->GetMapChipPositionByIndex(enemyPosX,enemyPosY)});
 	
 		enemies_.push_back(enemy_);
 	}
@@ -184,7 +186,22 @@ void GameScene::Update() {
 		}
 		return false;
 	});
+	
 
+	if (enemies_.empty()) {
+		for (uint32_t i = 0; i < kNumEnemies; i++) {
+			// 生成
+			enemyPosX = rand() % 20;
+			enemyPosY = rand() % 15 + 3;
+			Enemy* enemy_ = new Enemy();
+			// 初期化
+			enemy_->LoadEnemyMoveData();
+			enemy_->UpdateEnemyPopCommands(i);
+			enemy_->Initialize(enemyModel_, &viewProjection_, {mapChipField_->GetMapChipPositionByIndex(enemyPosX, enemyPosY)});
+
+			enemies_.push_back(enemy_);
+		}
+	}
 
 }
 
@@ -346,6 +363,7 @@ void GameScene::CheckAllCollision() {
 
 				if (IsCollision(aabb1, aabb2)) {
 					enemy_->SetBox(box);
+					enemy_->SetBoss(boss_);
 					enemy_->OnCollision();
 				}
 
