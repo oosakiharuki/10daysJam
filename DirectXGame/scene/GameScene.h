@@ -55,6 +55,8 @@ public: // メンバ関数
 	void CheckAllCollision();
 
 	bool IsCollision(const AABB& aabb1, const AABB& aabb2);
+	//距離をチェック
+	bool IsFarEnough(const Vector3& newPos);
 	//ランダムな位置を生成
 	Vector3 GenerateRandomPosition();
 

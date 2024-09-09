@@ -9,4 +9,6 @@ void StageSelect::Update() {
 	}
 }
 
-void StageSelect::Draw() {}
+void StageSelect::Draw() {
+
+}
