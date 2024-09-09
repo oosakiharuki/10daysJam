@@ -14,9 +14,19 @@ void Boss::Initialize(Model* model, ViewProjection* viewProjection) {
 	    -8.5f,
 	   0.0,
 	};
+
+	initialPositionX_ = worldTransform_.translation_.x;
 }
 
 void Boss::Updata() { 
+	// ボスの移動処理
+	worldTransform_.translation_.x += moveSpeed_ * moveDirection_;
+
+	// 一定範囲を超えたら移動方向を反転
+	if (std::abs(worldTransform_.translation_.x - initialPositionX_) > moveRange_) {
+		moveDirection_ *= -1; // 移動方向を反転
+	}
+    
 
 	IsHit();
 
