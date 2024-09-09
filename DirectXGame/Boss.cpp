@@ -1,4 +1,5 @@
 #include "Boss.h"
+#include "Score.h"
 
 void Boss::Initialize(Model* model, ViewProjection* viewProjection) { 
 	model_ = model;
@@ -67,7 +68,8 @@ void Boss::IsHit() {
 
 		}*/ 
 		//audio_->PlayWave(soundDataHandle_);//エラーが起きる
-		score_ += 2;
+		scorePoint_ += 2;
+		score->ScoreCounter(scorePoint_);
 		hitBox_ = false;
 	} else if (hitEnemy_) {
 		/*if (bossHp > 0) {
@@ -75,7 +77,8 @@ void Boss::IsHit() {
 
 		}*/ 
     	//audio_->PlayWave(soundDataHandle_);//ココも
-		score_ += 5;
+		scorePoint_ += 5;
+		score->ScoreCounter(scorePoint_);
 		hitEnemy_ = false;
 	} /* else if (hitHeal_) {
 		if (bossHp < 100) {
@@ -83,4 +86,6 @@ void Boss::IsHit() {
 		}
 		hitHeal_ = false;
 	}*/
+
+	
 }

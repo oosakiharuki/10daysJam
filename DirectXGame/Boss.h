@@ -9,29 +9,25 @@
 
 class Box;
 class Enemy;
+class Score;
 
 class Boss {
 public:
-
 	void Initialize(Model* model, ViewProjection* viewProjection);
-
 	void Updata();
-
 	void Draw();
 
 	Vector3 GetWorldPosition();
-
 	AABB GetAABB();
-
 	void OnBoxCollision(const Box* box);
-
 	void OnEnemyCollision(const Enemy* enemy);
 
 	// 衝突時にスコアの加算
 	void IsHit();
 
 	//スコアのgetter
-	float GetScore() const { return score_; }
+	//float GetScore() const { return score_; }
+	void GetScore(Score* score_) { score = score_; }
 
 	bool IsDead() const { return isDead_; }
 
@@ -50,5 +46,7 @@ private:
 	bool isDead_ = false;
 	static inline const float kWidth = 34.8f;
 	static inline const float kHeight = 24.8f;
-	float score_ = 0;
+	int scorePoint_ = 0;
+
+	Score* score = nullptr;
 };

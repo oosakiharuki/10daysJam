@@ -17,7 +17,7 @@
 #include "CameraController.h"
 #include "Box.h"
 #include <vector>
-
+#include "Score.h"
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -109,6 +109,8 @@ private: // メンバ変数
 	const float kBoxSpawnMinZ = 0.0f; 
 	const float kBoxSpawnMaxZ = 0.0f;  
 	
+
+	Score* score = nullptr;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
