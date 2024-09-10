@@ -40,7 +40,7 @@ private:
 	Audio* audio_ = nullptr;
 
 	uint32_t soundDataHandle_ = 0;
-	float bossHp = 100.0f;
+	int bossHp = 100;
 	bool hitBox_ = false;
 	bool hitEnemy_ = false;
 	bool hitHeal_ = false;

@@ -48,17 +48,25 @@ public: // メンバ関数
 	/// 描画
 	/// </summary>
 	void Draw();
-	//ブロック生成
+	// ブロック生成
 	void GenerateBlocks();
 
 	// すべての当たり判定
-	void CheckAllCollision();
+	void CheckAllCollision(int bossNum);
 
 	bool IsCollision(const AABB& aabb1, const AABB& aabb2);
-	//距離をチェック
+	// 距離をチェック
 	bool IsFarEnough(const Vector3& newPos);
-	//ランダムな位置を生成
+	// ランダムな位置を生成
 	Vector3 GenerateRandomPosition();
+
+	enum class Bosses { boss01, boss02,boss03 };
+
+	void ChangeScene();
+
+
+	// ゲームクリア
+	bool IsNextScene() { return isFinish_; }
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -76,19 +84,21 @@ private: // メンバ変数
 	// 箱
 	Box* box_ = nullptr;
 	Model* boxModel_ = nullptr;
-	//エネミー
+	// エネミー
 	uint32_t enemyPosX;
 	uint32_t enemyPosY;
 
-	const uint32_t kNumEnemies = 10; //敵の数
+	const uint32_t kNumEnemies = 10; // 敵の数
 	std::list<Enemy*> enemies_;
 	Model* enemyModel_ = nullptr;
 
 	std::stringstream enemyPopCommands;
 
 	// ボス
-	Boss* boss_ = nullptr;
-	Model* bossModel_ = nullptr;
+	Bosses bosses = Bosses::boss01;
+	Boss* boss[3] = {nullptr, nullptr,nullptr};
+	Model* bossModel[3] = {nullptr, nullptr, nullptr};
+	int BossNum = 0;
 	//ブロック
 	Model* modelBlocks_ = nullptr;
 	// 天球
@@ -113,7 +123,10 @@ private: // メンバ変数
 	const float kBoxSpawnMaxY = 19.5f;  
 	const float kBoxSpawnMinZ = 0.0f; 
 	const float kBoxSpawnMaxZ = 0.0f;  
-	Score* score = nullptr;
+	Score* score[3] = {nullptr, nullptr, nullptr};
+
+	bool isDestroy[2] = {false, false};
+	bool isFinish_ = false;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

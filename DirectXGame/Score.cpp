@@ -12,7 +12,7 @@ Score::~Score() {
 
 void Score::Initialize() {
 
-	pos = {10, 10,0};
+	pos = {10, 600, 0};
 	score = 0;
 
 	textureHandle[0] = TextureManager::Load("Number/num0.png");
@@ -25,7 +25,7 @@ void Score::Initialize() {
 	textureHandle[7] = TextureManager::Load("Number/num7.png");
 	textureHandle[8] = TextureManager::Load("Number/num8.png");
 	textureHandle[9] = TextureManager::Load("Number/num9.png");
-
+	
 	for (uint32_t i = 0; i < 5; i++) {
 		sprite[i] = Sprite::Create(textureHandle[placeNum[i]], {pos.x + i * 50, pos.y});	
 	}

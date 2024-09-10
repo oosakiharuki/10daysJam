@@ -26,8 +26,13 @@ GameScene::~GameScene() {
 		delete enemy_;
 	}
 	delete mapChipField_;
-	delete boss_;
-	delete bossModel_;
+
+	for (uint32_t i = 0; i < 3; i++) {
+		delete boss[i];
+		delete bossModel[i];
+		delete score[i];
+	}
+
 	delete skydome_;
 	delete skydomeModel_;
 	delete cameraController_;
@@ -37,7 +42,6 @@ GameScene::~GameScene() {
 	delete boxModel_;
 	boxes_.clear();
 
-	delete score;
 }
 
 void GameScene::Initialize() {
@@ -76,15 +80,21 @@ void GameScene::Initialize() {
 	
 		enemies_.push_back(enemy_);
 	}
-	//スコア
-	score = new Score();
-	score->Initialize();
-	// ボスのモデル
-	bossModel_ = Model::CreateFromOBJ("boss", true);
-	// ボスの生成と初期化
-	boss_ = new Boss();
-	boss_->Initialize(bossModel_, &viewProjection_);
-	boss_->GetScore(score);
+	
+	// ボスのモデル	
+	bossModel[0] = Model::CreateFromOBJ("boss", true);
+	bossModel[1] = Model::CreateFromOBJ("title1", true);
+	bossModel[2] = Model::CreateFromOBJ("title2", true);
+	for (uint32_t i = 0; i < 3; i++) {
+		//スコア
+		score[i] = new Score();	
+		score[i]->Initialize();
+
+		// ボスの生成と初期化
+		boss[i] = new Boss();
+		boss[i]->GetScore(score[i]);
+		boss[i]->Initialize(bossModel[i], &viewProjection_);
+	}
 	// 天球のモデル
 	skydomeModel_ = Model::CreateFromOBJ("sphere", true);
 	// 天球の生成と初期化
@@ -98,7 +108,7 @@ void GameScene::Initialize() {
 	cameraController_->SetTarget(player_);
 	cameraController_->Reset();
 	// 箱モデル
-	boxModel_ = Model::CreateFromOBJ("cube", true);
+	boxModel_ = Model::CreateFromOBJ("hako", true);
 	for (uint32_t i = 0; i < 3; ++i) {
 		Box* box = new Box();
 		box->Initialize(boxModel_, &viewProjection_);
@@ -111,7 +121,28 @@ void GameScene::Initialize() {
 	GenerateBlocks();
 }
 
+void GameScene::ChangeScene() {
+	switch (bosses) {
+	case Bosses::boss01:
+		if (boss[0]->IsDead()) {
+			bosses = Bosses::boss02;
+		}
+		break;
+	case Bosses::boss02:
+		if (boss[1]->IsDead()) {
+			bosses = Bosses::boss03;
+		}
+		break;
+	case Bosses::boss03:
+		if (boss[2]->IsDead()) {
+			isFinish_ = true; // ゲームクリア
+		}
+		break;
+	}
+}
+
 void GameScene::Update() {
+	ChangeScene();
 	// 天球の更新
 	skydome_->Update();
 	// ブロックの更新
@@ -125,8 +156,31 @@ void GameScene::Update() {
 	}
 	// プレイヤーの更新
 	player_->Update(boxes_);
-	// ボスの更新
-	boss_->Updata();
+
+	switch (bosses) {
+	case Bosses::boss01:
+		// ボスの更新
+		boss[0]->Updata();	
+		score[0]->Updata();
+		if (boss[0]->IsDead()) {
+			isDestroy[0] = true; // ボス撃破　
+			BossNum = 1;
+		}
+		break;
+	case Bosses::boss02:
+		boss[1]->Updata();
+		score[1]->Updata();
+		if (boss[1]->IsDead()) {
+			isDestroy[1] = true; // ボス撃破　
+			BossNum = 2;
+		}
+		break;
+	case Bosses::boss03:
+		boss[2]->Updata();
+		score[2]->Updata();
+		break;
+	}
+
 	// カメラコントローラーの更新
 	cameraController_->Update();
 	// 箱の生成間隔
@@ -159,7 +213,7 @@ void GameScene::Update() {
 	for (Box* box : boxes_) {
 		box->Update();
 	}
-	//箱の削除処理
+	// 箱の削除処理
 	boxes_.erase(
 	    std::remove_if(
 	        boxes_.begin(), boxes_.end(),
@@ -198,9 +252,9 @@ void GameScene::Update() {
 	for (Enemy* enemy_ : enemies_) {
 		enemy_->Update();
 	}
-	CheckAllCollision();
 
-	score->Updata();
+	CheckAllCollision(BossNum);
+
 
 
 	enemies_.remove_if([](Enemy* enemy) {
@@ -211,7 +265,6 @@ void GameScene::Update() {
 		}
 		return false;
 	});
-	
 
 	if (enemies_.empty()) {
 		for (uint32_t i = 0; i < kNumEnemies; i++) {
@@ -253,28 +306,42 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	// 天球の描画
-	skydome_->Draw();
-	// ブロックの描画
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
-			if (!worldTransformBlock)
-				continue;
-			modelBlocks_->Draw(*worldTransformBlock, viewProjection_);
-		}
-	}
-	// プレイヤーの描画
-	player_->Draw();
-	// エネミーの描画
-	for (Enemy* enemy_ : enemies_) {
-		enemy_->Draw();
-	}
 
-	// ボスの描画
-	boss_->Draw();
-	for (Box* box : boxes_) {
-		box->Draw();
-	}
+	switch (bosses) {
+	case Bosses::boss01:
+		// ボスの描画
+		boss[0]->Draw();
+		break;
+	case Bosses::boss02:
+		// ボスの描画
+		boss[1]->Draw();
+		break;
+	case Bosses::boss03:
+		// ボスの描画
+		boss[2]->Draw();
+		break;
+	}		
+	// 天球の描画
+		skydome_->Draw();
+		// ブロックの描画
+		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+			for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+				if (!worldTransformBlock)
+					continue;
+				modelBlocks_->Draw(*worldTransformBlock, viewProjection_);
+			}
+		}
+		// プレイヤーの描画
+		player_->Draw();
+		// エネミーの描画
+		for (Enemy* enemy_ : enemies_) {
+			enemy_->Draw();
+		}
+		
+		for (Box* box : boxes_) {
+			box->Draw();
+		}
+
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
@@ -283,7 +350,19 @@ void GameScene::Draw() {
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(commandList);
 
-	score->Draw();
+
+	switch (bosses) {
+	case Bosses::boss01:
+		    score[0]->Draw();
+		    break;
+	case Bosses::boss02:
+		    score[1]->Draw();
+		    break;
+	case Bosses::boss03:
+		    score[2]->Draw();
+		    break;
+	}	
+
 
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
@@ -347,7 +426,7 @@ bool GameScene::IsFarEnough(const Vector3& newPos) {
 }
 
 // すべての当たり判定
-void GameScene::CheckAllCollision() {
+void GameScene::CheckAllCollision(int bossNum) {
 
 	// 判定1と2の座標
 	AABB aabb1, aabb2;
@@ -355,7 +434,7 @@ void GameScene::CheckAllCollision() {
 	{
 		for (Box* box : boxes_) {
 			// ボスの座標
-			aabb1 = boss_->GetAABB();
+			aabb1 = boss[bossNum]->GetAABB();
 			// 箱の座標
 			aabb2 = box->GetAABB();
 
@@ -364,7 +443,7 @@ void GameScene::CheckAllCollision() {
 			// AABB同士の交差判定
 			if (IsCollision(aabb1, aabb2)) {
 				// ボスの衝突時コールバックを呼び出す
-				boss_->OnBoxCollision(box);
+				boss[bossNum]->OnBoxCollision(box);
 				// 箱の衝突時コールバックを呼び出す
 				box->OnCollisionBoss();
 			}
@@ -375,7 +454,7 @@ void GameScene::CheckAllCollision() {
 #pragma region ボスと敵の当たり判定
 	{
 		// ボスの座標
-		aabb1 = boss_->GetAABB();
+		aabb1 = boss[bossNum]->GetAABB();
 
 		// ボスと敵すべての当たり判定
 		for (Enemy* enemy_ : enemies_) {
@@ -385,7 +464,7 @@ void GameScene::CheckAllCollision() {
 			// AABB同士の交差判定
 			if (IsCollision(aabb1, aabb2)) {
 				// ボスの衝突時コールバックを呼び出す
-				boss_->OnEnemyCollision(enemy_);
+				boss[bossNum]->OnEnemyCollision(enemy_);
 
 				enemy_->OnCollisionBoss();
 			}
@@ -403,7 +482,7 @@ void GameScene::CheckAllCollision() {
 
 				if (IsCollision(aabb1, aabb2)) {
 					enemy_->SetBox(box);
-					enemy_->SetBoss(boss_);
+					enemy_->SetBoss(boss[bossNum]);
 					enemy_->OnCollision();
 				}
 			}
