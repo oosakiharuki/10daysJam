@@ -2,7 +2,6 @@
 #include "Input.h"
 #include "DirectXCommon.h"
 
-
 Title::~Title() { 
 	delete modelFlont_;
 	delete modelBack_;
