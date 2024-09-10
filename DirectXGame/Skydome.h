@@ -1,3 +1,7 @@
+#ifndef SKYDOME_H
+#define SKYDOME_H
+
+
 #include "Model.h"
 #include "WorldTransform.h"
 
@@ -28,3 +32,5 @@ private:
 	// モデル
 	Model* model_ = nullptr;
 };
+
+#endif // SKYDOME_H

@@ -1,4 +1,6 @@
 #pragma once
+#ifndef GAMESCENE_H
+#define GAMESCENE_H
 
 #include "Audio.h"
 #include "DirectXCommon.h"
@@ -151,3 +153,5 @@ private: // メンバ変数
 	/// ゲームシーン用
 	/// </summary>
 };
+
+#endif // GAMESCENE_H
