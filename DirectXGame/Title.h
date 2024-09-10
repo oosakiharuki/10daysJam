@@ -9,7 +9,7 @@ public:
 	void Draw();
 	bool IsNextScene() { return isfinish; }
 
-private:
+	private:
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 	Model* modelBack_ = nullptr;
