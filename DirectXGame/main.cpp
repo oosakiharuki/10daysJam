@@ -9,16 +9,19 @@
 
 #include "Title.h"
 #include "StageSelect.h"
+#include "ClearScene.h"
 enum class Scene {
 	title,
 	stageselect,
 	game,
+	clear
 };
 
 Title* title = nullptr;
 
 GameScene* gameScene = nullptr;
 StageSelect* stageselect = nullptr;
+ClearScene* clearScene = nullptr;
 Scene scene_;
 
 
@@ -49,18 +52,28 @@ void ChangeScene() {
 		break;
 		*/
 	case Scene::game:
+		if (gameScene->IsNextScene()) {
+			scene_ = Scene::clear;
+			delete gameScene;
+			gameScene = nullptr;
 
-		//if () {
-		// scene_ = Scene::title;
-		//	delete gameScene;
-		//	gameScene = nullptr;
-
-		//	title = new Title();
-		//	title->Initialize();
-		//}
+			clearScene = new ClearScene();
+			clearScene->Initialize();
+		}
 
 		break;
+	case Scene::clear:
+		if (clearScene->IsNextScene()) {
+			scene_ = Scene::title;
+			delete clearScene;
+			clearScene = nullptr;
+
+			title = new Title();
+			title->Initialize();
+		}
+		break;
 	}
+
 }
 
 //更新
@@ -76,6 +89,9 @@ void ChangeUpdate() {
 		*/
 	case Scene::game:
 		gameScene->Update();
+		break;
+	case Scene::clear:
+		clearScene->Update();
 		break;
 	}
 }
@@ -93,6 +109,9 @@ void ChangeDraw() {
 		*/
 	case Scene::game:
 		gameScene->Draw();
+		break;
+	case Scene::clear:
+		clearScene->Draw();
 		break;
 	}
 }

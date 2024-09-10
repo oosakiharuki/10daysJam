@@ -16,6 +16,7 @@ void Boss::Initialize(Model* model, ViewProjection* viewProjection) {
 	};
 
 	initialPositionX_ = worldTransform_.translation_.x;
+	bossHp = 20;
 }
 
 void Boss::Updata() { 
@@ -73,31 +74,32 @@ void Boss::OnBoxCollision(const Box* box) {
 
 void Boss::IsHit() {
 	if (hitBox_) {
-		/*if (bossHp > 0) {
-			bossHp -= 2;
+		if (bossHp > 0) {
+			// audio_->PlayWave(soundDataHandle_);//エラーが起きる
+			//bossHp -= 1; //何回も当たってる
+			score->ScoreCounter(bossHp);
+			hitBox_ = false;
+		}
 
-		}*/ 
-		//audio_->PlayWave(soundDataHandle_);//エラーが起きる
-		//scorePoint_ += 2; //何回も当たってる
-		score->ScoreCounter(scorePoint_);
-		hitBox_ = false;
 	} else if (hitEnemy_) {
-		/*if (bossHp > 0) {
-			bossHp -= 5;
+		if (bossHp > 0) {
+			// audio_->PlayWave(soundDataHandle_);//ココも
+			bossHp -= 1 * enemyCounter_;
+			score->ScoreCounter(bossHp);
+			enemyCounter_ = 1;
+			hitEnemy_ = false;
+		}
 
-		}*/ 
-    	//audio_->PlayWave(soundDataHandle_);//ココも
-		scorePoint_ += 1 * enemyCounter_;
-		score->ScoreCounter(scorePoint_);
-		enemyCounter_ = 1;
-		hitEnemy_ = false;
 	} /* else if (hitHeal_) {
 		if (bossHp < 100) {
 			bossHp += 5;
 		}
 		hitHeal_ = false;
 	}*/
-
+	else
+	{
+		score->NowHp(bossHp);
+	}
 	
 }
 
