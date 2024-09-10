@@ -10,6 +10,7 @@ public:
 	void Draw();
 
 	void ScoreCounter(int point);
+	void NowHp(int hp) { score = hp; }
 
 private:
 	int textureHandle[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
