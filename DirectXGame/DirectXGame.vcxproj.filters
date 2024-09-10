@@ -30,6 +30,8 @@
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="StageSelect.cpp" />
+    <ClCompile Include="Score.cpp" />
+    <ClCompile Include="obstructionBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\ImGuiManager.h" />
@@ -72,6 +74,8 @@
     <ClInclude Include="Title.h" />
     <ClInclude Include="Skydome.h" />
     <ClInclude Include="StageSelect.h" />
+    <ClInclude Include="Score.h" />
+    <ClInclude Include="obstructionBox.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Obj.hlsli" />

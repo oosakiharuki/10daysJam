@@ -18,6 +18,7 @@
 #include "Box.h"
 #include <vector>
 #include "Score.h"
+#include "obstructionBox.h"
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -53,12 +54,15 @@ public: // メンバ関数
 
 	// すべての当たり判定
 	void CheckAllCollision();
-
+	//妨害箱のスポーン
+	void SpawnobstructionBox();
 	bool IsCollision(const AABB& aabb1, const AABB& aabb2);
 	//距離をチェック
 	bool IsFarEnough(const Vector3& newPos);
 	//ランダムな位置を生成
 	Vector3 GenerateRandomPosition();
+	//ランダムな位置を生成(妨害箱)
+	Vector3 GenerateRandomPositionobBox();
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -114,6 +118,17 @@ private: // メンバ変数
 	const float kBoxSpawnMinZ = 0.0f; 
 	const float kBoxSpawnMaxZ = 0.0f;  
 	Score* score = nullptr;
+	//妨害箱
+	Model* obstructionboxModel_ = nullptr;
+	std::vector<obstructionBox*> obstructionBoxes_;
+	//スポーン範囲
+	float spawnRangeXMin = -10.0f;
+	float spawnRangeXMax = 10.0f;
+	float spawnRangeYMin = 0.0f;
+	float spawnRangeYMax = 10.0f;
+	float spawnRangeZMin = 0.0f;
+	float spawnRangeZMax = 0.0f;
+
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
