@@ -31,15 +31,15 @@ void ChangeScene() {
 	case Scene::title:
 		
 		if (title->IsNextScene()) {
-			scene_ = Scene::stageselect;
+			scene_ = Scene::game;
 			delete title;
 			title = nullptr;
 
-			stageselect = new StageSelect();
-			stageselect->Initialize();
+			gameScene = new GameScene();
+			gameScene->Initialize();
 		}
-
 		break;
+		/*
 	case Scene::stageselect:
 		if (stageselect->IsNextScene()) {
 			scene_ = Scene::game;
@@ -50,6 +50,7 @@ void ChangeScene() {
 			gameScene->Initialize();
 		}
 		break;
+		*/
 	case Scene::game:
 		if (gameScene->IsNextScene()) {
 			scene_ = Scene::clear;
@@ -81,9 +82,11 @@ void ChangeUpdate() {
 	case Scene::title:
 		title->Update();
 		break;
+		/*
 	case Scene::stageselect:
 		stageselect->Update();
 		break;
+		*/
 	case Scene::game:
 		gameScene->Update();
 		break;
@@ -99,9 +102,11 @@ void ChangeDraw() {
 	case Scene::title:
 		title->Draw();
 		break;
+		/*
 	case Scene::stageselect:
 		stageselect->Draw();
 		break;
+		*/
 	case Scene::game:
 		gameScene->Draw();
 		break;

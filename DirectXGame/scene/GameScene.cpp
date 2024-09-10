@@ -42,6 +42,11 @@ GameScene::~GameScene() {
 	delete boxModel_;
 	boxes_.clear();
 
+	/*
+	for (obstructionBox* structionBox : obstructionBoxes_) {
+		delete structionBox;
+	}
+	*/
 }
 
 void GameScene::Initialize() {
@@ -116,6 +121,8 @@ void GameScene::Initialize() {
 		box->SetPosition(randomPosition);
 		boxes_.push_back(box);
 	}
+	//妨害箱
+	//obstructionboxModel_ = Model::CreateFromOBJ("", true);
 
 	// ブロックの生成
 	GenerateBlocks();
@@ -225,29 +232,6 @@ void GameScene::Update() {
 		        return false; // 削除しない
 	        }),
 	    boxes_.end());
-	// デバックカメラの更新
-	debugCamera_->Update();
-#ifdef _DEBUG
-	if (input_->TriggerKey(DIK_SPACE)) {
-		if (isDebugCameraActive_ == false) {
-			isDebugCameraActive_ = true;
-		} else {
-			isDebugCameraActive_ = false;
-		}
-	}
-#endif
-	// カメラの処理
-
-	if (isDebugCameraActive_) {
-		debugCamera_->Update();
-		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-		// ビュープロジェクション行列の転送
-		viewProjection_.TransferMatrix();
-	} else {
-		// ビュープロジェクション行列の更新と転送
-		viewProjection_.UpdateMatrix();
-	}
 	// エネミーの処理
 	for (Enemy* enemy_ : enemies_) {
 		enemy_->Update();
@@ -279,6 +263,37 @@ void GameScene::Update() {
 
 			enemies_.push_back(enemy_);
 		}
+	}
+	//妨害箱の更新
+	/*
+	for (obstructionBox* structionBox : obstructionBoxes_) {
+		if (structionBox) {
+			structionBox->Update();
+		}
+	}
+	*/
+	// デバックカメラの更新
+	debugCamera_->Update();
+#ifdef _DEBUG
+	if (input_->TriggerKey(DIK_SPACE)) {
+		if (isDebugCameraActive_ == false) {
+			isDebugCameraActive_ = true;
+		} else {
+			isDebugCameraActive_ = false;
+		}
+	}
+#endif
+	// カメラの処理
+
+	if (isDebugCameraActive_) {
+		debugCamera_->Update();
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		// ビュープロジェクション行列の転送
+		viewProjection_.TransferMatrix();
+	} else {
+		// ビュープロジェクション行列の更新と転送
+		viewProjection_.UpdateMatrix();
 	}
 }
 
@@ -342,6 +357,18 @@ void GameScene::Draw() {
 			box->Draw();
 		}
 
+
+	for (Box* box : boxes_) {
+		box->Draw();
+	}
+	//妨害箱の描画
+	/*
+	for (obstructionBox* structionBox : obstructionBoxes_) {
+		if (structionBox) {
+			structionBox->Draw();
+		}
+	}
+	*/
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
@@ -398,6 +425,18 @@ void GameScene::GenerateBlocks() {
 		}
 	}
 }
+//妨害箱をランダムスポーン
+/*
+void GameScene::SpawnobstructionBox() {
+	for (uint32_t i = 0; i < 5; ++i) {
+		obstructionBox* obBox = new obstructionBox();
+		obBox->Initialize(obstructionboxModel_, &viewProjection_);
+		Vector3 randomPosition = GenerateRandomPositionobBox();
+		obBox->SetPosition(randomPosition);
+		obstructionBoxes_.push_back(obBox);
+	}
+}
+*/
 
 bool GameScene::IsCollision(const AABB& aabb1, const AABB& aabb2) {
 	if ((aabb1.min.x <= aabb2.max.x && aabb1.max.x >= aabb2.min.x) && (aabb1.min.y <= aabb2.max.y && aabb1.max.y >= aabb2.min.y) && (aabb1.min.z <= aabb2.max.z && aabb1.max.z >= aabb2.min.z)) {
@@ -489,11 +528,24 @@ void GameScene::CheckAllCollision(int bossNum) {
 		}
 	}
 #pragma endregion
+
+	#pragma region 箱と妨害箱の当たり判定
+	{
+
+	}
+	#pragma endregion
 }
 // ランダムな位置を生成
 Vector3 GameScene::GenerateRandomPosition() {
 	float x = kBoxSpawnMinX + static_cast<float>(rand()) / RAND_MAX * (kBoxSpawnMaxX - kBoxSpawnMinX);
 	float y = kBoxSpawnMinY + static_cast<float>(rand()) / RAND_MAX * (kBoxSpawnMaxY - kBoxSpawnMinY);
 	float z = kBoxSpawnMinZ + static_cast<float>(rand()) / RAND_MAX * (kBoxSpawnMaxZ - kBoxSpawnMinZ);
+	return Vector3{x, y, z};
+}
+//ランダムな位置を生成(妨害箱)
+Vector3 GameScene::GenerateRandomPositionobBox() {
+	float x =spawnRangeXMin + static_cast<float>(rand()) / RAND_MAX * (spawnRangeXMax - spawnRangeXMin);
+	float y = spawnRangeYMin + static_cast<float>(rand()) / RAND_MAX * (spawnRangeYMax - spawnRangeYMin);
+	float z = spawnRangeZMin + static_cast<float>(rand()) / RAND_MAX * (spawnRangeZMax - spawnRangeZMin);
 	return Vector3{x, y, z};
 }
