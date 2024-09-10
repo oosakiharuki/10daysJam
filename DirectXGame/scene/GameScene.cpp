@@ -95,7 +95,7 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 	skydome_->Initialize(skydomeModel_, &viewProjection_);
 	// ブロックモデル
-	modelBlocks_ = Model::CreateFromOBJ("block", true);
+	modelBlocks_ = Model::CreateFromOBJ("scaffold", true);
 	// カメラコントローラの生成・初期化
 	cameraController_ = new CameraController();//
 	cameraController_->Initialize(&viewProjection_, movableArea);
