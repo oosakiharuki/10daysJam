@@ -29,9 +29,11 @@
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Skydome.cpp" />
-    <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="obstructionBox.cpp" />
+    <ClCompile Include="ClearScene.cpp" />
+    <ClCompile Include="Instruction.cpp" />
+    <ClCompile Include="Item.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\ImGuiManager.h" />
@@ -73,9 +75,11 @@
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Skydome.h" />
-    <ClInclude Include="StageSelect.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="obstructionBox.h" />
+    <ClInclude Include="ClearScene.h" />
+    <ClInclude Include="Instruction.h" />
+    <ClInclude Include="Item.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Obj.hlsli" />

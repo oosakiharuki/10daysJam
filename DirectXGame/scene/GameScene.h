@@ -21,6 +21,7 @@
 #include <vector>
 #include "Score.h"
 #include "obstructionBox.h"
+#include "Item.h"
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -41,23 +42,18 @@ public: // メンバ関数
 	/// 初期化
 	/// </summary>
 	void Initialize();
-
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
 	void Update();
-
 	/// <summary>
 	/// 描画
 	/// </summary>
 	void Draw();
 	// ブロック生成
 	void GenerateBlocks();
-
 	// すべての当たり判定
-
 	void CheckAllCollision(int bossNum);
-
 	//妨害箱のスポーン
 	void SpawnobstructionBox();
 
@@ -72,8 +68,6 @@ public: // メンバ関数
 	enum class Bosses { boss01, boss02,boss03 };
 
 	void ChangeScene();
-
-
 	// ゲームクリア
 	bool IsNextScene() { return isFinish_; }
 
@@ -102,7 +96,6 @@ private: // メンバ変数
 	Model* enemyModel_ = nullptr;
 
 	std::stringstream enemyPopCommands;
-
 	// ボス
 	Bosses bosses = Bosses::boss01;
 	Boss* boss[3] = {nullptr, nullptr,nullptr};
@@ -124,7 +117,7 @@ private: // メンバ変数
 	 // 最後の箱生成からの経過時間
 	float timeSinceLastBox_ = 0.0f; 
 	// 箱生成間隔
-	const float kBoxSpawnInterval = 5.0f; 
+	const float kBoxSpawnInterval = 3.0f; 
 
 	const float kBoxSpawnMinX = 0.0f; 
 	const float kBoxSpawnMaxX = 31.0f;
@@ -148,7 +141,13 @@ private: // メンバ変数
 	float spawnRangeYMax = 10.0f;
 	float spawnRangeZMin = 0.0f;
 	float spawnRangeZMax = 0.0f;
-
+	//アイテム
+	Model* itemModel_ = nullptr;
+	Item* item_ = nullptr;
+	bool isItemActive_ = false;
+	//最後にアイテムが使われてからの時間
+    float timeSinceLastItem_ = 0.0f;
+	const float itemRespawnTime_ = 20.0f;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
