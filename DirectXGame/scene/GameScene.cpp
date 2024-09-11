@@ -74,12 +74,12 @@ void GameScene::Initialize() {
 	enemyModel_ = Model::CreateFromOBJ("enemy", true);
 	for (uint32_t i = 0; i < kNumEnemies; i++) {
     
-		enemyPosX = rand() % 20;
+		enemyPosX = rand() % 32;
 		enemyPosY = rand() % 15 + 3;
 		//生成
 		Enemy* enemy_ = new Enemy();
 		// 初期化
-		enemy_->LoadEnemyMoveData();
+		enemy_->LoadEnemyMoveData(BossNum);
 		enemy_->UpdateEnemyPopCommands(i);		
 		enemy_->Initialize(enemyModel_, &viewProjection_, {mapChipField_->GetMapChipPositionByIndex(enemyPosX,enemyPosY)});
 	
@@ -177,6 +177,7 @@ void GameScene::Update() {
 	case Bosses::boss02:
 		boss[1]->Updata();
 		score[1]->Updata();
+		kNumEnemies = 8;
 		if (boss[1]->IsDead()) {
 			isDestroy[1] = true; // ボス撃破　
 			BossNum = 2;
@@ -253,17 +254,17 @@ void GameScene::Update() {
 	if (enemies_.empty()) {
 		for (uint32_t i = 0; i < kNumEnemies; i++) {
 			// 生成
-			enemyPosX = rand() % 20;
+			enemyPosX = rand() % 32;
 			enemyPosY = rand() % 15 + 3;
 			Enemy* enemy_ = new Enemy();
 			// 初期化
-			enemy_->LoadEnemyMoveData();
+			enemy_->LoadEnemyMoveData(BossNum);
 			enemy_->UpdateEnemyPopCommands(i);
 			enemy_->Initialize(enemyModel_, &viewProjection_, {mapChipField_->GetMapChipPositionByIndex(enemyPosX, enemyPosY)});
 
 			enemies_.push_back(enemy_);
 		}
-	}
+	} 
 	//妨害箱の更新
 	/*
 	for (obstructionBox* structionBox : obstructionBoxes_) {
@@ -337,25 +338,25 @@ void GameScene::Draw() {
 		break;
 	}		
 	// 天球の描画
-		skydome_->Draw();
-		// ブロックの描画
-		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-			for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
-				if (!worldTransformBlock)
-					continue;
-				modelBlocks_->Draw(*worldTransformBlock, viewProjection_);
-			}
+	skydome_->Draw();
+	// ブロックの描画
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+			if (!worldTransformBlock)
+			continue;
+			modelBlocks_->Draw(*worldTransformBlock, viewProjection_);
 		}
-		// プレイヤーの描画
-		player_->Draw();
-		// エネミーの描画
-		for (Enemy* enemy_ : enemies_) {
-			enemy_->Draw();
-		}
+	}
+	// プレイヤーの描画
+	player_->Draw();
+	// エネミーの描画
+	for (Enemy* enemy_ : enemies_) {
+		enemy_->Draw();
+	}
 		
-		for (Box* box : boxes_) {
-			box->Draw();
-		}
+	for (Box* box : boxes_) {
+		box->Draw();
+	}
 
 
 	for (Box* box : boxes_) {

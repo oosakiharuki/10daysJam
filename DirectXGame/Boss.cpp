@@ -16,7 +16,7 @@ void Boss::Initialize(Model* model, ViewProjection* viewProjection) {
 	};
 
 	initialPositionX_ = worldTransform_.translation_.x;
-	bossHp = 20;
+	bossHp = 40;
 }
 
 void Boss::Updata() { 
