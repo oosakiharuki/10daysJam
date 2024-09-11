@@ -19,10 +19,18 @@ void Enemy::Initialize(Model* model, ViewProjection* viewProjection, Vector3 pos
 	
 }
 
-void Enemy::LoadEnemyMoveData() {
+void Enemy::LoadEnemyMoveData(int number) {
 
 	std::ifstream file;
-	file.open("Resources/EnemyMove.csv");
+	if (number == 0) {
+		file.open("Resources/EnemyMove.csv");
+	}
+	else if (number == 1) {
+		file.open("Resources/EnemyMove2.csv");
+	} 
+	else if (number == 2) {
+		file.open("Resources/EnemyMove3.csv");
+	}
 	assert(file.is_open());
 
 	enemyMoveCommands << file.rdbuf();
@@ -91,6 +99,10 @@ void Enemy::Update() {
 		}
 	} else {
 		worldTransform_.translation_.y = box_->GetWorldPosition().y - 3.0f;
+	}
+
+	if (worldTransform_.translation_.y < -200.0f) {
+		isDead_ = true; // 外したとき
 	}
 
 }
