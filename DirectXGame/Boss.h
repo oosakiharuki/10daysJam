@@ -57,4 +57,10 @@ private:
 	float moveRange_ = 5.0f; // 移動範囲
 	int moveDirection_ = 1;   // 1: 右移動, -1: 左移動
 	float initialPositionX_;  // 初期位置のX座標
+
+    float rotationAngle_ = 0.0f;    // 現在の回転角度
+	float rotationSpeed_ = 0.1f;    // 回転速度
+	float rotationDuration_ = 0.5f; // 回転時間（HIT後どれくらい揺れるか）
+	float rotationTimer_ = 0.0f;    // 回転アニメーションのためのタイマー
+	bool isRotating_ = false;       // 回転アニメーションが有効かどうか
 };

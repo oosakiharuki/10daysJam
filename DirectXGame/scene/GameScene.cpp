@@ -88,8 +88,8 @@ void GameScene::Initialize() {
 	
 	// ボスのモデル	
 	bossModel[0] = Model::CreateFromOBJ("boss", true);
-	bossModel[1] = Model::CreateFromOBJ("title1", true);
-	bossModel[2] = Model::CreateFromOBJ("title2", true);
+	bossModel[1] = Model::CreateFromOBJ("boss2", true);
+	bossModel[2] = Model::CreateFromOBJ("boss3", true);
 	for (uint32_t i = 0; i < 3; i++) {
 		//スコア
 		score[i] = new Score();	
