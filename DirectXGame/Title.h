@@ -24,7 +24,7 @@ public:
 	Model* modelStart_ = nullptr;
 	bool isfinish = false;
 
-	Skydome* skyDome_ = nullptr;
+	Skydome* skydome_ = nullptr;
 
 	float moveSpeed_ = 0.01f; // 移動速度
 	float moveRange_ = 1.0f;  // 移動範囲

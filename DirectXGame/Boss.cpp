@@ -1,5 +1,7 @@
 #include "Boss.h"
 #include "Score.h"
+#define _USE_MATH_DEFINES
+#include<math.h>
 
 void Boss::Initialize(Model* model, ViewProjection* viewProjection) { 
 	model_ = model;
@@ -28,6 +30,18 @@ void Boss::Updata() {
 		moveDirection_ *= -1; // 移動方向を反転
 	}
     
+    // HIT時の回転処理
+	if (isRotating_) {
+		rotationTimer_ -= 1.0f / 60.0f;                              // タイマーを減らす
+		rotationAngle_ = sinf(rotationTimer_ * float(M_PI) * 4.0f) * 10.0f; // 上下に揺れる
+
+		worldTransform_.rotation_.z = rotationAngle_ * (float(M_PI) / 180.0f); // 回転角度をラジアンに変換して適用
+
+		if (rotationTimer_ <= 0.0f) {
+			isRotating_ = false;                // 回転を終了
+			worldTransform_.rotation_.z = 0.0f; // 回転をリセット
+		}
+	}
 
 	IsHit();
 
@@ -75,6 +89,9 @@ void Boss::OnBoxCollision(const Box* box) {
 void Boss::IsHit() {
 	if (hitBox_) {
 		if (bossHp > 0) {
+			// HITしたら回転を開始
+			isRotating_ = true;
+			rotationTimer_ = rotationDuration_;  
 			// audio_->PlayWave(soundDataHandle_);//エラーが起きる
 			//bossHp -= 1; //何回も当たってる
 			score->ScoreCounter(bossHp);
@@ -83,6 +100,9 @@ void Boss::IsHit() {
 
 	} else if (hitEnemy_) {
 		if (bossHp > 0) {
+			// HITしたら回転を開始
+			isRotating_ = true;
+			rotationTimer_ = rotationDuration_;  
 			// audio_->PlayWave(soundDataHandle_);//ココも
 			bossHp -= 1 * enemyCounter_;
 			score->ScoreCounter(bossHp);

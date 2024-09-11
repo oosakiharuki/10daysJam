@@ -115,13 +115,14 @@
     <ClCompile Include="DeathParticles.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="Instruction.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChipField.cpp" />
     <ClCompile Include="MyMath.cpp" />
     <ClCompile Include="obstructionBox.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
-    <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Skydome.cpp" />
@@ -158,6 +159,8 @@
     <ClInclude Include="DeathParticles.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="input\Input.h" />
+    <ClInclude Include="Instruction.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="MapChipField.h" />
     <ClInclude Include="math\Matrix4x4.h" />
     <ClInclude Include="math\Vector2.h" />
@@ -167,7 +170,6 @@
     <ClInclude Include="obstructionBox.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="scene\GameScene.h" />
-    <ClInclude Include="StageSelect.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Skydome.h" />
