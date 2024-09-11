@@ -8,19 +8,18 @@
 #include "WinApp.h"
 
 #include "Title.h"
-#include "StageSelect.h"
+#include "Instruction.h"
 #include "ClearScene.h"
 enum class Scene {
 	title,
-	stageselect,
+	instruction,
 	game,
 	clear
 };
 
 Title* title = nullptr;
-
+Instruction* instruction = nullptr;
 GameScene* gameScene = nullptr;
-StageSelect* stageselect = nullptr;
 ClearScene* clearScene = nullptr;
 Scene scene_;
 
@@ -37,20 +36,24 @@ void ChangeScene() {
 
 			gameScene = new GameScene();
 			gameScene->Initialize();
+		
+			scene_ = Scene::instruction;
+			delete title;
+			title = nullptr;
+			instruction = new Instruction();
+			instruction->Initialize();
+			
 		}
 		break;
-		/*
-	case Scene::stageselect:
-		if (stageselect->IsNextScene()) {
+	case Scene::instruction:
+		if (instruction->IsNextScene()) {
 			scene_ = Scene::game;
-			delete stageselect;
-			stageselect = nullptr;
-
+			delete instruction;
+			instruction = nullptr;
 			gameScene = new GameScene();
 			gameScene->Initialize();
 		}
 		break;
-		*/
 	case Scene::game:
 		if (gameScene->IsNextScene()) {
 			scene_ = Scene::clear;
@@ -82,11 +85,9 @@ void ChangeUpdate() {
 	case Scene::title:
 		title->Update();
 		break;
-		/*
-	case Scene::stageselect:
-		stageselect->Update();
+	case Scene::instruction:
+		instruction->Update();
 		break;
-		*/
 	case Scene::game:
 		gameScene->Update();
 		break;
@@ -102,11 +103,9 @@ void ChangeDraw() {
 	case Scene::title:
 		title->Draw();
 		break;
-		/*
-	case Scene::stageselect:
-		stageselect->Draw();
+	case Scene::instruction:
+		instruction->Draw();
 		break;
-		*/
 	case Scene::game:
 		gameScene->Draw();
 		break;
