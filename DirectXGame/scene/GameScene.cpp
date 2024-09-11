@@ -530,8 +530,24 @@ void GameScene::CheckAllCollision(int bossNum) {
 #pragma endregion
 
 	#pragma region 箱と妨害箱の当たり判定
-	{
+	{ 
+		for (Box* box : boxes_) {
+			if (box->IsDead()) {
+				continue;
+			}
+			for (obstructionBox* structionBox : obstructionBoxes_) {
+				if (structionBox == nullptr) {
 
+					continue;
+				}
+				aabb1 = box->GetAABB();
+				aabb2 = structionBox->GetAABB();
+				if (IsCollision(aabb1, aabb2)) {
+					box->OnCollisionBoss();
+					break;
+				}
+			}
+		}
 	}
 	#pragma endregion
 }

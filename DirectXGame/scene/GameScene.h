@@ -122,7 +122,7 @@ private: // メンバ変数
 	 // 最後の箱生成からの経過時間
 	float timeSinceLastBox_ = 0.0f; 
 	// 箱生成間隔
-	const float kBoxSpawnInterval = 5.0f; 
+	const float kBoxSpawnInterval = 3.0f; 
 
 	const float kBoxSpawnMinX = 0.0f; 
 	const float kBoxSpawnMaxX = 31.0f;
