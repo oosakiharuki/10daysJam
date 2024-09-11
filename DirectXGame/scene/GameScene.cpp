@@ -124,6 +124,8 @@ void GameScene::Initialize() {
 	//妨害箱
 	//obstructionboxModel_ = Model::CreateFromOBJ("", true);
 
+	//アイテムモデル
+	//itemModel_ = Model::CreateFromOBJ("item", true);
 	// ブロックの生成
 	GenerateBlocks();
 }
@@ -272,6 +274,24 @@ void GameScene::Update() {
 		}
 	}
 	*/
+	//アイテムの更新
+	/*
+	if (!isItemActive_) {
+		timeSinceLastItem_ += 1.0f / 60.0f;
+		//アイテムが消えて一定時間経過後生成
+		if (timeSinceLastItem_ >= itemRespawnTime_) {
+			Vector3 randomPosition = GenerateRandomPosition();
+			//アイテムを生成
+			item_ = new Item();
+			item_->Initialize(itemModel_, &viewProjection_);
+			item_->SetPosition(randomPosition);
+			isItemActive_ = true;
+			timeSinceLastItem_ = 0.0f;
+		}
+	} else {
+		item_->Update();
+	}
+	*/
 	// デバックカメラの更新
 	debugCamera_->Update();
 #ifdef _DEBUG
@@ -284,7 +304,6 @@ void GameScene::Update() {
 	}
 #endif
 	// カメラの処理
-
 	if (isDebugCameraActive_) {
 		debugCamera_->Update();
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
@@ -367,6 +386,12 @@ void GameScene::Draw() {
 		if (structionBox) {
 			structionBox->Draw();
 		}
+	}
+	*/
+	//アイテムの描画
+	/*
+	if (isItemActive_ && item_ != nullptr) {
+		item_->Draw();
 	}
 	*/
 	// 3Dオブジェクト描画後処理
@@ -492,7 +517,7 @@ void GameScene::CheckAllCollision(int bossNum) {
 
 #pragma region ボスと敵の当たり判定
 	{
-		// ボスの座標
+		// ボス0の座標
 		aabb1 = boss[bossNum]->GetAABB();
 
 		// ボスと敵すべての当たり判定
@@ -550,6 +575,20 @@ void GameScene::CheckAllCollision(int bossNum) {
 		}
 	}
 	#pragma endregion
+/*
+	#pragma region 箱とアイテムの当たり判定
+	{
+		if (isItemActive_) {
+			aabb1 = item_->GetAABB();
+			for (Box* box : boxes_) {
+				aabb2 = box->GetAABB();
+				if (IsCollision(aabb1, aabb2)) {
+				
+				}
+			}
+		}
+	}
+	*/
 }
 // ランダムな位置を生成
 Vector3 GameScene::GenerateRandomPosition() {
