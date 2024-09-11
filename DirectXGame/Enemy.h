@@ -15,7 +15,7 @@ public:
 	/// <param name="position">位置</param>
 	void Initialize(Model* model,ViewProjection* viewProjection,Vector3 position);
 
-	void LoadEnemyMoveData();
+	void LoadEnemyMoveData(int number);
 	void UpdateEnemyPopCommands(uint32_t number);
 
 	void Update();
