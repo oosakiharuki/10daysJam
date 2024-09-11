@@ -6,7 +6,7 @@ Title::~Title() {
 	delete modelFlont_;
 	delete modelBack_;
 	delete modelSkyDome_;
-	delete skyDome_;
+	delete skydome_;
 }
 
 void Title::Initialize() { 
@@ -18,8 +18,8 @@ void Title::Initialize() {
 	isfinish = false;
 
 	modelSkyDome_ = Model::CreateFromOBJ("sphere", true);
-	skyDome_ = new Skydome();
-	skyDome_->Initialize(modelSkyDome_, &viewProjection_);
+	skydome_ = new Skydome();
+	skydome_->Initialize(modelSkyDome_, &viewProjection_);
 
 	modelStart_ = Model::CreateFromOBJ("startText", true);
 	startWorldTransform_.Initialize();
@@ -32,7 +32,7 @@ void Title::Update() {
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		isfinish = true;
 	} 
-	skyDome_->Update();
+	skydome_->Update();
 
 	// テキストの移動処理
 	startWorldTransform_.translation_.y += moveSpeed_ * moveDirection_;
@@ -49,7 +49,7 @@ void Title::Draw() {
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
 	Model::PreDraw(commandList);
-	skyDome_->Draw();
+	skydome_->Draw();
 	modelBack_->Draw(worldTransform_,viewProjection_);
 	modelFlont_->Draw(worldTransform_, viewProjection_);
 	modelStart_->Draw(startWorldTransform_, viewProjection_);
