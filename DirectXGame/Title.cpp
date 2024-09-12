@@ -7,6 +7,8 @@ Title::~Title() {
 	delete modelBack_;
 	delete modelSkyDome_;
 	delete skydome_;
+	delete modelStart_;
+
 }
 
 void Title::Initialize() { 

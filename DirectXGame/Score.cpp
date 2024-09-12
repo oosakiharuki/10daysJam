@@ -13,7 +13,21 @@ Score::~Score() {
 void Score::Initialize() {
 
 	pos = {10, 600, 0};
-	score = 0;
+	score = 40;
+	placeNum[0] = score / 10000;
+	score %= 10000;
+
+	placeNum[1] = score / 1000;
+	score %= 1000;
+
+	placeNum[2] = score / 100;
+	score %= 100;
+
+	placeNum[3] = score / 10;
+	score %= 10;
+
+	placeNum[4] = score / 1;
+	score %= 1;
 
 	textureHandle[0] = TextureManager::Load("Number/num0.png");
 	textureHandle[1] = TextureManager::Load("Number/num1.png");

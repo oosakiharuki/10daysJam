@@ -92,7 +92,7 @@ private: // メンバ変数
 	uint32_t enemyPosX;
 	uint32_t enemyPosY;
 
-	const uint32_t kNumEnemies = 10; // 敵の数
+	uint32_t kNumEnemies = 10; // 敵の数
 	std::list<Enemy*> enemies_;
 	Model* enemyModel_ = nullptr;
 

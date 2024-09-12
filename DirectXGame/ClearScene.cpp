@@ -13,7 +13,7 @@ void ClearScene::Initialize() {
 
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
-	modelBack_ = Model::CreateFromOBJ("title1", true);
+	modelBack_ = Model::CreateFromOBJ("clearText", true);
 	modelSkydome_ = Model::CreateFromOBJ("sphere", true);
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
@@ -22,6 +22,14 @@ void ClearScene::Initialize() {
 }
 
 void ClearScene::Update() {
+	// テキストの移動処理
+	worldTransform_.translation_.y += moveSpeed_ * moveDirection_;
+
+	// 一定範囲を超えたら移動方向を反転
+	if (std::abs(worldTransform_.translation_.y - initialPositionX_) > moveRange_) {
+		moveDirection_ *= -1; // 移動方向を反転
+	}
+
 	worldTransform_.UpdateMatrix();
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		isfinish = true;
