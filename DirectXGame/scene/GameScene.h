@@ -61,6 +61,7 @@ public: // メンバ関数
 	bool IsCollision(const AABB& aabb1, const AABB& aabb2);
 	// 距離をチェック
 	bool IsFarEnough(const Vector3& newPos);
+	bool IsFarEnoughobBox(const Vector3& newPos);
 	// ランダムな位置を生成
 	Vector3 GenerateRandomPosition();
 	//ランダムな位置を生成(妨害箱)
@@ -141,13 +142,14 @@ private: // メンバ変数
 	bool isFinishOver_ = false;
 
 	// 妨害箱
+
 	Model* obstructionboxModel_ = nullptr;
 	std::vector<obstructionBox*> obstructionBoxes_;
 	//スポーン範囲
-	float spawnRangeXMin = -10.0f;
-	float spawnRangeXMax = 10.0f;
-	float spawnRangeYMin = 0.0f;
-	float spawnRangeYMax = 10.0f;
+	float spawnRangeXMin = 0.0f;
+	float spawnRangeXMax = 31.0f;
+	float spawnRangeYMin = 1.0f;
+	float spawnRangeYMax = 15.0f;
 	float spawnRangeZMin = 0.0f;
 	float spawnRangeZMax = 0.0f;
 	//アイテム
@@ -167,5 +169,4 @@ private: // メンバ変数
 	/// ゲームシーン用
 	/// </summary>
 };
-
 #endif // GAMESCENE_H
