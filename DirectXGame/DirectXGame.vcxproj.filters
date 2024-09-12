@@ -34,6 +34,8 @@
     <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="Instruction.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="TimeLimit.cpp" />
+    <ClCompile Include="GameOver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\ImGuiManager.h" />
@@ -80,6 +82,8 @@
     <ClInclude Include="ClearScene.h" />
     <ClInclude Include="Instruction.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="TimeLimit.h" />
+    <ClInclude Include="GameOver.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Obj.hlsli" />
