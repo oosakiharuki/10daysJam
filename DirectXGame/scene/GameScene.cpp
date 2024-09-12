@@ -41,10 +41,12 @@ GameScene::~GameScene() {
 	}
 	delete boxModel_;
 	boxes_.clear();
-
+	for (obstructionBox* box : obstructionBoxes_) {
+		delete box;
+	}
 	/*
 	for (obstructionBox* structionBox : obstructionBoxes_) {
-		delete structionBox;
+	    delete structionBox;
 	}
 	*/
 }
@@ -73,10 +75,9 @@ void GameScene::Initialize() {
 	// モデル
 	enemyModel_ = Model::CreateFromOBJ("enemy", true);
 	for (uint32_t i = 0; i < kNumEnemies; i++) {
-    
 		enemyPosX = rand() % 32;
 		enemyPosY = rand() % 15 + 3;
-		//生成
+		// 生成
 		Enemy* enemy_ = new Enemy();
 		// 初期化
 		enemy_->LoadEnemyMoveData(BossNum);
@@ -85,20 +86,20 @@ void GameScene::Initialize() {
 	
 		enemies_.push_back(enemy_);
 	}
-	
-	// ボスのモデル	
+
+	// ボスのモデル
 	bossModel[0] = Model::CreateFromOBJ("boss", true);
 	bossModel[1] = Model::CreateFromOBJ("boss2", true);
 	bossModel[2] = Model::CreateFromOBJ("boss3", true);
 	for (uint32_t i = 0; i < 3; i++) {
-		//スコア
-		score[i] = new Score();	
+		// スコア
+		score[i] = new Score();
 		score[i]->Initialize();
 
 		// ボスの生成と初期化
 		boss[i] = new Boss();
 		boss[i]->GetScore(score[i]);
-		boss[i]->Initialize(bossModel[i], &viewProjection_);
+		boss[i]->Initialize(bossModel[i], &viewProjection_,i*5);
 	}
 	// 天球のモデル
 	skydomeModel_ = Model::CreateFromOBJ("sphere", true);
@@ -108,7 +109,7 @@ void GameScene::Initialize() {
 	// ブロックモデル
 	modelBlocks_ = Model::CreateFromOBJ("scaffold", true);
 	// カメラコントローラの生成・初期化
-	cameraController_ = new CameraController();//
+	cameraController_ = new CameraController(); //
 	cameraController_->Initialize(&viewProjection_, movableArea);
 	cameraController_->SetTarget(player_);
 	cameraController_->Reset();
@@ -121,12 +122,12 @@ void GameScene::Initialize() {
 		box->SetPosition(randomPosition);
 		boxes_.push_back(box);
 	}
-	//妨害箱
-	//obstructionboxModel_ = Model::CreateFromOBJ("", true);
+	// 妨害箱
+	obstructionboxModel_ = Model::CreateFromOBJ("ojama", true);
 
-	//アイテムモデル
-	//itemModel_ = Model::CreateFromOBJ("item", true);
-	// ブロックの生成
+	// アイテムモデル
+	// itemModel_ = Model::CreateFromOBJ("item", true);
+	//  ブロックの生成
 	GenerateBlocks();
 
 	soundDataHandle_ = audio_->LoadWave("gameBGM.wav");
@@ -173,7 +174,7 @@ void GameScene::Update() {
 	switch (bosses) {
 	case Bosses::boss01:
 		// ボスの更新
-		boss[0]->Updata();	
+		boss[0]->Updata();
 		score[0]->Updata();
 		if (boss[0]->IsDead()) {
 			isDestroy[0] = true; // ボス撃破　
@@ -246,8 +247,6 @@ void GameScene::Update() {
 
 	CheckAllCollision(BossNum);
 
-
-
 	enemies_.remove_if([](Enemy* enemy) {
 		if (enemy->IsDead()) {
 
@@ -270,31 +269,50 @@ void GameScene::Update() {
 
 			enemies_.push_back(enemy_);
 		}
-	} 
-	//妨害箱の更新
-	/*
-	for (obstructionBox* structionBox : obstructionBoxes_) {
-		if (structionBox) {
-			structionBox->Update();
-		}
 	}
-	*/
-	//アイテムの更新
+	// 妨害箱の生成・更新
+	if (obstructionBoxes_.size() >= 5) {
+		return;
+	}
+	if (isDestroy[0]) {
+		Vector3 randomPosition;
+		bool positionFound = false;
+		for (int i = 0; i < 5; ++i) {
+			for (int attempt = 0; attempt < 10; ++attempt) {
+				randomPosition = GenerateRandomPositionobBox();
+				if (IsFarEnoughobBox(randomPosition)) {
+					positionFound = true;
+					break;
+				}
+			}
+			if (positionFound) {
+				obstructionBox* newObstructionBox = new obstructionBox();
+				newObstructionBox->Initialize(obstructionboxModel_, &viewProjection_);
+				newObstructionBox->SetPosition(randomPosition);
+				obstructionBoxes_.push_back(newObstructionBox);
+			}
+		}
+		isDestroy[0] = false;
+	}
+	for (obstructionBox* box : obstructionBoxes_) {
+		box->Update();
+	}
+	// アイテムの更新
 	/*
 	if (!isItemActive_) {
-		timeSinceLastItem_ += 1.0f / 60.0f;
-		//アイテムが消えて一定時間経過後生成
-		if (timeSinceLastItem_ >= itemRespawnTime_) {
-			Vector3 randomPosition = GenerateRandomPosition();
-			//アイテムを生成
-			item_ = new Item();
-			item_->Initialize(itemModel_, &viewProjection_);
-			item_->SetPosition(randomPosition);
-			isItemActive_ = true;
-			timeSinceLastItem_ = 0.0f;
-		}
+	    timeSinceLastItem_ += 1.0f / 60.0f;
+	    //アイテムが消えて一定時間経過後生成
+	    if (timeSinceLastItem_ >= itemRespawnTime_) {
+	        Vector3 randomPosition = GenerateRandomPosition();
+	        //アイテムを生成
+	        item_ = new Item();
+	        item_->Initialize(itemModel_, &viewProjection_);
+	        item_->SetPosition(randomPosition);
+	        isItemActive_ = true;
+	        timeSinceLastItem_ = 0.0f;
+	    }
 	} else {
-		item_->Update();
+	    item_->Update();
 	}
 	*/
 	// デバックカメラの更新
@@ -359,7 +377,7 @@ void GameScene::Draw() {
 		// ボスの描画
 		boss[2]->Draw();
 		break;
-	}		
+	}
 	// 天球の描画
 	skydome_->Draw();
 	// ブロックの描画
@@ -380,23 +398,14 @@ void GameScene::Draw() {
 	for (Box* box : boxes_) {
 		box->Draw();
 	}
-
-
-	for (Box* box : boxes_) {
+	// 妨害箱の描画
+	for (obstructionBox* box : obstructionBoxes_) {
 		box->Draw();
 	}
-	//妨害箱の描画
-	/*
-	for (obstructionBox* structionBox : obstructionBoxes_) {
-		if (structionBox) {
-			structionBox->Draw();
-		}
-	}
-	*/
-	//アイテムの描画
+	// アイテムの描画
 	/*
 	if (isItemActive_ && item_ != nullptr) {
-		item_->Draw();
+	    item_->Draw();
 	}
 	*/
 	// 3Dオブジェクト描画後処理
@@ -407,19 +416,17 @@ void GameScene::Draw() {
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(commandList);
 
-
 	switch (bosses) {
 	case Bosses::boss01:
-		    score[0]->Draw();
-		    break;
+		score[0]->Draw();
+		break;
 	case Bosses::boss02:
-		    score[1]->Draw();
-		    break;
+		score[1]->Draw();
+		break;
 	case Bosses::boss03:
-		    score[2]->Draw();
-		    break;
-	}	
-
+		score[2]->Draw();
+		break;
+	}
 
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
@@ -455,19 +462,8 @@ void GameScene::GenerateBlocks() {
 		}
 	}
 }
-//妨害箱をランダムスポーン
-/*
-void GameScene::SpawnobstructionBox() {
-	for (uint32_t i = 0; i < 5; ++i) {
-		obstructionBox* obBox = new obstructionBox();
-		obBox->Initialize(obstructionboxModel_, &viewProjection_);
-		Vector3 randomPosition = GenerateRandomPositionobBox();
-		obBox->SetPosition(randomPosition);
-		obstructionBoxes_.push_back(obBox);
-	}
-}
-*/
-
+// 妨害箱をランダムスポーン
+void GameScene::SpawnobstructionBox() {}
 bool GameScene::IsCollision(const AABB& aabb1, const AABB& aabb2) {
 	if ((aabb1.min.x <= aabb2.max.x && aabb1.max.x >= aabb2.min.x) && (aabb1.min.y <= aabb2.max.y && aabb1.max.y >= aabb2.min.y) && (aabb1.min.z <= aabb2.max.z && aabb1.max.z >= aabb2.min.z)) {
 		return true;
@@ -493,7 +489,22 @@ bool GameScene::IsFarEnough(const Vector3& newPos) {
 	}
 	return true;
 }
+// 妨害箱同士の距離をチェック
+bool GameScene::IsFarEnoughobBox(const Vector3& newPos) {
+	const float kMinDistance = 3.0f;
+	for (obstructionBox* box : obstructionBoxes_) {
+		Vector3 boxPos = box->GetPosition();
+		float dx = newPos.x - boxPos.x;
+		float dy = newPos.y - boxPos.y;
+		float dz = newPos.z - boxPos.z;
 
+		float distance = sqrt(dx * dx + dy * dy + dz * dz);
+		if (distance < kMinDistance) {
+			return false;
+		}
+	}
+	return true;
+}
 // すべての当たり判定
 void GameScene::CheckAllCollision(int bossNum) {
 
@@ -559,8 +570,8 @@ void GameScene::CheckAllCollision(int bossNum) {
 	}
 #pragma endregion
 
-	#pragma region 箱と妨害箱の当たり判定
-	{ 
+#pragma region 箱と妨害箱の当たり判定
+	{
 		for (Box* box : boxes_) {
 			if (box->IsDead()) {
 				continue;
@@ -579,21 +590,34 @@ void GameScene::CheckAllCollision(int bossNum) {
 			}
 		}
 	}
-	#pragma endregion
-/*
-	#pragma region 箱とアイテムの当たり判定
+#pragma endregion
+	/*
+	    #pragma region 箱とアイテムの当たり判定
+	    {
+	        if (isItemActive_) {
+	            aabb1 = item_->GetAABB();
+	            for (Box* box : boxes_) {
+	                aabb2 = box->GetAABB();
+	                if (IsCollision(aabb1, aabb2)) {
+
+	                }
+	            }
+	        }
+	    }
+	    */
+	#pragma region 敵と妨害箱の当たり判定
 	{
-		if (isItemActive_) {
-			aabb1 = item_->GetAABB();
-			for (Box* box : boxes_) {
-				aabb2 = box->GetAABB();
+		for (Enemy* enemy : enemies_) {
+			for (obstructionBox* structionBox : obstructionBoxes_) {
+				aabb1 = enemy->GetAABB();
+				aabb2 = structionBox->GetAABB();
 				if (IsCollision(aabb1, aabb2)) {
-				
+					enemy->OnCollisionBoss();
 				}
 			}
 		}
 	}
-	*/
+	#pragma endregion
 }
 // ランダムな位置を生成
 Vector3 GameScene::GenerateRandomPosition() {
@@ -602,9 +626,9 @@ Vector3 GameScene::GenerateRandomPosition() {
 	float z = kBoxSpawnMinZ + static_cast<float>(rand()) / RAND_MAX * (kBoxSpawnMaxZ - kBoxSpawnMinZ);
 	return Vector3{x, y, z};
 }
-//ランダムな位置を生成(妨害箱)
+// ランダムな位置を生成(妨害箱)
 Vector3 GameScene::GenerateRandomPositionobBox() {
-	float x =spawnRangeXMin + static_cast<float>(rand()) / RAND_MAX * (spawnRangeXMax - spawnRangeXMin);
+	float x = spawnRangeXMin + static_cast<float>(rand()) / RAND_MAX * (spawnRangeXMax - spawnRangeXMin);
 	float y = spawnRangeYMin + static_cast<float>(rand()) / RAND_MAX * (spawnRangeYMax - spawnRangeYMin);
 	float z = spawnRangeZMin + static_cast<float>(rand()) / RAND_MAX * (spawnRangeZMax - spawnRangeZMin);
 	return Vector3{x, y, z};
