@@ -3,7 +3,7 @@
 #define _USE_MATH_DEFINES
 #include<math.h>
 
-void Boss::Initialize(Model* model, ViewProjection* viewProjection) { 
+void Boss::Initialize(Model* model, ViewProjection* viewProjection, uint32_t extraHp) { 
 	model_ = model;
 	viewProjection_ = viewProjection;
 	worldTransform_.Initialize();
@@ -18,7 +18,8 @@ void Boss::Initialize(Model* model, ViewProjection* viewProjection) {
 	};
 
 	initialPositionX_ = worldTransform_.translation_.x;
-	bossHp = 20;
+	additionalHp = extraHp; 
+	bossHp = 20 + additionalHp;
 }
 
 void Boss::Updata() { 

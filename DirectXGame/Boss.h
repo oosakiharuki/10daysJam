@@ -13,7 +13,7 @@ class Score;
 
 class Boss {
 public:
-	void Initialize(Model* model, ViewProjection* viewProjection);
+	void Initialize(Model* model, ViewProjection* viewProjection, uint32_t additionalHp);
 	void Updata();
 	void Draw();
 
@@ -63,4 +63,6 @@ private:
 	float rotationDuration_ = 0.5f; // 回転時間（HIT後どれくらい揺れるか）
 	float rotationTimer_ = 0.0f;    // 回転アニメーションのためのタイマー
 	bool isRotating_ = false;       // 回転アニメーションが有効かどうか
+	//増えるHP
+	uint32_t additionalHp;
 };

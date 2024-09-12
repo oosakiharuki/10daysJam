@@ -14,6 +14,7 @@ public:
 		worldTransform_.UpdateMatrix();
 	}
 	Vector3 GetWorldPosition();
+	const Vector3& GetPosition() const { return worldTransform_.translation_; }
 	AABB GetAABB();
 
 private:
