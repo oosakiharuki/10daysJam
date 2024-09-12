@@ -15,12 +15,19 @@ void Instruction::Initialize() {
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkyDome_, &viewProjection_);
 	isfinish = false;
+
+	audio_ = Audio::GetInstance();
+	soundDataHandle_ = audio_->LoadWave("gameBGM.wav");
+	soundDataHandle2_ = audio_->LoadWave("buttonSE.wav");
+	voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
 }
 
 void Instruction::Update() {
 	skydome_->Update();
 	worldTransform_.UpdateMatrix();
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		audio_->StopWave(voiceHandle_);
+		audio_->PlayWave(soundDataHandle2_);
 		isfinish = true;
 	}
 }

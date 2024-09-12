@@ -148,6 +148,9 @@ private: // メンバ変数
 	//最後にアイテムが使われてからの時間
     float timeSinceLastItem_ = 0.0f;
 	const float itemRespawnTime_ = 20.0f;
+
+	uint32_t soundDataHandle_ = 0;
+	uint32_t voiceHandele_ = 0;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

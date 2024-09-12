@@ -34,8 +34,8 @@ void ChangeScene() {
 			delete title;
 			title = nullptr;
 
-			gameScene = new GameScene();
-			gameScene->Initialize();
+			//gameScene = new GameScene();
+			//gameScene->Initialize();
 		
 			scene_ = Scene::instruction;
 			delete title;

@@ -27,11 +27,20 @@ void Title::Initialize() {
 	startWorldTransform_.Initialize();
 	startWorldTransform_.translation_ = {0.0f, -10.0f, 0.0f};
 	initialPositionX_ = startWorldTransform_.translation_.y;
+
+	audio_ = Audio::GetInstance();
+	// サウンドデータの読み込み
+	soundDataHandle_ = audio_->LoadWave("gameBGM.wav");
+	soundDataHadle2_ = audio_->LoadWave("buttonSE.wav");
+	// 音声再生
+	voiceJandle_ = audio_->PlayWave(soundDataHandle_);
 }
 
 void Title::Update() { 
 	worldTransform_.UpdateMatrix();
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		audio_->StopWave(voiceJandle_);
+		audio_->PlayWave(soundDataHadle2_);
 		isfinish = true;
 	} 
 	skydome_->Update();
