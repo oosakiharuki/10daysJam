@@ -47,6 +47,9 @@ GameScene::~GameScene() {
 		delete structionBox;
 	}
 	*/
+	delete item_;
+	delete itemModel_;
+	delete timeLimit_;
 }
 
 void GameScene::Initialize() {
@@ -125,7 +128,12 @@ void GameScene::Initialize() {
 	//obstructionboxModel_ = Model::CreateFromOBJ("", true);
 
 	//アイテムモデル
-	//itemModel_ = Model::CreateFromOBJ("item", true);
+	itemModel_ = Model::CreateFromOBJ("item", true);
+
+	//制限時間
+	timeLimit_ = new TimeLimit();
+	timeLimit_->Initalize();
+
 	// ブロックの生成
 	GenerateBlocks();
 }
@@ -144,9 +152,13 @@ void GameScene::ChangeScene() {
 		break;
 	case Bosses::boss03:
 		if (boss[2]->IsDead()) {
-			isFinish_ = true; // ゲームクリア
+			isFinishClear_ = true; // ゲームクリア
 		}
 		break;
+	}	
+	
+	if (timeLimit_->GameOver()) {
+		isFinishOver_ = true;
 	}
 }
 
@@ -237,11 +249,18 @@ void GameScene::Update() {
 	    boxes_.end());
 	// エネミーの処理
 	for (Enemy* enemy_ : enemies_) {
-		enemy_->Update();
+		if (!isStopEnemy_) {
+			enemy_->Update();
+		} else {
+			enemy_->Crush();
+		}
 	}
 
 	CheckAllCollision(BossNum);
+	IsStopEnemy();
 
+	// 制限時間
+	timeLimit_->Update();
 
 
 	enemies_.remove_if([](Enemy* enemy) {
@@ -276,7 +295,7 @@ void GameScene::Update() {
 	}
 	*/
 	//アイテムの更新
-	/*
+	
 	if (!isItemActive_) {
 		timeSinceLastItem_ += 1.0f / 60.0f;
 		//アイテムが消えて一定時間経過後生成
@@ -292,7 +311,7 @@ void GameScene::Update() {
 	} else {
 		item_->Update();
 	}
-	*/
+	
 	// デバックカメラの更新
 	debugCamera_->Update();
 #ifdef _DEBUG
@@ -373,10 +392,6 @@ void GameScene::Draw() {
 		enemy_->Draw();
 	}
 		
-	for (Box* box : boxes_) {
-		box->Draw();
-	}
-
 
 	for (Box* box : boxes_) {
 		box->Draw();
@@ -390,11 +405,11 @@ void GameScene::Draw() {
 	}
 	*/
 	//アイテムの描画
-	/*
+	
 	if (isItemActive_ && item_ != nullptr) {
 		item_->Draw();
 	}
-	*/
+	
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
@@ -415,7 +430,8 @@ void GameScene::Draw() {
 		    score[2]->Draw();
 		    break;
 	}	
-
+	// 制限時間
+	timeLimit_->Draw();
 
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
@@ -576,7 +592,7 @@ void GameScene::CheckAllCollision(int bossNum) {
 		}
 	}
 	#pragma endregion
-/*
+
 	#pragma region 箱とアイテムの当たり判定
 	{
 		if (isItemActive_) {
@@ -584,12 +600,13 @@ void GameScene::CheckAllCollision(int bossNum) {
 			for (Box* box : boxes_) {
 				aabb2 = box->GetAABB();
 				if (IsCollision(aabb1, aabb2)) {
-				
+					isStopEnemy_ = true;
+					isItemActive_ = false;
 				}
 			}
 		}
 	}
-	*/
+	
 }
 // ランダムな位置を生成
 Vector3 GameScene::GenerateRandomPosition() {
@@ -604,4 +621,15 @@ Vector3 GameScene::GenerateRandomPositionobBox() {
 	float y = spawnRangeYMin + static_cast<float>(rand()) / RAND_MAX * (spawnRangeYMax - spawnRangeYMin);
 	float z = spawnRangeZMin + static_cast<float>(rand()) / RAND_MAX * (spawnRangeZMax - spawnRangeZMin);
 	return Vector3{x, y, z};
+}
+
+// アイテムで敵が止まる
+void GameScene::IsStopEnemy() { 	
+	if (isStopEnemy_) {
+		timerCount -= deltaTimer_;
+		if (timerCount < 0) {
+			isStopEnemy_ = false;
+			timerCount = 5.0f;
+		}
+	} 
 }

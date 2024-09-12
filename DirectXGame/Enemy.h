@@ -19,6 +19,7 @@ public:
 	void UpdateEnemyPopCommands(uint32_t number);
 
 	void Update();
+	void Crush();
 	void Draw();
 
 	Vector3 GetWorldPosition();
