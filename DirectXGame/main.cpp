@@ -67,7 +67,7 @@ void ChangeScene() {
 			clearScene = new ClearScene();
 			clearScene->Initialize();
 		} 
-		if (gameScene->IsGameOverScene()) {
+		else if (gameScene->IsGameOverScene()) {
 			scene_ = Scene::gameover;
 			delete gameScene;
 			gameScene = nullptr;
