@@ -115,6 +115,7 @@
     <ClCompile Include="DeathParticles.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="Instruction.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="main.cpp" />
@@ -124,6 +125,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="Score.cpp" />
+    <ClCompile Include="TimeLimit.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="WorldTransform.cpp" />
@@ -158,6 +160,7 @@
     <ClInclude Include="ClearScene.h" />
     <ClInclude Include="DeathParticles.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="GameOver.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="Instruction.h" />
     <ClInclude Include="Item.h" />
@@ -171,6 +174,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="Score.h" />
+    <ClInclude Include="TimeLimit.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Skydome.h" />
   </ItemGroup>

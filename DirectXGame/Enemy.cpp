@@ -98,13 +98,18 @@ void Enemy::Update() {
 			worldTransform_.translation_.y = move.y + std::sin(kSpeed) * kRange.y;
 		}
 	} else {
+		Crush();
+	}
+}
+
+void Enemy::Crush() {
+	if (isCrush_) {
 		worldTransform_.translation_.y = box_->GetWorldPosition().y - 3.0f;
 	}
 
 	if (worldTransform_.translation_.y < -200.0f) {
 		isDead_ = true; // 外したとき
 	}
-
 }
 
 void Enemy::Draw() {

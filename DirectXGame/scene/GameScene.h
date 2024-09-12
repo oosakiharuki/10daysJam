@@ -22,6 +22,7 @@
 #include "Score.h"
 #include "obstructionBox.h"
 #include "Item.h"
+#include "TimeLimit.h"
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -66,11 +67,17 @@ public: // メンバ関数
 	//ランダムな位置を生成(妨害箱)
 	Vector3 GenerateRandomPositionobBox();
 
-	enum class Bosses { boss01, boss02,boss03 };
+	//アイテムで敵が止まる
+	void IsStopEnemy();
 
+	//ボスの数
+	enum class Bosses { boss01, boss02,boss03 };
+	//シーンチェンジ
 	void ChangeScene();
 	// ゲームクリア
-	bool IsNextScene() { return isFinish_; }
+	bool IsClearScene() { return isFinishClear_; }
+	//ゲームオーバー
+	bool IsGameOverScene() { return isFinishOver_; }
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -86,7 +93,7 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 	Model* playermodel_ = nullptr;
 	// 箱
-	Box* box_ = nullptr;
+	//Box* box_ = nullptr;
 	Model* boxModel_ = nullptr;
 	// エネミー
 	uint32_t enemyPosX;
@@ -130,8 +137,12 @@ private: // メンバ変数
 	Score* score[3] = {nullptr, nullptr, nullptr};
 
 	bool isDestroy[2] = {false, false};
-	bool isFinish_ = false;
-	//妨害箱
+
+	bool isFinishClear_ = false;
+	bool isFinishOver_ = false;
+
+	// 妨害箱
+
 	Model* obstructionboxModel_ = nullptr;
 	std::vector<obstructionBox*> obstructionBoxes_;
 	//スポーン範囲
@@ -148,6 +159,12 @@ private: // メンバ変数
 	//最後にアイテムが使われてからの時間
     float timeSinceLastItem_ = 0.0f;
 	const float itemRespawnTime_ = 20.0f;
+	//アイテムの止める時間
+	bool isStopEnemy_ = false;
+	float timerCount = 5.0f;
+	float deltaTimer_ = 1.0f / 60.0f;
+
+	TimeLimit* timeLimit_ = nullptr;
 
 	uint32_t soundDataHandle_ = 0;
 	uint32_t voiceHandele_ = 0;

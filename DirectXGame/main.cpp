@@ -10,17 +10,21 @@
 #include "Title.h"
 #include "Instruction.h"
 #include "ClearScene.h"
+#include "GameOver.h"
+
 enum class Scene {
 	title,
 	instruction,
 	game,
-	clear
+	clear,
+	gameover
 };
 
 Title* title = nullptr;
 Instruction* instruction = nullptr;
 GameScene* gameScene = nullptr;
 ClearScene* clearScene = nullptr;
+GameOver* gameOver = nullptr;
 Scene scene_;
 
 
@@ -30,9 +34,9 @@ void ChangeScene() {
 	case Scene::title:
 		
 		if (title->IsNextScene()) {
-			scene_ = Scene::game;
-			delete title;
-			title = nullptr;
+			//scene_ = Scene::game;
+			//delete title;
+			//title = nullptr;
 
 			//gameScene = new GameScene();
 			//gameScene->Initialize();
@@ -55,21 +59,38 @@ void ChangeScene() {
 		}
 		break;
 	case Scene::game:
-		if (gameScene->IsNextScene()) {
+		if (gameScene->IsClearScene()) {
 			scene_ = Scene::clear;
 			delete gameScene;
 			gameScene = nullptr;
 
 			clearScene = new ClearScene();
 			clearScene->Initialize();
-		}
+		} 
+		if (gameScene->IsGameOverScene()) {
+			scene_ = Scene::gameover;
+			delete gameScene;
+			gameScene = nullptr;
 
+			gameOver = new GameOver();
+			gameOver->Initialize();
+		}
 		break;
 	case Scene::clear:
 		if (clearScene->IsNextScene()) {
 			scene_ = Scene::title;
 			delete clearScene;
 			clearScene = nullptr;
+
+			title = new Title();
+			title->Initialize();
+		}
+		break;
+	case Scene::gameover:
+		if (gameOver->IsNextScene()) {
+			scene_ = Scene::title;
+			delete gameOver;
+			gameOver = nullptr;
 
 			title = new Title();
 			title->Initialize();
@@ -94,6 +115,9 @@ void ChangeUpdate() {
 	case Scene::clear:
 		clearScene->Update();
 		break;
+	case Scene::gameover:
+		gameOver->Update();
+		break;
 	}
 }
 
@@ -111,6 +135,9 @@ void ChangeDraw() {
 		break;
 	case Scene::clear:
 		clearScene->Draw();
+		break;
+	case Scene::gameover:
+		gameOver->Draw();
 		break;
 	}
 }
@@ -211,8 +238,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// 各種解放
 	delete title;
+	delete instruction;
 	delete gameScene;
 	delete clearScene;
+	delete gameOver;
 	// 3Dモデル解放
 	Model::StaticFinalize();
 	audio->Finalize();

@@ -93,8 +93,8 @@ void Boss::IsHit() {
 			// HITしたら回転を開始
 			isRotating_ = true;
 			rotationTimer_ = rotationDuration_;  
-			audio_->PlayWave(soundDataHandle_);//エラーが起きる
-			//bossHp -= 1; //何回も当たってる
+			// audio_->PlayWave(soundDataHandle_);//エラーが起きる
+			bossHp -= 1; //何回も当たってる
 			score->ScoreCounter(bossHp);
 			hitBox_ = false;
 		}
