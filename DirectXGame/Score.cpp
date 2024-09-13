@@ -6,6 +6,7 @@ Score::~Score() {
 	for (int i = 0; i < 5; i++) {
 		delete sprite[i];
 	}
+	delete HPSprite_;
 }
 
 
@@ -43,6 +44,9 @@ void Score::Initialize() {
 	for (uint32_t i = 0; i < 5; i++) {
 		sprite[i] = Sprite::Create(textureHandle[placeNum[i]], {pos.x + i * 50, pos.y});	
 	}
+
+	hpTextureHandle_ = TextureManager::Load("bossHP.png");
+	HPSprite_ = Sprite::Create(hpTextureHandle_, {20, 560});
 }
 
 
@@ -68,6 +72,8 @@ void Score::Draw() {
 	for (uint32_t i = 0; i < 5; i++) {
 		sprite[i]->Draw();
 	}
+
+	HPSprite_->Draw();
 }
 
 void Score::ScoreCounter(int point) {
