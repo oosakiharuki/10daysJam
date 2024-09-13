@@ -28,6 +28,7 @@ public:
 	void OnCollision();
 	void OnCollisionBoss();
 	bool IsDead() { return isDead_; }
+	bool IsCrush() { return isCrush_; }
 
 	void SetBox(Box* box) { box_ = box; }
 	void SetBoss(Boss* boss) { boss_ = boss; }

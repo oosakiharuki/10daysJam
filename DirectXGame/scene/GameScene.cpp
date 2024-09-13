@@ -53,6 +53,12 @@ GameScene::~GameScene() {
 	delete item_;
 	delete itemModel_;
 	delete timeLimit_;
+
+
+	for (DeathParticles* particle : deathParticles_) {
+		delete particle;
+	}
+	delete particleModel_;
 }
 
 void GameScene::Initialize() {
@@ -135,6 +141,8 @@ void GameScene::Initialize() {
 	//制限時間
 	timeLimit_ = new TimeLimit();
 	timeLimit_->Initalize();
+
+	particleModel_ = Model::Create();
 
 	// ブロックの生成
 	GenerateBlocks();
@@ -339,6 +347,11 @@ void GameScene::Update() {
 	    item_->Update();
 	}
 	
+
+	for (DeathParticles* hitparticle_ : deathParticles_) {
+		hitparticle_->Update();
+	}
+
 	// デバックカメラの更新
 	debugCamera_->Update();
 #ifdef _DEBUG
@@ -433,6 +446,10 @@ void GameScene::Draw() {
 	    item_->Draw();
 	}
 	
+	for (DeathParticles* hitparticle_ : deathParticles_) {
+		hitparticle_->Draw();
+	}
+
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
@@ -549,7 +566,10 @@ void GameScene::CheckAllCollision(int bossNum) {
 			// AABB同士の交差判定
 			if (IsCollision(aabb1, aabb2)) {
 				// ボスの衝突時コールバックを呼び出す
-				boss[bossNum]->OnBoxCollision(box);
+				boss[bossNum]->OnBoxCollision(box);				
+				
+				ParticleBorn(box->GetPosition());
+
 				// 箱の衝突時コールバックを呼び出す
 				box->OnCollisionBoss();
 			}
@@ -639,7 +659,7 @@ void GameScene::CheckAllCollision(int bossNum) {
 			for (obstructionBox* structionBox : obstructionBoxes_) {
 				aabb1 = enemy->GetAABB();
 				aabb2 = structionBox->GetAABB();
-				if (IsCollision(aabb1, aabb2)) {
+				if (IsCollision(aabb1, aabb2) && enemy->IsCrush()) {
 
 					enemy->OnCollisionBoss();
 				}
@@ -673,4 +693,12 @@ void GameScene::IsStopEnemy() {
 			timerCount = 5.0f;
 		}
 	} 
+}
+
+void GameScene::ParticleBorn(Vector3 position) {
+	// 当たった時のパーテイクル
+	DeathParticles* hitparticle_ = new DeathParticles();
+	hitparticle_->Initialize(particleModel_,&viewProjection_, position);
+
+	deathParticles_.push_back(hitparticle_);
 }
