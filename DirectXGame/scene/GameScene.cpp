@@ -455,14 +455,12 @@ void GameScene::Draw() {
 	// 制限時間
 	timeLimit_->Draw();
 
-
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
-
 #pragma endregion
 }
 
