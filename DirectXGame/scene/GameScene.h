@@ -22,6 +22,10 @@
 #include "WorldTransform.h"
 #include "obstructionBox.h"
 #include <vector>
+#include "Item.h"
+#include "TimeLimit.h"
+#include "DeathParticles.h"
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -67,9 +71,11 @@ public: // メンバ関数
 	// アイテムで敵が止まる
 	void IsStopEnemy();
 
-	// ボスの数
-	enum class Bosses { boss01, boss02, boss03 };
-	// シーンチェンジ
+	//当たった時のパーテイクル
+	void ParticleBorn(Vector3 position);
+	//ボスの数
+	enum class Bosses { boss01, boss02,boss03 };
+	//シーンチェンジ
 	void ChangeScene();
 	// ゲームクリア
 	bool IsClearScene() { return isFinishClear_; }
@@ -166,8 +172,12 @@ private: // メンバ変数
 
 	TimeLimit* timeLimit_ = nullptr;
 
+	std::list<DeathParticles*> deathParticles_;
+	Model* particleModel_ = nullptr;
+
 	uint32_t soundDataHandle_ = 0;
 	uint32_t voiceHandele_ = 0;
+
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
