@@ -44,6 +44,7 @@ void Boss::Updata() {
 		}
 	}
 
+
 	IsHit();
 	if (bossHp <= 0) {
 		bossHp = 0;
@@ -112,7 +113,7 @@ void Boss::IsHit() {
 			enemyCounter_ = 1;
 			hitEnemy_ = false;
 		}
-	}
+	}			
 }
 
 void Boss::EnemyCounter() { enemyCounter_ *= 2; }

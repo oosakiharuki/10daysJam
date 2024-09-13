@@ -191,7 +191,7 @@ void GameScene::Update() {
 	case Bosses::boss01:
 		// ボスの更新
 		boss[0]->Updata();
-		score[0]->Updata();
+		score[0]->Update();
 		if (boss[0]->IsDead()) {
 			isDestroy[0] = true; // ボス撃破　
 			BossNum = 1;
@@ -199,7 +199,7 @@ void GameScene::Update() {
 		break;
 	case Bosses::boss02:
 		boss[1]->Updata();
-		score[1]->Updata();
+		score[1]->Update();
 		kNumEnemies = 8;
 		if (boss[1]->IsDead()) {
 			isDestroy[1] = true; // ボス撃破　
@@ -208,7 +208,7 @@ void GameScene::Update() {
 		break;
 	case Bosses::boss03:
 		boss[2]->Updata();
-		score[2]->Updata();
+		score[2]->Update();
 		break;
 	}
 
