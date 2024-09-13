@@ -20,6 +20,7 @@ void Boss::Initialize(Model* model, ViewProjection* viewProjection, uint32_t ext
 	initialPositionX_ = worldTransform_.translation_.x;
 	additionalHp = extraHp; 
 	bossHp = 20 + additionalHp;
+	dummyHp = 19 + additionalHp;
 }
 
 void Boss::Updata() { 
@@ -47,9 +48,10 @@ void Boss::Updata() {
 	if (bossHp <= 0) {
 		bossHp = 0;
 	}
+	if (dummyHp <= 0) {
+		dummyHp = 0;
+	}
 	IsHit();
-
-
 
 	if (bossHp <= 0) {
 		isDead_ = true;
@@ -101,8 +103,9 @@ void Boss::IsHit() {
 			 isRotating_ = true;
 			 rotationTimer_ = rotationDuration_;
 			 audio_->PlayWave(soundDataHandle_); // エラーが起きる
-			 bossHp -= 1;                        // 何回も当たってる
-			 score->ScoreCounter(bossHp);
+			 bossHp -= 1;   
+			 dummyHp -= 1; // 何回も当たってる
+			 score->ScoreCounter(dummyHp);
 			 hitBox_ = false;
 		 } else if (bossHp <= 0) {
 			 bossHp = 0;
@@ -114,7 +117,8 @@ void Boss::IsHit() {
 			 isRotating_ = true;
 			 rotationTimer_ = rotationDuration_;
 			 bossHp -= 1 * enemyCounter_;
-			 score->ScoreCounter(bossHp);
+			 dummyHp -= 1 * enemyCounter_;
+			 score->ScoreCounter(dummyHp);
 			 enemyCounter_ = 1;
 			 hitEnemy_ = false;
 		 } else if (bossHp <= 0) {
@@ -122,7 +126,7 @@ void Boss::IsHit() {
 		 }
 
 	 } else {
-		 score->NowHp(bossHp);
+		 score->NowHp(dummyHp);
 	 }
  }
  void Boss::EnemyCounter() { enemyCounter_ *= 2; }

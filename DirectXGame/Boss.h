@@ -34,6 +34,7 @@ public:
 	bool IsDead() const { return isDead_; }
 
 	int GetBossHp() { return bossHp; }
+	int GetDummyHp() { return dummyHp; }
 
 private:
 	WorldTransform worldTransform_;
@@ -44,6 +45,7 @@ private:
 
 	uint32_t soundDataHandle_ = 0;
 	int bossHp;
+	int dummyHp;
 	bool hitBox_ = false;
 	bool hitEnemy_ = false;
 	bool hitHeal_ = false;
