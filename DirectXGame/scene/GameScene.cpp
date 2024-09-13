@@ -45,11 +45,6 @@ GameScene::~GameScene() {
 	for (obstructionBox* box : obstructionBoxes_) {
 		delete box;
 	}
-	/*
-	for (obstructionBox* structionBox : obstructionBoxes_) {
-	    delete structionBox;
-	}
-	*/
 	delete item_;
 	delete itemModel_;
 	delete timeLimit_;
