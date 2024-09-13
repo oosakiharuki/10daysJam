@@ -29,6 +29,7 @@ public:
 	//float GetScore() const { return score_; }
 	void GetScore(Score* score_) { score = score_; }
 	void EnemyCounter();
+	void CounterReset();
 
 	bool IsDead() const { return isDead_; }
 
@@ -40,7 +41,7 @@ private:
 	Audio* audio_ = nullptr;
 
 	uint32_t soundDataHandle_ = 0;
-	int bossHp = 100;
+	int bossHp;
 	bool hitBox_ = false;
 	bool hitEnemy_ = false;
 	bool hitHeal_ = false;

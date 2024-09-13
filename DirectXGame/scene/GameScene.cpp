@@ -141,7 +141,7 @@ void GameScene::Initialize() {
 	timeLimit_ = new TimeLimit();
 	timeLimit_->Initalize();
 
-	particleModel_ = Model::Create();
+	particleModel_ = Model::CreateFromOBJ("particle", true);
 
 	// ブロックの生成
 	GenerateBlocks();
@@ -281,7 +281,7 @@ void GameScene::Update() {
 		return false;
 	});
 
-	if (enemies_.empty()) {
+	if (enemies_.empty() && !isStopEnemy_) {
 		for (uint32_t i = 0; i < kNumEnemies; i++) {
 			// 生成
 			enemyPosX = rand() % 32;
@@ -656,7 +656,7 @@ void GameScene::CheckAllCollision(int bossNum) {
 				aabb1 = enemy->GetAABB();
 				aabb2 = structionBox->GetAABB();
 				if (IsCollision(aabb1, aabb2) && enemy->IsCrush()) {
-
+					boss[bossNum]->CounterReset();
 					enemy->OnCollisionBoss();
 				}
 			}

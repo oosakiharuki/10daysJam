@@ -28,15 +28,16 @@ void DeathParticles::Update() {
 
 	for (uint32_t i = 0; i < kNumParticles; ++i) {
 		// 基本となる速度ベクトル
-		Vector3 velocity = {kSpeed, 0, 0};
+		Vector3 velocity = {kSpeed, kSpeed, 0};
 		// 回転角を計算する
 		float angle = kAngleUnit * i;
 		// Z軸まわり回転行列
-		Matrix4x4 matrixRoration = MakeRotateZMatrix(angle);
+		Matrix4x4 matrixRoration = MakeRotateYMatrix(angle);
 		// 基本ベクトルを回転させて速度ベクトルを得る
 		velocity = Transform(velocity, matrixRoration);
 		// 移動処理
-		worldTransform_[i].translation_ += velocity;
+		worldTransform_[i].translation_.x += velocity.x;
+		worldTransform_[i].translation_.y += velocity.y;
 	}
 
 	// カウンターの1フレーム分の秒数進める
