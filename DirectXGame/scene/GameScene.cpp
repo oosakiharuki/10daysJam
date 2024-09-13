@@ -41,6 +41,7 @@ GameScene::~GameScene() {
 	}
 	delete boxModel_;
 	boxes_.clear();
+	delete obstructionboxModel_;
 	for (obstructionBox* box : obstructionBoxes_) {
 		delete box;
 	}
