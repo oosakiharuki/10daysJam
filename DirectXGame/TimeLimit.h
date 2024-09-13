@@ -18,7 +18,7 @@ private:
 	int placeNum[3];
 
 	int Timer = 100;
-	float limit = 100.0f;
+	float limit = 90.0f;
 	int counter = 10;
 	float deltaTimer = 1.0f / 60.0f;
 	bool isFinish_ = false;
