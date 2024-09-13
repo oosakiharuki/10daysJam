@@ -3,26 +3,25 @@
 #define GAMESCENE_H
 
 #include "Audio.h"
+#include "Boss.h"
+#include "Box.h"
+#include "CameraController.h"
+#include "DebugCamera.h"
 #include "DirectXCommon.h"
+#include "Enemy.h"
 #include "Input.h"
+#include "Item.h"
+#include "MapChipField.h"
 #include "Model.h"
 #include "Player.h"
-#include "Box.h"
-#include "Enemy.h"
-#include "Boss.h"
+#include "Score.h"
 #include "Skydome.h"
 #include "Sprite.h"
+#include "TimeLimit.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include "DebugCamera.h"
-#include "MapChipField.h"
-#include "CameraController.h"
-#include "Box.h"
-#include <vector>
-#include "Score.h"
 #include "obstructionBox.h"
-#include "Item.h"
-#include "TimeLimit.h"
+#include <vector>
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -55,8 +54,6 @@ public: // メンバ関数
 	void GenerateBlocks();
 	// すべての当たり判定
 	void CheckAllCollision(int bossNum);
-	//妨害箱のスポーン
-	void SpawnobstructionBox();
 
 	bool IsCollision(const AABB& aabb1, const AABB& aabb2);
 	// 距離をチェック
@@ -64,19 +61,19 @@ public: // メンバ関数
 	bool IsFarEnoughobBox(const Vector3& newPos);
 	// ランダムな位置を生成
 	Vector3 GenerateRandomPosition();
-	//ランダムな位置を生成(妨害箱)
+	// ランダムな位置を生成(妨害箱)
 	Vector3 GenerateRandomPositionobBox();
 
-	//アイテムで敵が止まる
+	// アイテムで敵が止まる
 	void IsStopEnemy();
 
-	//ボスの数
-	enum class Bosses { boss01, boss02,boss03 };
-	//シーンチェンジ
+	// ボスの数
+	enum class Bosses { boss01, boss02, boss03 };
+	// シーンチェンジ
 	void ChangeScene();
 	// ゲームクリア
 	bool IsClearScene() { return isFinishClear_; }
-	//ゲームオーバー
+	// ゲームオーバー
 	bool IsGameOverScene() { return isFinishOver_; }
 
 private: // メンバ変数
@@ -93,7 +90,7 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 	Model* playermodel_ = nullptr;
 	// 箱
-	//Box* box_ = nullptr;
+	// Box* box_ = nullptr;
 	Model* boxModel_ = nullptr;
 	// エネミー
 	uint32_t enemyPosX;
@@ -106,33 +103,33 @@ private: // メンバ変数
 	std::stringstream enemyPopCommands;
 	// ボス
 	Bosses bosses = Bosses::boss01;
-	Boss* boss[3] = {nullptr, nullptr,nullptr};
+	Boss* boss[3] = {nullptr, nullptr, nullptr};
 	Model* bossModel[3] = {nullptr, nullptr, nullptr};
 	int BossNum = 0;
-	//ブロック
+	// ブロック
 	Model* modelBlocks_ = nullptr;
 	// 天球
 	Skydome* skydome_ = nullptr;
 	Model* skydomeModel_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
-	//マップチップフィールド
+	// マップチップフィールド
 	MapChipField* mapChipField_;
-	//カメラコントローラー
+	// カメラコントローラー
 	CameraController* cameraController_ = nullptr;
 	Rect movableArea = {12, 15, 0, 10};
 	// 複数の箱を保持
-	std::vector<Box*> boxes_; 
-	 // 最後の箱生成からの経過時間
-	float timeSinceLastBox_ = 0.0f; 
+	std::vector<Box*> boxes_;
+	// 最後の箱生成からの経過時間
+	float timeSinceLastBox_ = 0.0f;
 	// 箱生成間隔
-	const float kBoxSpawnInterval = 3.0f; 
+	const float kBoxSpawnInterval = 3.0f;
 
-	const float kBoxSpawnMinX = 0.0f; 
+	const float kBoxSpawnMinX = 0.0f;
 	const float kBoxSpawnMaxX = 31.0f;
 	const float kBoxSpawnMinY = 19.5f;
-	const float kBoxSpawnMaxY = 19.5f;  
-	const float kBoxSpawnMinZ = 0.0f; 
-	const float kBoxSpawnMaxZ = 0.0f;  
+	const float kBoxSpawnMaxY = 19.5f;
+	const float kBoxSpawnMinZ = 0.0f;
+	const float kBoxSpawnMaxZ = 0.0f;
 
 	Score* score[3] = {nullptr, nullptr, nullptr};
 
@@ -145,21 +142,24 @@ private: // メンバ変数
 
 	Model* obstructionboxModel_ = nullptr;
 	std::vector<obstructionBox*> obstructionBoxes_;
-	//スポーン範囲
+	// スポーン範囲
 	float spawnRangeXMin = 0.0f;
 	float spawnRangeXMax = 31.0f;
 	float spawnRangeYMin = 1.0f;
 	float spawnRangeYMax = 15.0f;
 	float spawnRangeZMin = 0.0f;
 	float spawnRangeZMax = 0.0f;
-	//アイテム
+	// 妨害箱の生成間隔
+	const float kObBoxSpawnInterval = 5.0f;
+	float timeSinceLastObBoxSpawn_ = 0.0f;
+	// アイテム
 	Model* itemModel_ = nullptr;
 	Item* item_ = nullptr;
 	bool isItemActive_ = false;
-	//最後にアイテムが使われてからの時間
-    float timeSinceLastItem_ = 0.0f;
+	// 最後にアイテムが使われてからの時間
+	float timeSinceLastItem_ = 0.0f;
 	const float itemRespawnTime_ = 20.0f;
-	//アイテムの止める時間
+	// アイテムの止める時間
 	bool isStopEnemy_ = false;
 	float timerCount = 5.0f;
 	float deltaTimer_ = 1.0f / 60.0f;

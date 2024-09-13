@@ -293,14 +293,14 @@ void GameScene::Update() {
 			enemies_.push_back(enemy_);
 		}
 	}
+
 	// 妨害箱の生成・更新
-	if (obstructionBoxes_.size() >= 5) {
-		return;
-	}
-	if (isDestroy[0]) {
-		Vector3 randomPosition;
-		bool positionFound = false;
-		for (int i = 0; i < 5; ++i) {
+	timeSinceLastObBoxSpawn_ += 1.0f / 60.0f; 
+
+	if (isDestroy[0] && obstructionBoxes_.size() < 10) {
+		if (timeSinceLastObBoxSpawn_ >= kObBoxSpawnInterval) {
+			Vector3 randomPosition;
+			bool positionFound = false;
 			for (int attempt = 0; attempt < 10; ++attempt) {
 				randomPosition = GenerateRandomPositionobBox();
 				if (IsFarEnoughobBox(randomPosition)) {
@@ -313,16 +313,14 @@ void GameScene::Update() {
 				newObstructionBox->Initialize(obstructionboxModel_, &viewProjection_);
 				newObstructionBox->SetPosition(randomPosition);
 				obstructionBoxes_.push_back(newObstructionBox);
+				timeSinceLastObBoxSpawn_ = 0.0f; // リセット
 			}
 		}
-		isDestroy[0] = false;
 	}
-
 	for (obstructionBox* box : obstructionBoxes_) {
 		box->Update();
 	}
 	// アイテムの更新
-
 	if (!isItemActive_) {
 	    timeSinceLastItem_ += 1.0f / 60.0f;
 	    //アイテムが消えて一定時間経過後生成
@@ -418,8 +416,7 @@ void GameScene::Draw() {
 	for (Enemy* enemy_ : enemies_) {
 		enemy_->Draw();
 	}
-		
-
+	//箱の描画
 	for (Box* box : boxes_) {
 		box->Draw();
 	}
@@ -428,7 +425,6 @@ void GameScene::Draw() {
 		box->Draw();
 	}
 	// アイテムの描画
-	
 	if (isItemActive_ && item_ != nullptr) {
 	    item_->Draw();
 	}
@@ -488,8 +484,6 @@ void GameScene::GenerateBlocks() {
 		}
 	}
 }
-// 妨害箱をランダムスポーン
-void GameScene::SpawnobstructionBox() {}
 bool GameScene::IsCollision(const AABB& aabb1, const AABB& aabb2) {
 	if ((aabb1.min.x <= aabb2.max.x && aabb1.max.x >= aabb2.min.x) && (aabb1.min.y <= aabb2.max.y && aabb1.max.y >= aabb2.min.y) && (aabb1.min.z <= aabb2.max.z && aabb1.max.z >= aabb2.min.z)) {
 		return true;
@@ -498,7 +492,7 @@ bool GameScene::IsCollision(const AABB& aabb1, const AABB& aabb2) {
 }
 // 距離をチェック
 bool GameScene::IsFarEnough(const Vector3& newPos) {
-	const float kMinDistance = 2.0f; // 箱同士の最小距離
+	const float kMinDistance = 4.0f; // 箱同士の最小距離
 
 	for (Box* box : boxes_) {
 		Vector3 boxPos = box->GetPosition();
