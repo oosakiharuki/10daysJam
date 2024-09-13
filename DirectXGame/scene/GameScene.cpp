@@ -41,6 +41,7 @@ GameScene::~GameScene() {
 	}
 	delete boxModel_;
 	boxes_.clear();
+	delete obstructionboxModel_;
 	for (obstructionBox* box : obstructionBoxes_) {
 		delete box;
 	}
@@ -145,6 +146,9 @@ void GameScene::Initialize() {
 
 	// ブロックの生成
 	GenerateBlocks();
+
+	soundDataHandle_ = audio_->LoadWave("gameBGM.wav");
+	voiceHandele_ = audio_->PlayWave(soundDataHandle_, true,0.5f);
 }
 
 void GameScene::ChangeScene() {
@@ -161,12 +165,14 @@ void GameScene::ChangeScene() {
 		break;
 	case Bosses::boss03:
 		if (boss[2]->IsDead()) {
+		    audio_->StopWave(voiceHandele_);
 			isFinishClear_ = true; // ゲームクリア
 		}
 		break;
 	}	
 	
 	if (timeLimit_->GameOver()) {
+		audio_->StopWave(voiceHandele_);
 		isFinishOver_ = true;
 	}
 }
@@ -466,14 +472,12 @@ void GameScene::Draw() {
 	// 制限時間
 	timeLimit_->Draw();
 
-
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
-
 #pragma endregion
 }
 

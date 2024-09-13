@@ -1,6 +1,7 @@
 #include "Model.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "Audio.h"
 
 class Skydome;
 
@@ -26,4 +27,9 @@ private:
 	float moveRange_ = 1.0f;  // 移動範囲
 	int moveDirection_ = 1;   // 1: 右移動, -1: 左移動
 	float initialPositionX_;  // 初期位置のX座標
+
+	Audio* audio_ = nullptr;
+	uint32_t soundDataHandle_ = 0;
+	uint32_t soundDataHandle2_ = 0;
+	uint32_t voiceHandle_ = 0;
 };

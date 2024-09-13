@@ -5,6 +5,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "Skydome.h"
+#include "Audio.h"
 
 class Instruction {
 public:
@@ -21,6 +22,11 @@ private:
 	Model* modelSkyDome_ = nullptr;
 	Skydome* skydome_ = nullptr;
 	bool isfinish = false;
+
+	Audio* audio_ = nullptr;
+	uint32_t soundDataHandle_ = 0;
+	uint32_t soundDataHandle2_ = 0;
+	uint32_t voiceHandle_ = 0;
 };
 
 
