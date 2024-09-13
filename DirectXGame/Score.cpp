@@ -65,6 +65,9 @@ void Score::Updata() {
 
 	placeNum[4] = score / 1;
 	score %= 1;
+	for (uint32_t i = 0; i < 5; i++) {
+		sprite[i] = Sprite::Create(textureHandle[placeNum[i]], {pos.x + i * 50, pos.y});
+	}
 }
 
 

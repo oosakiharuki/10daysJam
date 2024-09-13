@@ -45,6 +45,11 @@ void Boss::Updata() {
 	}
 
 	IsHit();
+	if (bossHp <= 0) {
+		bossHp = 0;
+	}
+	score->ScoreCounter(bossHp);
+	score->NowHp(bossHp);
 
 	if (bossHp <= 0) {
 		isDead_ = true;
@@ -95,11 +100,8 @@ void Boss::IsHit() {
 			rotationTimer_ = rotationDuration_;  
 			audio_->PlayWave(soundDataHandle_);//エラーが起きる
 			bossHp -= 1; //何回も当たってる
-			score->ScoreCounter(bossHp);
 			hitBox_ = false;
-		} else if (bossHp <= 0) {
-			bossHp = 0;
-		}
+		} 
 
 	} else if (hitEnemy_) {
 		if (bossHp >= 0) {
@@ -107,19 +109,10 @@ void Boss::IsHit() {
 			isRotating_ = true;
 			rotationTimer_ = rotationDuration_;  
 			bossHp -= 1 * enemyCounter_;
-			score->ScoreCounter(bossHp);
 			enemyCounter_ = 1;
 			hitEnemy_ = false;
-		} else if (bossHp <= 0) {
-			bossHp = 0;
 		}
-
 	}
-	else
-	{
-		score->NowHp(bossHp);
-	}
-	
 }
 
 void Boss::EnemyCounter() { enemyCounter_ *= 2; }
