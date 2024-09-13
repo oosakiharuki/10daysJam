@@ -23,6 +23,7 @@
 #include "obstructionBox.h"
 #include "Item.h"
 #include "TimeLimit.h"
+#include "DeathParticles.h"
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -69,6 +70,10 @@ public: // メンバ関数
 
 	//アイテムで敵が止まる
 	void IsStopEnemy();
+
+	//当たった時のパーテイクル
+	void ParticleBorn(Vector3 position);
+
 
 	//ボスの数
 	enum class Bosses { boss01, boss02,boss03 };
@@ -165,6 +170,9 @@ private: // メンバ変数
 	float deltaTimer_ = 1.0f / 60.0f;
 
 	TimeLimit* timeLimit_ = nullptr;
+
+	std::list<DeathParticles*> deathParticles_;
+	Model* particleModel_ = nullptr;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
