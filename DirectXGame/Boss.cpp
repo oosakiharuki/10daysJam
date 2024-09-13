@@ -89,18 +89,20 @@ void Boss::OnBoxCollision(const Box* box) {
 
 void Boss::IsHit() {
 	if (hitBox_) {
-		if (bossHp > 0) {
+		if (bossHp >= 0) {
 			// HITしたら回転を開始
 			isRotating_ = true;
 			rotationTimer_ = rotationDuration_;  
-			// audio_->PlayWave(soundDataHandle_);//エラーが起きる
+			audio_->PlayWave(soundDataHandle_);//エラーが起きる
 			bossHp -= 1; //何回も当たってる
 			score->ScoreCounter(bossHp);
 			hitBox_ = false;
+		} else if (bossHp <= 0) {
+			bossHp = 0;
 		}
 
 	} else if (hitEnemy_) {
-		if (bossHp > 0) {
+		if (bossHp >= 0) {
 			// HITしたら回転を開始
 			isRotating_ = true;
 			rotationTimer_ = rotationDuration_;  
@@ -108,14 +110,11 @@ void Boss::IsHit() {
 			score->ScoreCounter(bossHp);
 			enemyCounter_ = 1;
 			hitEnemy_ = false;
+		} else if (bossHp <= 0) {
+			bossHp = 0;
 		}
 
-	} /* else if (hitHeal_) {
-		if (bossHp < 100) {
-			bossHp += 5;
-		}
-		hitHeal_ = false;
-	}*/
+	}
 	else
 	{
 		score->NowHp(bossHp);

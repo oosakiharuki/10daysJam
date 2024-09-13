@@ -164,6 +164,7 @@ void GameScene::ChangeScene() {
 	}	
 	
 	if (timeLimit_->GameOver()) {
+		audio_->StopWave(voiceHandele_);
 		isFinishOver_ = true;
 	}
 }

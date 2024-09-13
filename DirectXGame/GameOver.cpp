@@ -12,11 +12,16 @@ GameOver::~GameOver() {
 void GameOver::Initialize() {
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
-	model_ = Model::CreateFromOBJ("title2", true);
+	model_ = Model::CreateFromOBJ("gameoverText", true);
 	modelSkydome_ = Model::CreateFromOBJ("sphere", true);
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
 	isfinish = false;
+
+	audio_ = Audio::GetInstance();
+	soundDataHandle_ = audio_->LoadWave("gameoverSE.wav");
+	soundDataHandle2_ = audio_->LoadWave("buttonSE.wav");
+	voiceHandle_ = audio_->PlayWave(soundDataHandle_);
 }
 
 void GameOver::Update() {
@@ -30,6 +35,8 @@ void GameOver::Update() {
 
 	worldTransform_.UpdateMatrix();
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		audio_->StopWave(soundDataHandle_);
+		audio_->PlayWave(soundDataHandle2_);
 		isfinish = true;
 	}
 }

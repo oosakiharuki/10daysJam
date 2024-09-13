@@ -33,7 +33,7 @@ void Title::Initialize() {
 	soundDataHandle_ = audio_->LoadWave("gameBGM.wav");
 	soundDataHadle2_ = audio_->LoadWave("buttonSE.wav");
 	// 音声再生
-	voiceJandle_ = audio_->PlayWave(soundDataHandle_);
+	voiceJandle_ = audio_->PlayWave(soundDataHandle_, true, 0.7f);
 }
 
 void Title::Update() { 

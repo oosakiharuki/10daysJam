@@ -19,7 +19,7 @@ void Instruction::Initialize() {
 	audio_ = Audio::GetInstance();
 	soundDataHandle_ = audio_->LoadWave("gameBGM.wav");
 	soundDataHandle2_ = audio_->LoadWave("buttonSE.wav");
-	voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
+	voiceHandle_ = audio_->PlayWave(soundDataHandle_, true,0.7f);
 }
 
 void Instruction::Update() {
