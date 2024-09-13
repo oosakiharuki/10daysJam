@@ -91,9 +91,9 @@ void GameScene::Initialize() {
 		Enemy* enemy_ = new Enemy();
 		// 初期化
 		enemy_->LoadEnemyMoveData(BossNum);
-		enemy_->UpdateEnemyPopCommands(i);		
-		enemy_->Initialize(enemyModel_, &viewProjection_, {mapChipField_->GetMapChipPositionByIndex(enemyPosX,enemyPosY)});
-	
+		enemy_->UpdateEnemyPopCommands(i);
+		enemy_->Initialize(enemyModel_, &viewProjection_, {mapChipField_->GetMapChipPositionByIndex(enemyPosX, enemyPosY)});
+
 		enemies_.push_back(enemy_);
 	}
 
@@ -109,7 +109,7 @@ void GameScene::Initialize() {
 		// ボスの生成と初期化
 		boss[i] = new Boss();
 		boss[i]->GetScore(score[i]);
-		boss[i]->Initialize(bossModel[i], &viewProjection_,i*5);
+		boss[i]->Initialize(bossModel[i], &viewProjection_, i * 5);
 	}
 	// 天球のモデル
 	skydomeModel_ = Model::CreateFromOBJ("sphere", true);
@@ -135,10 +135,10 @@ void GameScene::Initialize() {
 	// 妨害箱
 	obstructionboxModel_ = Model::CreateFromOBJ("ojama", true);
 
-	//アイテムモデル
+	// アイテムモデル
 	itemModel_ = Model::CreateFromOBJ("item", true);
 
-	//制限時間
+	// 制限時間
 	timeLimit_ = new TimeLimit();
 	timeLimit_->Initalize();
 
@@ -148,7 +148,7 @@ void GameScene::Initialize() {
 	GenerateBlocks();
 
 	soundDataHandle_ = audio_->LoadWave("gameBGM.wav");
-	voiceHandele_ = audio_->PlayWave(soundDataHandle_, true,0.5f);
+	voiceHandele_ = audio_->PlayWave(soundDataHandle_, true, 0.5f);
 }
 
 void GameScene::ChangeScene() {
@@ -165,12 +165,12 @@ void GameScene::ChangeScene() {
 		break;
 	case Bosses::boss03:
 		if (boss[2]->IsDead()) {
-		    audio_->StopWave(voiceHandele_);
+			audio_->StopWave(voiceHandele_);
 			isFinishClear_ = true; // ゲームクリア
 		}
 		break;
-	}	
-	
+	}
+
 	if (timeLimit_->GameOver()) {
 		audio_->StopWave(voiceHandele_);
 		isFinishOver_ = true;
@@ -274,7 +274,6 @@ void GameScene::Update() {
 	CheckAllCollision(BossNum);
 	IsStopEnemy();
 
-
 	// 制限時間
 	timeLimit_->Update();
 
@@ -301,14 +300,14 @@ void GameScene::Update() {
 			enemies_.push_back(enemy_);
 		}
 	}
+
 	// 妨害箱の生成・更新
-	if (obstructionBoxes_.size() >= 5) {
-		return;
-	}
-	if (isDestroy[0]) {
-		Vector3 randomPosition;
-		bool positionFound = false;
-		for (int i = 0; i < 5; ++i) {
+	timeSinceLastObBoxSpawn_ += 1.0f / 60.0f;
+
+	if (isDestroy[0] && obstructionBoxes_.size() < 10) {
+		if (timeSinceLastObBoxSpawn_ >= kObBoxSpawnInterval) {
+			Vector3 randomPosition;
+			bool positionFound = false;
 			for (int attempt = 0; attempt < 10; ++attempt) {
 				randomPosition = GenerateRandomPositionobBox();
 				if (IsFarEnoughobBox(randomPosition)) {
@@ -321,33 +320,29 @@ void GameScene::Update() {
 				newObstructionBox->Initialize(obstructionboxModel_, &viewProjection_);
 				newObstructionBox->SetPosition(randomPosition);
 				obstructionBoxes_.push_back(newObstructionBox);
+				timeSinceLastObBoxSpawn_ = 0.0f; // リセット
 			}
 		}
-		isDestroy[0] = false;
 	}
-
 	for (obstructionBox* box : obstructionBoxes_) {
 		box->Update();
 	}
 	// アイテムの更新
-
 	if (!isItemActive_) {
-	    timeSinceLastItem_ += 1.0f / 60.0f;
-	    //アイテムが消えて一定時間経過後生成
-	    if (timeSinceLastItem_ >= itemRespawnTime_) {
-	        Vector3 randomPosition = GenerateRandomPosition();
-	        //アイテムを生成
-	        item_ = new Item();
-	        item_->Initialize(itemModel_, &viewProjection_);
-	        item_->SetPosition(randomPosition);
-	        isItemActive_ = true;
-	        timeSinceLastItem_ = 0.0f;
-	    }
+		timeSinceLastItem_ += 1.0f / 60.0f;
+		// アイテムが消えて一定時間経過後生成
+		if (timeSinceLastItem_ >= itemRespawnTime_) {
+			Vector3 randomPosition = GenerateRandomPosition();
+			// アイテムを生成
+			item_ = new Item();
+			item_->Initialize(itemModel_, &viewProjection_);
+			item_->SetPosition(randomPosition);
+			isItemActive_ = true;
+			timeSinceLastItem_ = 0.0f;
+		}
 	} else {
-	    item_->Update();
+		item_->Update();
 	}
-	
-
 	for (DeathParticles* hitparticle_ : deathParticles_) {
 		hitparticle_->Update();
 	}
@@ -421,7 +416,7 @@ void GameScene::Draw() {
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock)
-			continue;
+				continue;
 			modelBlocks_->Draw(*worldTransformBlock, viewProjection_);
 		}
 	}
@@ -431,8 +426,7 @@ void GameScene::Draw() {
 	for (Enemy* enemy_ : enemies_) {
 		enemy_->Draw();
 	}
-		
-
+	// 箱の描画
 	for (Box* box : boxes_) {
 		box->Draw();
 	}
@@ -441,11 +435,9 @@ void GameScene::Draw() {
 		box->Draw();
 	}
 	// アイテムの描画
-	
 	if (isItemActive_ && item_ != nullptr) {
-	    item_->Draw();
+		item_->Draw();
 	}
-	
 	for (DeathParticles* hitparticle_ : deathParticles_) {
 		hitparticle_->Draw();
 	}
@@ -466,9 +458,9 @@ void GameScene::Draw() {
 		score[1]->Draw();
 		break;
 	case Bosses::boss03:
-    score[2]->Draw();
-		    break;
-	}	
+		score[2]->Draw();
+		break;
+	}
 	// 制限時間
 	timeLimit_->Draw();
 
@@ -505,8 +497,6 @@ void GameScene::GenerateBlocks() {
 		}
 	}
 }
-// 妨害箱をランダムスポーン
-void GameScene::SpawnobstructionBox() {}
 bool GameScene::IsCollision(const AABB& aabb1, const AABB& aabb2) {
 	if ((aabb1.min.x <= aabb2.max.x && aabb1.max.x >= aabb2.min.x) && (aabb1.min.y <= aabb2.max.y && aabb1.max.y >= aabb2.min.y) && (aabb1.min.z <= aabb2.max.z && aabb1.max.z >= aabb2.min.z)) {
 		return true;
@@ -515,7 +505,7 @@ bool GameScene::IsCollision(const AABB& aabb1, const AABB& aabb2) {
 }
 // 距離をチェック
 bool GameScene::IsFarEnough(const Vector3& newPos) {
-	const float kMinDistance = 2.0f; // 箱同士の最小距離
+	const float kMinDistance = 4.0f; // 箱同士の最小距離
 
 	for (Box* box : boxes_) {
 		Vector3 boxPos = box->GetPosition();
@@ -639,21 +629,19 @@ void GameScene::CheckAllCollision(int bossNum) {
 
 #pragma endregion
 
-	   #pragma region 箱とアイテムの当たり判定
-	    {
-	        if (isItemActive_) {
-	            aabb1 = item_->GetAABB();
-	            for (Box* box : boxes_) {
-	                aabb2 = box->GetAABB();
-	                if (IsCollision(aabb1, aabb2)) {
-					isStopEnemy_ = true;
-					isItemActive_ = false;
-	                }
-	            }
-	        }
-	    }
-	 
-	#pragma region 敵と妨害箱の当たり判定
+#pragma region プレイヤーとアイテムの当たり判定
+	{
+		if (isItemActive_) {
+			aabb1 = item_->GetAABB();
+			aabb2 = player_->GetAABB();
+			if (IsCollision(aabb1, aabb2)) {
+				isStopEnemy_ = true;
+				isItemActive_ = false;
+			}
+		}
+	}
+
+#pragma region 敵と妨害箱の当たり判定
 	{
 		for (Enemy* enemy : enemies_) {
 			for (obstructionBox* structionBox : obstructionBoxes_) {
@@ -666,7 +654,7 @@ void GameScene::CheckAllCollision(int bossNum) {
 			}
 		}
 	}
-	#pragma endregion
+#pragma endregion
 }
 
 // ランダムな位置を生成
@@ -685,15 +673,16 @@ Vector3 GameScene::GenerateRandomPositionobBox() {
 }
 
 // アイテムで敵が止まる
-void GameScene::IsStopEnemy() { 	
+void GameScene::IsStopEnemy() {
 	if (isStopEnemy_) {
 		timerCount -= deltaTimer_;
 		if (timerCount < 0) {
 			isStopEnemy_ = false;
 			timerCount = 5.0f;
 		}
+
+	}
 	} 
-}
 
 void GameScene::ParticleBorn(Vector3 position) {
 	// 当たった時のパーテイクル
@@ -701,4 +690,5 @@ void GameScene::ParticleBorn(Vector3 position) {
 	hitparticle_->Initialize(particleModel_,&viewProjection_, position);
 
 	deathParticles_.push_back(hitparticle_);
+
 }

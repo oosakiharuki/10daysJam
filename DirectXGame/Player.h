@@ -32,6 +32,8 @@ public:
 	bool IsNearBox(const Box* box) const;
 	// 一番近い箱を探す
 	Box* FindNearestBox(const std::vector<Box*>& boxes);
+	Vector3 GetWorldPosition();
+	AABB GetAABB();
 
 private:
 	// ワールド変換データ
@@ -54,6 +56,9 @@ private:
 	static inline const float kTimeTurn = 0.3f;
 	//箱の高さ
 	static constexpr float kBoxPickupHeight = 2.0f;
+	//箱の横・盾
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
 	// 旋回開始時の角度
 	float turnFirstRotationY_ = 0.0f;
 	// 旋回タイマー
