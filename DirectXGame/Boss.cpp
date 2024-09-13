@@ -44,13 +44,12 @@ void Boss::Updata() {
 		}
 	}
 
-
-	IsHit();
 	if (bossHp <= 0) {
 		bossHp = 0;
 	}
-	score->ScoreCounter(bossHp);
-	score->NowHp(bossHp);
+	IsHit();
+
+
 
 	if (bossHp <= 0) {
 		isDead_ = true;
@@ -86,36 +85,46 @@ AABB Boss::GetAABB() {
 void Boss::OnBoxCollision(const Box* box) { 
 	(void)box; 
 	hitBox_ = true;
+	isHit_ = true;
 }
 
  void Boss::OnEnemyCollision(const Enemy* enemy) {
 	(void)enemy;
 	hitEnemy_ = true;
-}
+	isHit_ = true;
+ }
 
 void Boss::IsHit() {
-	if (hitBox_) {
-		if (bossHp >= 0) {
-			// HITしたら回転を開始
-			isRotating_ = true;
-			rotationTimer_ = rotationDuration_;  
-			audio_->PlayWave(soundDataHandle_);//エラーが起きる
-			bossHp -= 1; //何回も当たってる
-			hitBox_ = false;
-		} 
+	 if (hitBox_) {
+		 if (bossHp >= 0) {
+			 // HITしたら回転を開始
+			 isRotating_ = true;
+			 rotationTimer_ = rotationDuration_;
+			 audio_->PlayWave(soundDataHandle_); // エラーが起きる
+			 bossHp -= 1;                        // 何回も当たってる
+			 score->ScoreCounter(bossHp);
+			 hitBox_ = false;
+		 } else if (bossHp <= 0) {
+			 bossHp = 0;
+		 }
 
-	} else if (hitEnemy_) {
-		if (bossHp >= 0) {
-			// HITしたら回転を開始
-			isRotating_ = true;
-			rotationTimer_ = rotationDuration_;  
-			bossHp -= 1 * enemyCounter_;
-			enemyCounter_ = 1;
-			hitEnemy_ = false;
-		}
-	}			
-}
+	 } else if (hitEnemy_) {
+		 if (bossHp >= 0) {
+			 // HITしたら回転を開始
+			 isRotating_ = true;
+			 rotationTimer_ = rotationDuration_;
+			 bossHp -= 1 * enemyCounter_;
+			 score->ScoreCounter(bossHp);
+			 enemyCounter_ = 1;
+			 hitEnemy_ = false;
+		 } else if (bossHp <= 0) {
+			 bossHp = 0;
+		 }
 
-void Boss::EnemyCounter() { enemyCounter_ *= 2; }
+	 } else {
+		 score->NowHp(bossHp);
+	 }
+ }
+ void Boss::EnemyCounter() { enemyCounter_ *= 2; }
 
 void Boss::CounterReset() { enemyCounter_ = 1; }
