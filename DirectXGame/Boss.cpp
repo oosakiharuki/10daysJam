@@ -116,3 +116,5 @@ void Boss::IsHit() {
 }
 
 void Boss::EnemyCounter() { enemyCounter_ *= 2; }
+
+void Boss::CounterReset() { enemyCounter_ = 1; }
