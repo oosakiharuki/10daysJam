@@ -173,6 +173,10 @@ private: // メンバ変数
 
 	std::list<DeathParticles*> deathParticles_;
 	Model* particleModel_ = nullptr;
+
+	uint32_t soundDataHandle_ = 0;
+	uint32_t voiceHandele_ = 0;
+
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
