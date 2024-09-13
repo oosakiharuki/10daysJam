@@ -98,12 +98,14 @@ void GameScene::Initialize() {
 	for (uint32_t i = 0; i < 3; i++) {
 		// スコア
 		score[i] = new Score();
-		score[i]->Initialize();
+
 
 		// ボスの生成と初期化
 		boss[i] = new Boss();
 		boss[i]->GetScore(score[i]);
 		boss[i]->Initialize(bossModel[i], &viewProjection_, i * 5);
+
+		score[i]->Initialize(boss[i]->GetBossHp());
 	}
 	// 天球のモデル
 	skydomeModel_ = Model::CreateFromOBJ("sphere", true);

@@ -33,6 +33,8 @@ public:
 
 	bool IsDead() const { return isDead_; }
 
+	int GetBossHp() { return bossHp; }
+
 private:
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
@@ -45,6 +47,7 @@ private:
 	bool hitBox_ = false;
 	bool hitEnemy_ = false;
 	bool hitHeal_ = false;
+	bool isHit_ = false;
 	bool isDead_ = false;
 	static inline const float kWidth = 34.8f;
 	static inline const float kHeight = 8.8f;
