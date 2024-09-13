@@ -138,6 +138,9 @@ void GameScene::Initialize() {
 
 	// ブロックの生成
 	GenerateBlocks();
+
+	soundDataHandle_ = audio_->LoadWave("gameBGM.wav");
+	voiceHandele_ = audio_->PlayWave(soundDataHandle_, true,0.5f);
 }
 
 void GameScene::ChangeScene() {
@@ -154,12 +157,14 @@ void GameScene::ChangeScene() {
 		break;
 	case Bosses::boss03:
 		if (boss[2]->IsDead()) {
+		    audio_->StopWave(voiceHandele_);
 			isFinishClear_ = true; // ゲームクリア
 		}
 		break;
 	}	
 	
 	if (timeLimit_->GameOver()) {
+		audio_->StopWave(voiceHandele_);
 		isFinishOver_ = true;
 	}
 }

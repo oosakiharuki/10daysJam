@@ -19,6 +19,11 @@ void ClearScene::Initialize() {
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
 	//modelFlont_ = Model::CreateFromOBJ("title2", true);
 	isfinish = false;
+
+	audio_ = Audio::GetInstance();
+	soundDataHandle = audio_->LoadWave("clearJingle.wav");
+	soundDataHandle2_ = audio_->LoadWave("buttonSE.wav");
+	voiceHandle_ = audio_->PlayWave(soundDataHandle);
 }
 
 void ClearScene::Update() {
@@ -32,6 +37,8 @@ void ClearScene::Update() {
 
 	worldTransform_.UpdateMatrix();
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		audio_->StopWave(voiceHandle_);
+		audio_->PlayWave(soundDataHandle2_);
 		isfinish = true;
 	}
 }

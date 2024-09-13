@@ -165,6 +165,9 @@ private: // メンバ変数
 	float deltaTimer_ = 1.0f / 60.0f;
 
 	TimeLimit* timeLimit_ = nullptr;
+
+	uint32_t soundDataHandle_ = 0;
+	uint32_t voiceHandele_ = 0;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
