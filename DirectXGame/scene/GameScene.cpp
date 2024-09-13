@@ -54,7 +54,6 @@ GameScene::~GameScene() {
 	delete itemModel_;
 	delete timeLimit_;
 
-
 	for (DeathParticles* particle : deathParticles_) {
 		delete particle;
 	}
@@ -556,8 +555,8 @@ void GameScene::CheckAllCollision(int bossNum) {
 			// AABB同士の交差判定
 			if (IsCollision(aabb1, aabb2)) {
 				// ボスの衝突時コールバックを呼び出す
-				boss[bossNum]->OnBoxCollision(box);				
-				
+				boss[bossNum]->OnBoxCollision(box);
+
 				ParticleBorn(box->GetPosition());
 
 				// 箱の衝突時コールバックを呼び出す
@@ -680,15 +679,13 @@ void GameScene::IsStopEnemy() {
 			isStopEnemy_ = false;
 			timerCount = 5.0f;
 		}
-
 	}
-	} 
+}
 
 void GameScene::ParticleBorn(Vector3 position) {
 	// 当たった時のパーテイクル
 	DeathParticles* hitparticle_ = new DeathParticles();
-	hitparticle_->Initialize(particleModel_,&viewProjection_, position);
+	hitparticle_->Initialize(particleModel_, &viewProjection_, position);
 
 	deathParticles_.push_back(hitparticle_);
-
 }

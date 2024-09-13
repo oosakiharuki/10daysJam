@@ -1,3 +1,6 @@
+#ifndef TIMELIMIT_H
+#define TIMELIMIT_H
+
 #include "Vector3.h"
 class Sprite;
 
@@ -25,3 +28,4 @@ private:
 
 	Sprite* sprite[3];
 };
+#endif // TIMELIMIT_H
